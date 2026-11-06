@@ -1,6 +1,6 @@
 # SMPS Study Website
 
-This repository contains a static revision website for Primary 4 studies. The app entry point is `src/index.html`, and each subject folder under `src/` holds its own study pages.
+This repository contains a static revision website for Primary 4 students. The website files are stored under `src/`, and the main entry page is `src/index.html`.
 
 ## Project structure
 
@@ -35,15 +35,15 @@ smps/
 
 ## App entry point
 
-Open `src/index.html` in a browser, or serve the `src` folder locally to use the full hub page.
+Open `src/index.html` in a browser, or serve the `src` folder locally to use the full study hub.
 
 The hub page includes:
 
 - subject cards for Chinese, English, Humanities, Maths, and Science
-- exam countdowns saved in `localStorage`
+- exam countdowns stored in `localStorage`
 - daily task tracking per subject
 - quick links to revision, practice, and games pages
-- study tips and exam reminders
+- study tips and exam-day reminders
 
 ## Subject folders
 
@@ -60,28 +60,29 @@ The hub page includes:
 From the repo root:
 
 ```bash
-cd s\src
+cd d:\kang\smps\src
 python -m http.server 8000
 ```
 
 Then open:
 
 - http://localhost:8000/
-- or open a specific page such as http://localhost:8000/4a-exam-humanities/revision.html
+- or a subject page such as http://localhost:8000/4a-exam-humanities/revision.html
 
 ## Notes
 
-- This project is a pure static site with plain HTML, CSS, and JavaScript.
-- No backend server or build step is required.
+- This project is a pure static site using plain HTML, CSS, and JavaScript.
+- There is no backend server or build step.
 - Most data is stored in the browser with `localStorage`.
-- Image folders such as `scope/` are kept local to each subject folder.
+- Image folders such as `scope/` stay local to each subject folder.
+- The project root is just the container; the app itself lives in `src/`.
 
 ## Typical workflow
 
-- Open `src/index.html` to see the overall revision dashboard
-- Use the linked subject page for notes or exercises
-- Play the mini-games from each subject's `games.html`
-- Keep progress in the browser; no user account is required
+- Start at `src/index.html` for the overall study dashboard
+- Open a subject page for notes or practice activities
+- Use each subject's `games.html` for revision games and quizzes
+- Keep progress in the browser; no login or server is required
 
 ## License
 

@@ -1,0 +1,2107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff8ec">
+<meta name="description" content="Ten friendly Primary 4 English games and a simple tense guide, built from Units 1–5 and the school dictation sheets.">
+<title>English Game Club · P4 Units 1–5</title>
+<style>
+:root{
+  --paper:#fff8ec; --card:#ffffff; --ink:#22283a; --muted:#59637a;
+  --line:#e7ddc8; --line-2:#f4ece0;
+  --u1:#e2572f; --u2:#2b7bd8; --u3:#c88700; --u4:#1a8a5a; --u5:#6f4fd0;
+  --t1:#d2452f; --t2:#1f74c9; --t3:#7a45c4;
+  --ok:#0b7a52; --ok-bg:#e0f7eb; --bad:#c22845; --bad-bg:#fde8ee;
+  --amber-bg:#fdf1cf; --radius:26px;
+  --shadow:0 2px 0 rgba(34,40,58,.05), 0 10px 26px -16px rgba(34,40,58,.3);
+  --tap:56px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink); font-size:18.5px; line-height:1.68;
+  font-family:ui-rounded,"Hiragino Maru Gothic ProN",system-ui,-apple-system,"Segoe UI",Roboto,
+              "Microsoft JhengHei","PingFang HK","Noto Sans TC",sans-serif;
+  background:
+    radial-gradient(circle at 10% 0%, #fff3dd 0%, transparent 42%),
+    radial-gradient(circle at 90% 6%, #eaf2ff 0%, transparent 40%),
+    var(--paper);
+  background-attachment:fixed;
+}
+h1,h2,h3{line-height:1.25;margin:0}
+p{margin:0 0 .7em}
+.cn{font-family:"Microsoft JhengHei","PingFang HK","Noto Sans TC",system-ui,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+button:disabled{cursor:default}
+:focus-visible{outline:4px solid #6fa8ff;outline-offset:3px;border-radius:12px}
+
+/* ---------- header ---------- */
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,248,236,.94);
+  backdrop-filter:blur(10px);border-bottom:2px solid var(--line)}
+.topbar-in{max-width:1120px;margin:0 auto;padding:14px 20px 12px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+@media (max-width:760px){.topbar-in{gap:10px}.topbar .top-link{margin-left:0}.brand{flex-basis:100%}}
+.brand{display:flex;align-items:baseline;gap:12px;flex:1 1 260px;min-width:0}
+.brand b{font-size:22px;letter-spacing:-.02em}
+.brand span{font-size:15px;color:var(--muted)}
+.topbar .btn{margin-left:0}
+
+.btn{min-height:var(--tap);padding:12px 22px;font-size:17px;font-weight:700;
+  background:var(--card);border:2px solid var(--line);border-radius:16px;
+  transition:transform .12s,box-shadow .12s,background .15s}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 16px -10px rgba(34,40,58,.5)}
+.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:0 4px 0 #0e1322}
+.btn.primary:active:not(:disabled){box-shadow:0 1px 0 #0e1322;transform:translateY(3px)}
+.btn.sm{min-height:46px;padding:9px 16px;font-size:15px;border-radius:13px}
+.btn.ghost{background:transparent}
+
+/* ---------- tabs ---------- */
+.tabs{max-width:1120px;margin:0 auto;padding:16px 20px 0;display:flex;gap:10px;flex-wrap:wrap}
+.tab{min-height:var(--tap);padding:13px 22px;font-size:17px;font-weight:700;
+  border:2px solid var(--line);border-radius:999px;background:var(--card);color:var(--muted);
+  box-shadow:0 3px 0 rgba(34,40,58,.06);transition:transform .12s}
+.tab:hover{background:#fff;color:var(--ink);transform:translateY(-2px)}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:0 4px 0 #0e1322}
+main{max-width:1120px;margin:0 auto;padding:0 20px 90px}
+.panel{display:none;animation:fade .18s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---------- shared ---------- */
+.pagehead{padding:30px 0 18px}
+.pagehead h2{font-size:34px;letter-spacing:-.03em;margin-bottom:8px}
+.lede{color:var(--muted);font-size:17.5px;max-width:64ch}
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.card + .card{margin-top:18px}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.chip{min-height:50px;padding:11px 20px;font-size:16px;font-weight:700;border-radius:999px;
+  background:var(--card);border:2px solid var(--line);color:var(--muted)}
+.chip:hover{transform:translateY(-2px)}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:0 4px 0 #0e1322}
+.badge{display:inline-block;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  border-radius:8px;padding:4px 10px;background:var(--line-2);color:var(--muted)}
+.badge.t1{background:#fbe5e0;color:var(--t1)}
+.badge.t2{background:#e3eefb;color:var(--t2)}
+.badge.t3{background:#ece4fa;color:var(--t3)}
+.badge.u1{background:#fbe9e3;color:var(--u1)} .badge.u2{background:#e6effc;color:var(--u2)}
+.badge.u3{background:#fbf1d8;color:#9a6b00} .badge.u4{background:#e3f3ec;color:var(--u4)}
+.badge.u5{background:#eee8fb;color:var(--u5)}
+
+/* ---------- game grid ---------- */
+.game-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.game-card{position:relative;background:var(--card);border:2px solid var(--line);border-radius:26px;
+  padding:0;overflow:hidden;text-align:left;box-shadow:var(--shadow);display:flex;flex-direction:column;
+  transition:transform .2s,box-shadow .2s}
+.game-card:hover,.game-card:focus-visible{transform:translateY(-5px);box-shadow:0 16px 34px -18px rgba(34,40,58,.5)}
+.game-art{height:152px;display:block;background:var(--stage,#eef1f6);overflow:hidden}
+.game-art svg{width:100%;height:100%;display:block}
+.game-body{padding:16px 18px 20px}
+.game-body h3{font-size:21px;margin-bottom:6px;letter-spacing:-.01em}
+.game-body p{font-size:15.5px;color:var(--muted);margin:0;line-height:1.55}
+.game-tags{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+.game-tag{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--line-2);color:var(--muted);border-radius:7px;padding:4px 9px}
+.game-stars{position:absolute;top:10px;right:10px;font-size:15px;letter-spacing:1px;color:#e8b21b;
+  background:rgba(255,255,255,.92);border-radius:999px;padding:4px 11px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+
+.stage-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:22px 0 16px}
+.stage-head h3{font-size:25px;letter-spacing:-.01em}
+
+/* ---------- playfield ---------- */
+.scene-holder{position:relative;width:100%;aspect-ratio:600/390;max-width:860px;margin:0 auto;
+  border-radius:26px;border:2px solid var(--line);overflow:hidden;box-shadow:var(--shadow);background:var(--stage,#eef1f6)}
+.scene-holder > svg.scene{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
+.scene-holder > .play-overlay{position:absolute;inset:0;z-index:3;padding:22px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:16px}
+.playfield{position:relative;border-radius:26px;overflow:hidden;background:var(--stage,#eef1f6);
+  border:2px solid var(--line);box-shadow:var(--shadow);max-width:860px;margin:0 auto}
+.play-overlay{position:relative;z-index:3;padding:22px;display:flex;flex-direction:column;gap:16px}
+
+.hud{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hud .pip{background:rgba(255,255,255,.92);border:2px solid rgba(0,0,0,.07);border-radius:999px;
+  padding:7px 15px;font-size:15.5px;font-weight:700}
+.hud .pip.lives{letter-spacing:2px}
+
+.speech{display:flex;gap:14px;align-items:flex-end;max-width:620px}
+.mascot{width:82px;height:82px;flex:none;filter:drop-shadow(0 3px 6px rgba(0,0,0,.16))}
+.bubble{background:#fff;border-radius:18px 18px 18px 5px;padding:13px 17px;font-size:16.5px;line-height:1.5;
+  box-shadow:0 4px 14px -6px rgba(0,0,0,.3);border:2px solid rgba(0,0,0,.05)}
+.bubble b{color:var(--accent,var(--ink))}
+.bubble .cn{display:block;font-size:15px;color:var(--muted);margin-top:3px}
+
+.prompt-card{background:#fff;border-radius:22px;padding:20px 22px;box-shadow:0 6px 22px -10px rgba(0,0,0,.35);
+  border:2px solid rgba(0,0,0,.05)}
+.prompt-card .pz{font-size:13.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  font-weight:800;margin-bottom:8px}
+.prompt-card .pq{font-size:23px;line-height:1.45;font-weight:700;margin:0}
+.prompt-card .pq u{text-decoration:none;border-bottom:3px solid var(--accent,var(--ink));padding:0 3px}
+.opt-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:16px}
+.ob{min-height:62px;padding:15px 18px;font-size:19px;font-weight:700;border-radius:16px;
+  border:2px solid var(--line);background:#fff;line-height:1.35;transition:transform .12s,border-color .15s,background .15s}
+.ob:hover:not(:disabled){border-color:#c9c0ad;transform:translateY(-2px)}
+.ob.correct{background:var(--ok-bg);border-color:var(--ok)}
+.ob.wrong{background:var(--bad-bg);border-color:var(--bad);animation:shake .4s}
+
+.timerbar{height:14px;background:rgba(0,0,0,.12);border-radius:99px;overflow:hidden;margin-top:14px}
+.timerbar > i{display:block;height:100%;background:var(--accent,var(--ink));border-radius:99px;transition:width .25s linear}
+.timerbar.low > i{background:var(--bad)}
+.kb-input{font:inherit;font-size:26px;text-align:center;padding:16px 18px;border-radius:16px;
+  border:3px solid var(--line);background:#fff;width:100%;min-height:66px}
+.kb-input:focus{outline:none;border-color:var(--accent,var(--ink))}
+.letter-diff{font-family:"SF Mono",Consolas,monospace;font-size:26px;letter-spacing:.04em;margin-top:12px}
+.letter-diff s{background:#fadadd;color:var(--bad);text-decoration:none;border-radius:4px}
+.letter-diff b{background:#d9f2e5;color:var(--ok);border-radius:4px}
+
+/* result */
+.result{position:relative;z-index:5;background:#fff;border-radius:30px;padding:34px 28px;text-align:center;
+  box-shadow:0 16px 40px -18px rgba(0,0,0,.45);max-width:470px;margin:30px auto;animation:popIn .4s}
+.result .r-art{width:140px;margin:0 auto 10px}
+.result .r-art .mascot{width:140px;height:140px}
+.result .r-big{font-size:58px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:6px;color:var(--accent,var(--ink))}
+.result .r-stars{font-size:42px;letter-spacing:6px;margin-bottom:12px;color:#e8b21b}
+.result p{font-size:17px;color:var(--muted);margin-bottom:18px}
+.result .btn{min-height:56px;height:56px;flex:none;font-size:18px;padding:14px 26px}
+
+/* ---------- tenses explorer ---------- */
+.tbox{border:2px solid var(--line-2);border-radius:22px;padding:20px 22px;margin-top:18px;background:#fdfcf8}
+.tbox h3{font-size:21px;margin-bottom:4px}
+.tbox .cnsub{font-size:16px;color:var(--muted);margin-bottom:14px}
+.rule2{background:#fff;border:2px dashed #d9d2c3;border-radius:14px;padding:15px 18px;font-size:18px;line-height:1.8}
+.rule2 code{font-family:"SF Mono",Consolas,monospace;font-size:16.5px;background:#f4f0e7;padding:2px 7px;border-radius:6px}
+.ttable{width:100%;border-collapse:collapse;font-size:17px;margin-top:14px}
+.ttable th{text-align:left;font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+  padding:10px 12px;border-bottom:2px solid var(--line)}
+.ttable td{padding:12px;border-bottom:1px solid var(--line-2);vertical-align:top;line-height:1.55}
+.ttable tr:last-child td{border-bottom:none}
+.ttable td.v{font-weight:700;color:var(--accent,var(--ink));white-space:nowrap}
+.trap{margin-top:18px;border-left:6px solid #e0a416;background:var(--amber-bg);
+  border-radius:0 16px 16px 0;padding:16px 20px;font-size:17px}
+.trap b{display:block;font-size:13.5px;letter-spacing:.07em;text-transform:uppercase;color:#8a6100;margin-bottom:6px}
+.exlist{margin:10px 0 0;padding:0;list-style:none;font-size:17.5px}
+.exlist li{padding:11px 0;border-top:1px solid var(--line-2)}
+.exlist li:first-child{border-top:none}
+.exlist .zh{display:block;color:var(--muted);font-size:15.5px;margin-top:3px}
+
+/* ---------- tense quiz ---------- */
+.quiz-top{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.progress{flex:1 1 200px;height:12px;background:#eae5da;border-radius:99px;overflow:hidden;min-width:140px}
+.progress > i{display:block;height:100%;background:var(--accent,var(--ink));width:0;border-radius:99px;transition:width .3s}
+.counter{font-size:16px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:78px;text-align:center}
+.qcard{background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:28px;
+  box-shadow:var(--shadow);max-width:840px}
+.qcard .qnum{font-size:13px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.qtext{font-size:23px;line-height:1.5;margin-bottom:22px;font-weight:600}
+.qtext .slot{display:inline-block;min-width:110px;border-bottom:3px solid var(--accent,var(--ink));margin:0 3px;color:transparent}
+.opts{display:grid;gap:12px}
+.opt{display:flex;align-items:flex-start;gap:15px;text-align:left;background:#fff;border:2px solid var(--line);
+  border-radius:18px;padding:17px 20px;font-size:19px;line-height:1.45;width:100%;min-height:64px;transition:.13s}
+.opt:hover:not(:disabled){border-color:#c9c0ad;background:#fdfcf8;transform:translateY(-2px)}
+.opt .key{flex:none;width:36px;height:36px;border-radius:11px;background:#f0ece2;display:grid;place-items:center;
+  font-size:16px;font-weight:800;color:var(--muted)}
+.opt.correct{border-color:var(--ok);background:var(--ok-bg)}
+.opt.correct .key{background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg);animation:shake .4s}
+.opt.wrong .key{background:var(--bad);color:#fff}
+.answerline{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.answerline input{font:inherit;font-size:20px;padding:15px 18px;border-radius:14px;border:2px solid var(--line);
+  flex:1 1 240px;min-width:0;background:#fff;min-height:60px}
+.answerline input:focus{border-color:var(--accent,var(--ink));outline:none}
+.feedback{margin-top:18px;border-radius:16px;padding:17px 20px;font-size:17px;display:none;border:2px solid transparent;line-height:1.6}
+.feedback.show{display:block;animation:fade .18s ease}
+.feedback.ok{background:var(--ok-bg);border-color:#b9e3d0;color:#0a5c40}
+.feedback.bad{background:var(--bad-bg);border-color:#f3c3cd;color:#93203a}
+.feedback .fb-head{font-weight:800;display:block;font-size:18px;margin-bottom:5px}
+.feedback .why{margin-top:9px;color:var(--ink);font-size:16.5px}
+.qfoot{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;align-items:center}
+.score-pill{margin-left:auto;font-size:16px;color:var(--muted);font-variant-numeric:tabular-nums}
+.summary{text-align:center;padding:44px 24px}
+.summary .big{font-size:68px;font-weight:800;line-height:1;margin-bottom:6px;color:var(--accent,var(--ink))}
+.summary .stars{font-size:36px;letter-spacing:5px;margin-bottom:10px}
+.missed{text-align:left;max-width:640px;margin:18px auto 0;font-size:16.5px}
+.missed li{margin-bottom:11px}
+
+/* ---------- motion ---------- */
+@keyframes popIn{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-4px) rotate(1deg)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}70%{transform:translateY(0)}}
+@keyframes confetti{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(140px) rotate(320deg);opacity:0}}
+.anim-float{animation:float 3s ease-in-out infinite}
+.anim-bob{animation:bob 2.4s ease-in-out infinite}
+.eye{transform-origin:center;animation:blink 5.5s infinite}
+.hop{animation:hop .5s}
+.confetti-bit{position:absolute;width:10px;height:15px;border-radius:2px;top:0;animation:confetti 1.5s ease-in forwards;pointer-events:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- games: specific art ---------- */
+.tense-track{position:relative;height:100%;display:flex;align-items:flex-end;justify-content:space-between;padding:0 6% 4%}
+.tstep{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;font-weight:800;color:#6b5740}
+.tstep .dot{width:34px;height:34px;border-radius:50%;background:#fff;border:3px solid #d9c9a8;display:grid;place-items:center;font-size:15px}
+.tstep.done .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.tstep.now .dot{background:var(--accent,#7a45c4);border-color:var(--accent,#7a45c4);color:#fff;transform:scale(1.15)}
+.ball{position:absolute;width:38px;height:38px;border-radius:50%;background:#fff;border:3px solid #8a6a3f;
+  display:grid;place-items:center;font-size:18px;z-index:4;transition:left .5s cubic-bezier(.3,.9,.3,1)}
+.word-tile{display:inline-block;padding:11px 16px;margin:5px;border-radius:14px;background:#fff;
+  border:2px solid var(--line);font-size:20px;font-weight:700;box-shadow:0 3px 0 rgba(0,0,0,.06)}
+.word-tile.picked{background:#fff3c9;border-color:#d9a520;transform:translateY(-3px)}
+.slot-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;min-height:70px;align-items:center;
+  border:3px dashed #cfc0a0;border-radius:18px;padding:12px;background:#fdfaf3}
+.slot-row .slot-cell{min-width:120px;min-height:48px;border-radius:12px;background:#fff;border:2px solid var(--line);
+  display:grid;place-items:center;font-size:19px;font-weight:700;padding:4px 10px;color:#b8ae98}
+.slot-row .slot-cell.filled{color:var(--ink);border-color:#d9a520;background:#fff8e0}
+.story-line{font-size:19px;line-height:1.85;margin-bottom:8px}
+.story-line .gap{display:inline-block;min-width:96px;border-bottom:3px solid var(--accent);text-align:center;color:var(--ink);font-weight:700}
+.tagbtn{font-size:15px!important}
+
+@media (max-width:760px){
+  body{font-size:17.5px}
+  .topbar-in{padding:12px 16px 10px}
+  .brand b{font-size:19px}
+  .brand span{font-size:13.5px}
+  .tabs{padding:12px 16px 0;gap:8px}
+  .tab{padding:11px 17px;font-size:16px}
+  main{padding:0 16px 70px}
+  .pagehead{padding:22px 0 14px}
+  .pagehead h2{font-size:27px}
+  .qcard,.card,.tbox{padding:20px}
+  .qtext{font-size:20px}
+  .opt{font-size:17.5px;padding:15px 16px;min-height:60px;gap:12px}
+  .opt .key{width:32px;height:32px;font-size:15px}
+  .scene-holder{aspect-ratio:auto;min-height:520px}
+  .scene-holder > .play-overlay{position:relative;inset:auto;min-height:520px}
+  .play-overlay{padding:16px}
+  .game-grid{grid-template-columns:1fr}
+  .ttable{font-size:15.5px}
+  .ttable td{padding:10px 8px}
+  .word-tile{font-size:17px;padding:9px 13px}
+  .slot-row .slot-cell{min-width:92px;font-size:16.5px}
+}
+
+/* =====================================================================
+   FRIENDLY GUIDE — a simple route through the real exam scope.
+   These are navigation cards, not charts: colours decorate, text carries
+   every meaning. No new questions or answer keys are introduced here.
+   ===================================================================== */
+:root{--guide-blue:#2b7bd8;--guide-blue-bg:#e8f2ff}
+.top-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:46px;margin-left:auto;
+  padding:9px 16px;border:2px solid var(--line);border-radius:13px;background:#fff;
+  color:var(--ink);text-decoration:none;font-size:15px;font-weight:800;white-space:nowrap;
+  transition:transform .12s,box-shadow .12s}
+.top-link:hover{transform:translateY(-2px);box-shadow:0 5px 12px -8px rgba(34,40,58,.7)}
+body:not(.start-here) .kid-guide,body:not(.start-here) .scope-map{display:none}
+body.start-here .panel{display:none}
+.star-total{display:inline-flex;align-items:center;gap:6px;min-height:46px;padding:8px 15px;
+  border-radius:999px;background:#fff3cc;border:2px solid #e9bb4b;color:#765100;
+  font-size:15px;font-weight:800;white-space:nowrap}
+.star-total b{font-size:18px;color:#5c3f00}
+.all-games{margin:6px 0 4px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.all-games b{font-size:17px}
+.all-games span{font-size:14.5px;color:var(--muted)}
+.kid-guide{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:20px;align-items:center;
+  margin:24px 0 20px;padding:24px 26px;border-radius:30px;border:3px solid #f2d59b;
+  background:linear-gradient(135deg,#fff8e6 0%,#fffdf7 62%,#eaf5ff 100%);
+  box-shadow:0 5px 0 #f2d59b,0 12px 28px -20px rgba(34,40,58,.55);position:relative;overflow:hidden}
+.kid-guide::before,.kid-guide::after{content:"";position:absolute;border-radius:50%;background:#ffe8a6;opacity:.55;pointer-events:none}
+.kid-guide::before{width:120px;height:120px;left:-52px;top:-58px}
+.kid-guide::after{width:86px;height:86px;right:-36px;bottom:-48px;background:#cce8ff}
+.kid-guide > *{position:relative;z-index:1}
+.kid-guide h2{font-size:28px;line-height:1.3;margin-bottom:8px;letter-spacing:-.02em}
+.kid-guide h2 em{font-style:normal;color:var(--guide-blue)}
+.kid-guide p{font-size:17px;line-height:1.6;color:#4d5769;margin:0 0 14px;max-width:64ch}
+.guide-pals{display:flex;align-items:center;justify-content:center;min-height:140px}
+.guide-pals svg{width:140px;height:140px;max-width:100%;animation:float 3.2s ease-in-out infinite;
+  filter:drop-shadow(0 5px 7px rgba(34,40,58,.18))}
+.scope-pills{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 16px}
+.scope-pills > span{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:7px 14px;
+  border-radius:999px;background:#fff;border:2px solid #f0dcb9;font-size:15px;font-weight:700;color:#475166}
+.scope-pills > span.star-total{background:#fff3cc;border-color:#e9bb4b;color:#765100}
+.guide-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.guide-step{display:flex;gap:12px;align-items:flex-start;text-align:left;min-height:104px;
+  padding:15px 16px;border-radius:20px;border:2px solid #d9e6f7;background:#fff;
+  box-shadow:0 3px 0 #d9e6f7;transition:transform .15s,box-shadow .15s,border-color .15s}
+.guide-step:hover{transform:translateY(-3px);border-color:var(--guide-blue);box-shadow:0 6px 0 #d9e6f7}
+.guide-step .step-num{flex:none;width:38px;height:38px;display:grid;place-items:center;border-radius:13px;
+  background:var(--guide-blue-bg);color:#175ca8;font-size:17px;font-weight:900}
+.guide-step b{display:block;font-size:17px;line-height:1.3;margin-bottom:3px}
+.guide-step small{display:block;font-size:14px;line-height:1.45;color:var(--muted)}
+.guide-step .go{display:block;margin-top:5px;color:#175ca8;font-size:14px;font-weight:800}
+.guide-tip{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:12px 16px;
+  border-radius:16px;background:#fff5d9;border:2px dashed #e4b94e;font-size:15.5px;line-height:1.55}
+.guide-tip .tip-icon{flex:none;font-size:22px;line-height:1.2}
+.guide-tip b{color:#765100}
+
+/* Scope reminder — one small card per topic; visual badges, all facts in text. */
+.scope-map{margin:0 0 20px;padding:22px 24px;border-radius:26px;background:#fff;border:2px solid var(--line)}
+.scope-map-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.scope-map-head h3{font-size:22px;letter-spacing:-.01em}
+.scope-map-head span{font-size:15px;color:var(--muted)}
+.scope-map > p{font-size:15.5px;color:var(--muted);margin-bottom:14px}
+.unit-map{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px}
+.unit-map button{display:flex;gap:11px;align-items:center;text-align:left;min-height:88px;
+  padding:12px 14px;border-radius:18px;border:2px solid var(--line);background:#fffdf8;
+  box-shadow:0 3px 0 rgba(34,40,58,.06)}
+.unit-map button:hover{transform:translateY(-2px);border-color:var(--unit-color)}
+.unit-map .unit-icon{flex:none;width:46px;height:46px;display:grid;place-items:center;
+  border-radius:15px;background:var(--unit-tint);font-size:25px}
+.unit-map b{display:block;font-size:15.5px;line-height:1.3}
+.unit-map small{display:block;font-size:13.5px;line-height:1.35;color:var(--muted);margin-top:2px}
+
+/* A little cheerleader that stays out of the way. */
+.guide-bubble{display:flex;gap:10px;align-items:center;margin-top:14px;padding:10px 15px;
+  border-radius:16px;background:#e9f7ef;border:2px solid #bce5ce;font-size:15.5px;line-height:1.45}
+.guide-bubble .buddy-mini{flex:none;width:30px;height:30px;display:grid;place-items:center;
+  border-radius:50%;background:#fff;font-size:19px}
+.guide-bubble b{color:#0a6443}
+.game-card .play-cta{display:inline-flex;align-items:center;gap:5px;margin-top:11px;
+  font-size:15px;font-weight:800;color:#175ca8}
+.game-card:hover .play-cta{text-decoration:underline}
+.site-foot{max-width:1120px;margin:0 auto;padding:0 20px 44px;color:#8a7d68;font-size:14px}
+
+@media (max-width:760px){
+  .kid-guide{grid-template-columns:1fr;padding:20px 18px;margin:18px 0 16px}
+  .kid-guide h2{font-size:23px}
+  .kid-guide p{font-size:16px}
+  .guide-pals{display:none}
+  .guide-steps{grid-template-columns:1fr}
+  .guide-step{min-height:0}
+  .scope-map{padding:18px 16px}
+  .unit-map{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}
+  .top-link,.star-total{min-height:42px;padding:7px 12px;font-size:14px}
+}
+@media print{.topbar,.tabs,.top-link,.kid-guide,.scope-map,.guide-bubble,.site-foot{display:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <b>🎮 English Game Club</b>
+      <span class="cn">四年級英文遊戲 · 邊玩邊記</span>
+    </div>
+    <a class="top-link" href="index.html">📖 Study notes</a>
+    <button class="btn sm ghost" id="guideBack" hidden title="Back to the game map">🗺️ Map</button>
+    <span class="star-total" id="starTotal" title="Stars collected in games">⭐ <span id="starNum">0</span> / <b id="starMax">30</b></span>
+    <button class="btn sm" id="sndBtn" aria-pressed="false">🔇 Sound off</button>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Sections">
+  <button class="tab" role="tab" id="tab-arcade" aria-controls="panel-arcade" aria-selected="true">🎮 Choose a game</button>
+  <button class="tab" role="tab" id="tab-tense"  aria-controls="panel-tense"  aria-selected="false">⏳ Time rules</button>
+  <button class="tab" role="tab" id="tab-drill"  aria-controls="panel-drill"  aria-selected="false">✍️ Quiz time</button>
+</nav>
+
+<main>
+  <!-- Kid-friendly route through the real scope: textbook Units 1–5,
+       Ready self-learning word pools, and Dictation Sheets 1–3. -->
+  <section class="kid-guide" aria-labelledby="guide-title">
+    <div>
+      <h2 id="guide-title">Welcome to the <em>Game Club</em>! <span aria-hidden="true">🦊</span></h2>
+      <p>Every game uses words from your <b>Units 1–5</b> books, <b>Ready</b> word pools, and <b>three dictation sheets</b>. Pick one game, play for <b>10 minutes</b>, then come back for another!</p>
+      <div class="scope-pills" aria-label="What is in the exam scope">
+        <span>📚 5 textbook units</span>
+        <span>🃏 65 word cards</span>
+        <span>✏️ 3 dictation sheets</span>
+        <span>⏳ 3 tense teams</span>
+        <span>🎮 10 games</span>
+        <span class="star-total">⭐ Stars: <span id="heroStars">0</span> / 30</span>
+      </div>
+      <div class="guide-steps" aria-label="A three-step study route">
+        <button class="guide-step" type="button" data-guide="arcade">
+          <span class="step-num">1</span>
+          <span><b>🎲 Play</b><small>Choose a game that looks fun today.</small><span class="go">See the games →</span></span>
+        </button>
+        <button class="guide-step" type="button" data-guide="tense">
+          <span class="step-num">2</span>
+          <span><b>💡 Learn a trick</b><small>Stuck on a verb? Peek at the time rule.</small><span class="go">See time rules →</span></span>
+        </button>
+        <button class="guide-step" type="button" data-guide="drill">
+          <span class="step-num">3</span>
+          <span><b>🏅 Try a quiz</b><small>Answer a few questions, one at a time.</small><span class="go">Try quiz time →</span></span>
+        </button>
+      </div>
+      <div class="guide-tip"><span class="tip-icon" aria-hidden="true">💡</span><span><b>Buddy’s tip:</b> A wrong answer is a clue, not a mistake. Read the little explanation, then give it another go!</span></div>
+    </div>
+    <div class="guide-pals" aria-hidden="true">
+      <svg viewBox="0 0 150 150">
+        <ellipse cx="75" cy="139" rx="43" ry="6" fill="#d7c3a1" opacity=".45"/>
+        <path d="M75 23 L38 43 L48 83 L102 83 L112 43 Z" fill="#e8833a"/>
+        <path d="M38 43 L25 17 L57 33 Z" fill="#e8833a"/><path d="M112 43 L125 17 L93 33 Z" fill="#e8833a"/>
+        <path d="M47 50 Q75 80 103 50 Q101 102 75 119 Q49 102 47 50 Z" fill="#fff1dc"/>
+        <circle cx="60" cy="63" r="8" fill="#27324a"/><circle cx="90" cy="63" r="8" fill="#27324a"/>
+        <circle cx="63" cy="60" r="2.6" fill="#fff"/><circle cx="93" cy="60" r="2.6" fill="#fff"/>
+        <ellipse cx="75" cy="79" rx="7" ry="5" fill="#27324a"/>
+        <path d="M75 84 Q67 94 59 86 M75 84 Q83 94 91 86" stroke="#8a5a3c" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M40 97 Q19 98 20 117 Q36 125 51 109" fill="#e8833a"/>
+        <path d="M110 97 Q131 98 130 117 Q114 125 99 109" fill="#e8833a"/>
+        <path d="M126 23 L130 31 L139 35 L130 39 L126 48 L122 39 L113 35 L122 31 Z" fill="#f0bf30"/>
+        <circle cx="24" cy="55" r="4" fill="#8fc6f1"/><circle cx="127" cy="59" r="3" fill="#f3a0a0"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="scope-map" aria-labelledby="scope-title">
+    <div class="scope-map-head"><h3 id="scope-title">🗺️ Pick your practice island</h3><span>Tap a topic to go there</span></div>
+    <p>Every island uses the same words as your school books and dictation sheets — no surprise words!</p>
+    <div class="unit-map" id="unitMap"></div>
+    <div class="guide-bubble" role="status"><span class="buddy-mini" aria-hidden="true">🦊</span><span><b>Buddy says:</b> Stars are saved on this device. You can play the same game again to beat your best score!</span></div>
+  </section>
+
+  <section class="panel active" id="panel-arcade" role="tabpanel" aria-labelledby="tab-arcade">
+    <div class="pagehead">
+      <h2>🎮 Choose a game</h2>
+      <p class="lede">Ten games from the real exam scope. Every word and rule comes from Units 1–5 or the school dictation lists — so playing <b>is</b> revising!</p>
+    </div>
+    <div id="arcadeChrome">
+      <div class="guide-bubble"><span class="buddy-mini" aria-hidden="true">🦊</span><span><b>Buddy says:</b> Start with any game you like. Finishing a game can earn up to three stars.</span></div>
+      <div class="all-games" id="allGames"><b>🎲 All 10 games</b><span>Choose one — you can come back for another!</span></div>
+    </div>
+    <div class="game-grid" id="gameGrid"></div>
+    <div id="gameStage"></div>
+  </section>
+
+  <section class="panel" id="panel-tense" role="tabpanel" aria-labelledby="tab-tense">
+    <div class="pagehead">
+      <h2>⏳ Time rules</h2>
+      <p class="lede">Three little teams of verbs: <b>now</b>, <b>before</b>, and <b>special words</b>. Read one rule and one example, then try the quiz.</p>
+    </div>
+    <div class="chips" id="tenseChips">
+      <button class="chip" data-tense="present" aria-pressed="true">🔵 Now · Present</button>
+      <button class="chip" data-tense="past" aria-pressed="false">🟠 Before · Past</button>
+      <button class="chip" data-tense="irregular" aria-pressed="false">🟣 Special verbs</button>
+    </div>
+    <div class="guide-bubble"><span class="buddy-mini" aria-hidden="true">🦊</span><span><b>Buddy says:</b> Look for time words like <em>every day</em>, <em>yesterday</em> and <em>last week</em>. They are your clues!</span></div>
+    <div id="tenseRoot"></div>
+  </section>
+
+  <section class="panel" id="panel-drill" role="tabpanel" aria-labelledby="tab-drill">
+    <div class="pagehead">
+      <h2>✍️ Quiz time</h2>
+      <p class="lede">Choose the right verb form. Pick one tense, try a story gap, or mix them all together. One question at a time!</p>
+    </div>
+    <div class="chips" id="drillChips">
+      <button class="chip" data-drill="all" aria-pressed="true">🌟 All mixed</button>
+      <button class="chip" data-drill="present" aria-pressed="false">🔵 Present</button>
+      <button class="chip" data-drill="past" aria-pressed="false">🟠 Past</button>
+      <button class="chip" data-drill="irregular" aria-pressed="false">🟣 Special verbs</button>
+      <button class="chip" data-drill="cloze" aria-pressed="false">📖 Story gaps</button>
+    </div>
+    <div id="drillRoot"></div>
+  </section>
+</main>
+
+<footer class="site-foot">Sau Ming Primary School · Primary 4 English · Term 1 (2026–2027) · Units 1–5 and Dictation Sheets 1–3 · works offline</footer>
+
+<script>
+/* =========================================================================
+   SHARED
+   ========================================================================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const norm = s => String(s).toLowerCase().replace(/[’‘]/g, "'").replace(/\s+/g, ' ').trim().replace(/[.!?,;:]+$/, '');
+const shuffle = a => {
+  const b = a.slice();
+  for (let i = b.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [b[i], b[j]] = [b[j], b[i]];
+  }
+  return b;
+};
+const pick = (arr, n) => shuffle(arr).slice(0, n);
+
+/* ---- sound ---- */
+const Snd = (() => {
+  let ctx = null, on = true;   // sound is on from the start; the toggle can mute it
+  const live = () => {
+    if (!on) return null;
+    if (!ctx) {
+      const C = window.AudioContext || window.webkitAudioContext;
+      if (!C) return null;
+      try { ctx = new C(); } catch (e) { return null; }
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  };
+  function tone(f, dur = .16, type = 'sine', vol = .13, delay = 0, slideTo = null) {
+    const c = live(); if (!c) return;
+    const t = c.currentTime + delay;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+    g.gain.setValueAtTime(.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + .015);
+    g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g).connect(c.destination);
+    o.start(t); o.stop(t + dur + .03);
+  }
+  function noise(dur = .3, vol = .1, hp = 900, delay = 0) {
+    const c = live(); if (!c) return;
+    const n = Math.floor(c.sampleRate * dur);
+    const buf = c.createBuffer(1, n, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+    const src = c.createBufferSource(); src.buffer = buf;
+    const f = c.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hp;
+    const g = c.createGain(); g.gain.value = vol;
+    src.connect(f).connect(g).connect(c.destination);
+    src.start(c.currentTime + delay);
+  }
+  return {
+    get on() { return on; },
+    toggle() { on = !on; if (on) { live(); tone(660, .09, 'sine', .1); } return on; },
+    ok()   { tone(523, .1, 'sine', .12); tone(784, .18, 'sine', .12, .09); },
+    great(){ tone(523, .09, 'triangle', .12); tone(659, .09, 'triangle', .12, .08); tone(1047, .22, 'triangle', .13, .16); },
+    bad()  { tone(300, .16, 'sine', .09, 0, 190); },
+    pop()  { tone(880, .05, 'square', .05, 0, 1200); },
+    ting() { tone(1320, .22, 'sine', .09); tone(1760, .3, 'sine', .05, .03); },
+    whoosh(){ noise(.32, .09, 700); },
+    thunk(){ tone(150, .12, 'triangle', .14, 0, 90); noise(.08, .04, 300); },
+    cheer(){ [523,659,784,1047].forEach((f,i)=>tone(f,.3,'triangle',.09,i*.07)); },
+    step() { tone(220, .05, 'square', .05); },
+    boing(){ tone(220, .22, 'sine', .12, 0, 620); },
+    /* click sounds — short, round and clearly audible.
+       "tap"  small buttons  ·  "card" big cards & options
+       "pick" tabs/chips     ·  "open" accordions          */
+    tap()  { const f = 640 + Math.random() * 160; tone(f, .09, 'triangle', .13, 0, f * 1.55); },
+    card() { const f = 420 + Math.random() * 70;  tone(f, .11, 'triangle', .15, 0, f * 1.25); tone(f * 2, .06, 'sine', .06, .02); },
+    pick() { tone(700, .07, 'sine', .14); tone(1050, .1, 'sine', .1, .05); },
+    open() { tone(380, .13, 'sine', .12, 0, 720); }
+  };
+})();
+$('#sndBtn').addEventListener('click', () => {
+  const on = Snd.toggle();
+  $('#sndBtn').textContent = on ? '🔊 Sound on' : '🔇 Sound off';
+  $('#sndBtn').setAttribute('aria-pressed', String(on));
+});
+
+/* ---- mascot ---- */
+function mascot(mood = 'happy') {
+  const eyes = mood === 'cheer'
+    ? `<path d="M30 44 q5 -6 10 0" stroke="#3a2418" stroke-width="3" fill="none" stroke-linecap="round"/>
+       <path d="M50 44 q5 -6 10 0" stroke="#3a2418" stroke-width="3" fill="none" stroke-linecap="round"/>`
+    : `<ellipse class="eye" cx="35" cy="45" rx="4.6" ry="5.4" fill="#3a2418"/>
+       <ellipse class="eye" cx="55" cy="45" rx="4.6" ry="5.4" fill="#3a2418"/>
+       <circle cx="36.6" cy="43.2" r="1.5" fill="#fff"/><circle cx="56.6" cy="43.2" r="1.5" fill="#fff"/>`;
+  const mouth = mood === 'oops'
+    ? `<ellipse cx="45" cy="58" rx="4" ry="5" fill="#7c2b34"/>`
+    : mood === 'think'
+      ? `<path d="M38 58 q7 3 14 0" stroke="#3a2418" stroke-width="2.6" fill="none" stroke-linecap="round"/>`
+      : `<path d="M36 56 q9 9 18 0" stroke="#7c2b34" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  return `<svg class="mascot" viewBox="0 0 90 90" aria-hidden="true">
+    <ellipse cx="45" cy="83" rx="26" ry="4" fill="rgba(0,0,0,.1)"/>
+    <path d="M45 18 q-24 0 -26 26 q-1 20 10 27 q16 9 32 0 q11 -7 10 -27 q-2 -26 -26 -26" fill="#b9704f"/>
+    <path d="M45 24 q-18 1 -20 21 q-1 15 8 21 q12 7 24 0 q9 -6 8 -21 q-2 -20 -20 -21" fill="#e9c39b"/>
+    <ellipse cx="45" cy="52" rx="19" ry="16" fill="#f6dcb8"/>
+    <ellipse cx="31" cy="40" rx="9" ry="7" fill="#7b4a32" opacity=".55"/>
+    <ellipse cx="59" cy="40" rx="9" ry="7" fill="#7b4a32" opacity=".55"/>
+    ${eyes}
+    <ellipse cx="45" cy="53" rx="4.4" ry="3.4" fill="#5a3521"/>
+    ${mouth}
+    <path d="M45 60 v4" stroke="#c98a6a" stroke-width="2" stroke-linecap="round"/>
+  </svg>`;
+}
+const say = (text, cn = '', mood = 'happy') =>
+  `<div class="speech">${mascot(mood)}<div class="bubble">${text}${cn ? `<span class="cn">${esc(cn)}</span>` : ''}</div></div>`;
+const hud = (right, lives, extra = '') => `<div class="hud">
+  <span class="pip">Score <b>${right}</b></span>
+  ${lives !== null ? `<span class="pip lives" aria-label="${lives} lives left">${'❤️'.repeat(Math.max(0, lives))}</span>` : ''}
+  ${extra}</div>`;
+const timerBar = () => `<div class="timerbar" id="tbar"><i style="width:100%"></i></div>`;
+
+/* ---- stars ---- */
+const STORE = 'p4games-v1';
+let store = (() => { try { return JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { return {}; } })();
+function saveStore() { try { localStorage.setItem(STORE, JSON.stringify(store)); } catch (e) {} }
+function award(id, n) {
+  const k = 'game:' + id, prev = (store[k] || {}).stars || 0;
+  if (n > prev) { store[k] = { stars: n }; saveStore(); }
+  renderStars();
+}
+function totalStars() {
+  return GAMES.reduce((n, g) => n + ((store['game:' + g.id] || {}).stars || 0), 0);
+}
+function renderStars() {
+  const n = totalStars();
+  const max = GAMES.length * 3;
+  const num = $('#starNum');
+  const hero = $('#heroStars');
+  const maxEl = $('#starMax');
+  if (num) num.textContent = n;
+  if (hero) hero.textContent = n;
+  if (maxEl) maxEl.textContent = max;
+}
+
+/* ---- result card ---- */
+function resultCard(host, cfg) {
+  Snd.cheer();
+  const pct = cfg.total ? cfg.right / cfg.total : 0;
+  const stars = pct >= .9 ? 3 : pct >= .6 ? 2 : pct >= .3 ? 1 : 0;
+  if (cfg.award) award(cfg.award, stars);
+  renderStars();
+  const cheer = stars >= 2 ? 'You are a word wizard! Keep going.' :
+                stars === 1 ? 'Nice try! Play again and your stars can grow.' :
+                'You finished the game — every try makes your brain stronger!';
+  const bits = Array.from({ length: 18 }, (_, i) =>
+    `<span class="confetti-bit" style="left:${5 + Math.random() * 90}%;background:${['#e0574a','#2f7fe0','#22885a','#e8b21b','#7455cc'][i % 5]};animation-delay:${(Math.random() * .6).toFixed(2)}s"></span>`).join('');
+  host.innerHTML = `<div class="playfield" style="background:linear-gradient(160deg,#eef2f8,#e4ebf5)"><div class="result">
+    ${bits}
+    <div class="r-art anim-bob">${mascot(stars >= 2 ? 'cheer' : 'happy')}</div>
+    <div class="r-big">${cfg.right} / ${cfg.total}</div>
+    <div class="r-stars" aria-label="${stars} out of 3 stars">${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}</div>
+    <p>${esc(cfg.msg)}</p>
+    <p class="guide-bubble" style="text-align:left;margin:0 0 16px"><span class="buddy-mini" aria-hidden="true">🦊</span><span><b>Buddy says:</b> ${cheer}</span></p>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button class="btn primary" id="againGame">🔄 Play again</button>
+      <button class="btn" id="backGame">🎮 All games</button>
+    </div>
+  </div></div>`;
+  $('#againGame', host).addEventListener('click', () => mountGame(cfg.award));
+  $('#backGame', host).addEventListener('click', renderArcade);
+}
+
+/* =========================================================================
+   THUMBNAILS
+   ========================================================================= */
+const Art = {
+  timeMachine: () => `<svg viewBox="0 0 240 118" aria-hidden="true">
+    <rect width="240" height="118" fill="#e9e2f8"/>
+    <circle cx="120" cy="60" r="40" fill="#c9b6f0" opacity=".5"/>
+    <circle cx="120" cy="60" r="30" fill="#fff" stroke="#7a45c4" stroke-width="3"/>
+    <path d="M120 60 L120 42" stroke="#7a45c4" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M120 60 L133 68" stroke="#7a45c4" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="120" cy="60" r="4" fill="#7a45c4"/>
+    <g class="anim-float"><circle cx="196" cy="34" r="9" fill="#ffd166"/><circle cx="196" cy="34" r="4" fill="#fff" opacity=".7"/></g>
+    <g class="anim-bob"><ellipse cx="48" cy="92" rx="16" ry="6" fill="#7a45c4" opacity=".25"/></g>
+  </svg>`,
+  fishing: () => `<svg viewBox="0 0 240 118" aria-hidden="true">
+    <rect width="240" height="118" fill="#dbeefb"/>
+    <path d="M0 78 q60 -14 120 0 q60 14 120 0 v40 H0z" fill="#8fc9ea"/>
+    <path d="M0 92 q60 -14 120 0 q60 14 120 0 v26 H0z" fill="#6fb5dc"/>
+    <g class="anim-float">
+      <path d="M70 40 v40" stroke="#7a5a38" stroke-width="2"/>
+      <circle cx="70" cy="80" r="5" fill="#e2572f"/>
+      <rect x="66" y="84" width="8" height="14" rx="3" fill="#e2572f"/>
+    </g>
+    <g class="anim-bob" style="animation-delay:.4s">
+      <ellipse cx="150" cy="88" rx="12" ry="7" fill="#f2a03c"/>
+      <path d="M162 88 l10 -6 v12z" fill="#f2a03c"/>
+      <circle cx="146" cy="86" r="1.6" fill="#3a2418"/>
+    </g>
+    <g class="anim-bob" style="animation-delay:.9s">
+      <ellipse cx="190" cy="99" rx="9" ry="5.5" fill="#e2734a"/>
+      <circle cx="187" cy="97" r="1.3" fill="#3a2418"/>
+    </g>
+  </svg>`,
+  trophy: () => `<svg viewBox="0 0 240 118" aria-hidden="true">
+    <rect width="240" height="118" fill="#fdf3d6"/>
+    <g transform="translate(120 62)">
+      <path d="M-22 -32 h44 v20 a22 22 0 0 1 -44 0z" fill="#e8b21b"/>
+      <path d="M-22 -28 h-10 a14 14 0 0 0 14 14" fill="none" stroke="#e8b21b" stroke-width="5"/>
+      <path d="M22 -28 h10 a14 14 0 0 1 -14 14" fill="none" stroke="#e8b21b" stroke-width="5"/>
+      <rect x="-5" y="-8" width="10" height="16" fill="#c99312"/>
+      <rect x="-18" y="8" width="36" height="8" rx="3" fill="#c99312"/>
+      <text x="0" y="-12" font-size="15" text-anchor="middle" fill="#fff" font-weight="700">★</text>
+    </g>
+    <g class="anim-float"><circle cx="46" cy="32" r="4" fill="#e8b21b"/></g>
+    <g class="anim-float" style="animation-delay:.7s"><circle cx="196" cy="44" r="5" fill="#e8b21b"/></g>
+  </svg>`,
+  shuffle: () => `<svg viewBox="0 0 240 118" aria-hidden="true">
+    <rect width="240" height="118" fill="#e2f2ea"/>
+    <g transform="translate(30 34) rotate(-6)"><rect width="54" height="58" rx="10" fill="#fff" stroke="#1a8a5a" stroke-width="3"/>
+      <text x="27" y="38" font-size="19" text-anchor="middle" fill="#1a8a5a" font-weight="800">go</text></g>
+    <g transform="translate(93 28) rotate(3)"><rect width="54" height="58" rx="10" fill="#fff" stroke="#2b7bd8" stroke-width="3"/>
+      <text x="27" y="38" font-size="17" text-anchor="middle" fill="#2b7bd8" font-weight="800">went</text></g>
+    <g transform="translate(156 34) rotate(-4)"><rect width="54" height="58" rx="10" fill="#fff" stroke="#e2572f" stroke-width="3"/>
+      <text x="27" y="38" font-size="17" text-anchor="middle" fill="#e2572f" font-weight="800">goes</text></g>
+  </svg>`,
+  calendar: () => `<svg viewBox="0 0 240 118" aria-hidden="true">
+    <rect width="240" height="118" fill="#fbe6e0"/>
+    <g transform="translate(72 24)">
+      <rect width="96" height="76" rx="10" fill="#fff" stroke="#e2572f" stroke-width="3"/>
+      <rect width="96" height="20" rx="10" fill="#e2572f"/>
+      <rect x="14" y="30" width="18" height="14" rx="3" fill="#f6cfc4"/>
+      <rect x="39" y="30" width="18" height="14" rx="3" fill="#f6cfc4"/>
+      <rect x="64" y="30" width="18" height="14" rx="3" fill="#e2572f"/>
+      <rect x="14" y="52" width="18" height="14" rx="3" fill="#f6cfc4"/>
+      <rect x="39" y="52" width="18" height="14" rx="3" fill="#f6cfc4"/>
+      <rect x="64" y="52" width="18" height="14" rx="3" fill="#f6cfc4"/>
+    </g>
+    <g class="anim-bob"><circle cx="186" cy="40" r="12" fill="#fff" stroke="#e2572f" stroke-width="3"/>
+      <path d="M186 33 v8 l5 3" stroke="#e2572f" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>
+  </svg>`,
+  shopping: () => `<svg viewBox="0 0 240 118" aria-hidden="true">
+    <rect width="240" height="118" fill="#e8f1e0"/>
+    <g transform="translate(52 30)">
+      <rect width="100" height="66" rx="8" fill="#fff" stroke="#1a8a5a" stroke-width="3"/>
+      <rect x="10" y="10" width="34" height="20" rx="4" fill="#cfe8d8"/>
+      <rect x="52" y="10" width="38" height="6" rx="3" fill="#cfe8d8"/>
+      <rect x="52" y="22" width="26" height="6" rx="3" fill="#cfe8d8"/>
+    </g>
+    <g transform="translate(160 58)">
+      <path d="M0 0 h10 l10 30 h26 l8 -20 H14" fill="none" stroke="#1a8a5a" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="26" cy="40" r="5" fill="#1a8a5a"/><circle cx="44" cy="40" r="5" fill="#1a8a5a"/>
+      <rect x="16" y="6" width="10" height="12" fill="#f2a03c"/>
+    </g>
+  </svg>`,
+  clock: () => `<svg viewBox="0 0 240 118" aria-hidden="true">
+    <rect width="240" height="118" fill="#e6ecfb"/>
+    <circle cx="86" cy="60" r="34" fill="#fff" stroke="#2b7bd8" stroke-width="3"/>
+    <path d="M86 60 V38" stroke="#2b7bd8" stroke-width="4" stroke-linecap="round"/>
+    <path d="M86 60 L102 70" stroke="#e2572f" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="86" cy="60" r="4" fill="#2b7bd8"/>
+    <g class="anim-float" style="animation-delay:.3s">
+      <rect x="146" y="34" width="10" height="34" rx="2" fill="#fff" stroke="#2b7bd8" stroke-width="2.5"/>
+      <circle cx="151" cy="80" r="6" fill="#fff" stroke="#2b7bd8" stroke-width="2.5"/>
+    </g>
+  </svg>`,
+  detective: () => `<svg viewBox="0 0 240 118" aria-hidden="true">
+    <rect width="240" height="118" fill="#efe6d4"/>
+    <g transform="translate(74 40)">
+      <rect width="92" height="56" rx="10" fill="#fff" stroke="#a8843f" stroke-width="3"/>
+      <path d="M14 18 h46 M14 30 h60 M14 42 h34" stroke="#d9c9a8" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <g class="anim-float"><circle cx="176" cy="54" r="18" fill="rgba(255,255,255,.55)" stroke="#6b5a3a" stroke-width="4"/>
+      <path d="M189 67 l12 12" stroke="#6b5a3a" stroke-width="6" stroke-linecap="round"/></g>
+  </svg>`,
+  basket: () => `<svg viewBox="0 0 240 118" aria-hidden="true">
+    <rect width="240" height="118" fill="#e5f3f7"/>
+    <g transform="translate(70 46)">
+      <path d="M0 0 h100 l-12 48 H12z" fill="#d9a05b" stroke="#a87a38" stroke-width="3"/>
+      <path d="M8 -6 q42 -26 84 0" fill="none" stroke="#a87a38" stroke-width="3"/>
+      <circle cx="26" cy="6" r="9" fill="#e2572f"/><circle cx="50" cy="2" r="8" fill="#2b7bd8"/>
+      <circle cx="74" cy="6" r="9" fill="#e8b21b"/><circle cx="60" cy="-8" r="7" fill="#1a8a5a"/>
+    </g>
+  </svg>`,
+  lanterns: () => `<svg viewBox="0 0 240 118" aria-hidden="true">
+    <rect width="240" height="118" fill="#241b3a"/>
+    <circle cx="196" cy="28" r="14" fill="#ffe9a8" opacity=".9"/>
+    <path d="M0 92 q60 -12 120 0 q60 12 120 0 v26 H0z" fill="#2f2350"/>
+    <g class="anim-float"><ellipse cx="60" cy="40" rx="14" ry="18" fill="#e05a3a"/>
+      <rect x="52" y="20" width="16" height="5" rx="2" fill="#f2c14e"/>
+      <rect x="54" y="58" width="12" height="4" rx="2" fill="#f2c14e"/></g>
+    <g class="anim-float" style="animation-delay:.5s"><ellipse cx="110" cy="56" rx="12" ry="15" fill="#f29b3a"/>
+      <rect x="104" y="39" width="12" height="4" rx="2" fill="#f2c14e"/></g>
+    <g class="anim-float" style="animation-delay:1s"><ellipse cx="156" cy="34" rx="11" ry="14" fill="#e05a3a"/>
+      <rect x="150" y="18" width="12" height="4" rx="2" fill="#f2c14e"/></g>
+  </svg>`
+};
+
+/* =========================================================================
+   GAME POOL — every item comes from the exam scope or the dictation sheets
+   ========================================================================= */
+const VERB_FORMS = {
+  go:     { pres3: 'goes',   past: 'went',   ing: 'going',   zh: '去' },
+  play:   { pres3: 'plays',  past: 'played', ing: 'playing', zh: '玩' },
+  do:     { pres3: 'does',   past: 'did',    ing: 'doing',   zh: '做' },
+  watch:  { pres3: 'watches',past: 'watched',ing: 'watching',zh: '看' },
+  eat:    { pres3: 'eats',   past: 'ate',    ing: 'eating',  zh: '吃' },
+  see:    { pres3: 'sees',   past: 'saw',    ing: 'seeing',  zh: '看見' },
+  run:    { pres3: 'runs',   past: 'ran',    ing: 'running', zh: '跑' },
+  come:   { pres3: 'comes',  past: 'came',   ing: 'coming',  zh: '來' },
+  fall:   { pres3: 'falls',  past: 'fell',   ing: 'falling', zh: '跌倒' },
+  hurt:   { pres3: 'hurts',  past: 'hurt',   ing: 'hurting', zh: '受傷' },
+  laugh:  { pres3: 'laughs', past: 'laughed',ing: 'laughing',zh: '笑' },
+  put:    { pres3: 'puts',   past: 'put',    ing: 'putting', zh: '放' },
+  sing:   { pres3: 'sings',  past: 'sang',   ing: 'singing', zh: '唱歌' },
+  bring:  { pres3: 'brings', past: 'brought',ing: 'bringing',zh: '帶來' },
+  win:    { pres3: 'wins',   past: 'won',    ing: 'winning', zh: '贏' },
+  read:   { pres3: 'reads',  past: 'read',   ing: 'reading', zh: '閱讀' },
+  make:   { pres3: 'makes',  past: 'made',   ing: 'making',  zh: '製作' },
+  buy:    { pres3: 'buys',   past: 'bought', ing: 'buying',  zh: '買' },
+  teach:  { pres3: 'teaches',past: 'taught', ing: 'teaching',zh: '教' },
+  think:  { pres3: 'thinks', past: 'thought',ing: 'thinking',zh: '想' },
+  catch:  { pres3: 'catches',past: 'caught', ing: 'catching',zh: '接住' },
+  fly:    { pres3: 'flies',  past: 'flew',   ing: 'flying',  zh: '飛' },
+  said:   { pres3: 'says',   past: 'said',   ing: 'saying',  zh: '說' }
+};
+
+/* sentences drawn from the textbook / dictation passages */
+const TENSE_ITEMS = [
+  /* ---- PRESENT ---- */
+  { tense:'present', base:'Ben always ___ sport on weekdays.', ans:'does', form:'pres3',
+    opts:['do','does','did','doing'], why:'He / she / it takes -s (or -es): Ben always does sport.' },
+  { tense:'present', base:'Daisy ___ does sport. She only plays badminton once a year.', ans:'seldom', alt:1,
+    opts:['seldom','yesterday','ago','last year'], why:'“seldom” is an adverb of frequency and goes before the verb.' },
+  { tense:'present', base:'He ___ karate on Saturdays.', ans:'does', form:'pres3',
+    opts:['do','does','doing','done'], why:'Present tense with “he” → does.' },
+  { tense:'present', base:'I ___ dodgebee three times a week.', ans:'play', form:'base',
+    opts:['play','plays','played','playing'], why:'With “I / you / we / they” the present tense is the base verb.' },
+  { tense:'present', base:'Luna ___ her things away every day.', ans:'puts', form:'pres3',
+    opts:['put','puts','putted','putting'], why:'She → puts. The past of “put” is also “put”, not “putted”.' },
+  { tense:'present', base:'My sister ___ badminton very well.', ans:'plays', form:'pres3',
+    opts:['play','plays','played','to play'], why:'My sister = she → plays.' },
+  { tense:'present', base:'We ___ to each other for hours.', ans:'talk', form:'base',
+    opts:['talk','talks','talked','talking'], why:'“We” takes the base verb in the present tense.' },
+  { tense:'present', base:'Grandpa ___ jogging every morning.', ans:'goes', form:'pres3',
+    opts:['go','goes','went','going'], why:'Grandpa = he → goes. Add -es after “go”.' },
+  { tense:'present', base:'Everyone ___ to join the New Sports Experience Day.', ans:'wants', form:'pres3',
+    opts:['want','wants','wanted','wanting'], why:'Everyone is singular, so it takes -s: wants.' },
+  { tense:'present', base:'Our neighbours ___ kind. They always help us.', ans:'are', form:'be',
+    opts:['is','are','was','were'], why:'“Neighbours” is plural, so the present-tense “be” is “are”.' },
+  { tense:'present', base:'Tim ___ my neighbour.', ans:'is', form:'be',
+    opts:['is','are','am','be'], why:'Tim = he → is.' },
+  { tense:'present', base:'Every culture ___ its own festivals.', ans:'has', form:'pres3',
+    opts:['have','has','had','having'], why:'Every culture = it → has. “Have” changes to “has”.' },
+  { tense:'present', base:'She ___ to play the game, but I am not sure.', ans:'wants', form:'pres3',
+    opts:['want','wants','wanted','wanting'], why:'She → wants.' },
+  { tense:'present', base:'Kate ___ reading horror stories with her buddy.', ans:'likes', form:'pres3',
+    opts:['like','likes','liked','to like'], why:'Kate = she → likes.' },
+  { tense:'present', base:'The walls ___ the village feel safe.', ans:'make', form:'base',
+    opts:['make','makes','made','making'], why:'“The walls” is plural, so the verb stays in its base form.' },
+  { tense:'present', base:'___ you and your family celebrate Christmas?', ans:'Do', form:'do',
+    opts:['Do','Does','Did','Are'], why:'Questions in the present tense start with Do + I/you/we/they.' },
+  { tense:'present', base:'___ she go jogging every day?', ans:'Does', form:'do',
+    opts:['Do','Does','Did','Is'], why:'Questions with he/she/it use Does, and the verb stays plain: Does she go…?' },
+  { tense:'present', base:'Daisy ___ sport. She only plays badminton once a year.', ans:'seldom does', form:'phrase',
+    opts:['seldom does','does seldom','seldom did','never do'], why:'The adverb comes before the verb: she seldom does sport.' },
+  { tense:'present', base:'We ___ look after each other.', ans:'should', form:'modal',
+    opts:['should','shoulds','shoulded','shoulding'], why:'“Should” never changes form. After it, use the base verb.' },
+  { tense:'present', base:'The WinterFest ___ place on 21 September.', ans:'takes', form:'pres3',
+    opts:['take','takes','took','taking'], why:'The WinterFest = it → takes.' },
+  /* ---- PAST ---- */
+  { tense:'past', base:'Last weekend, my family and I ___ to a walled village.', ans:'went', form:'past',
+    opts:['go','goes','went','going'], why:'“Last weekend” tells us it is past: go → went.' },
+  { tense:'past', base:'Great-uncle ___ us at the main gate to the village.', ans:'met', form:'past',
+    opts:['meet','meets','met','meeting'], why:'The recount is in the past: meet → met.' },
+  { tense:'past', base:'He ___ us around the village.', ans:'showed', form:'past',
+    opts:['show','shows','showed','showing'], why:'Regular past tense: show → showed.' },
+  { tense:'past', base:'We ___ to his stories about the past.', ans:'listened', form:'past',
+    opts:['listen','listens','listened','listening'], why:'Regular past tense: listen → listened.' },
+  { tense:'past', base:'I ___ the top and it flew into the air.', ans:'spun', form:'past',
+    opts:['spin','spins','spun','spinning'], why:'spin → spun. This word appears in the Unit 2 recount.' },
+  { tense:'past', base:'I ___ after it and fell into some mud.', ans:'raced', form:'past',
+    opts:['race','races','raced','racing'], why:'Regular past: race → raced.' },
+  { tense:'past', base:'I ___ down because I went too fast.', ans:'fell', form:'past',
+    opts:['fall','falls','fell','falling'], why:'fall → fell.' },
+  { tense:'past', base:'The other children ___ at me.', ans:'laughed', form:'past',
+    opts:['laugh','laughs','laughed','laughing'], why:'Regular past: laugh → laughed.' },
+  { tense:'past', base:'My arm ___ a lot, so Jamie called for help.', ans:'hurt', form:'past',
+    opts:['hurt','hurts','hurted','hurting'], why:'“Hurt” does not change: hurt → hurt. Never “hurted”.' },
+  { tense:'past', base:'We ___ a delicious meal in the evening.', ans:'had', form:'past',
+    opts:['have','has','had','having'], why:'have → had.' },
+  { tense:'past', base:'Daisy ___ to Ben and tried playing dodgebee.', ans:'listened', form:'past',
+    opts:['listen','listens','listened','listening'], why:'Regular past: listened.' },
+  { tense:'past', base:'Ben ___ Daisy about dodgebee one day.', ans:'told', form:'past',
+    opts:['tell','tells','told','telling'], why:'tell → told.' },
+  { tense:'past', base:'They ___ roller skating last Sunday.', ans:'went', form:'past',
+    opts:['go','goes','went','going'], why:'“Last Sunday” → past tense: went.' },
+  { tense:'past', base:'I ___ my leg and could not go to school.', ans:'hurt', form:'past',
+    opts:['hurt','hurts','hurted','hurting'], why:'hurt → hurt.' },
+  { tense:'past', base:'Tim ___ to see me every day.', ans:'came', form:'past',
+    opts:['come','comes','came','coming'], why:'come → came.' },
+  { tense:'past', base:'We ___ a book called The Secret World of Bugs.', ans:'read', form:'past',
+    opts:['read','reads','reading','to read'], why:'The past of “read” is still spelt “read” but sounds like “red”.' },
+  { tense:'past', base:'Great-uncle ___ the children how to play with a spinning top.', ans:'taught', form:'past',
+    opts:['teach','teaches','taught','teaching'], why:'teach → taught.' },
+  { tense:'past', base:'The elves and I ___ Christmas gifts.', ans:'exchanged', form:'past',
+    opts:['exchange','exchanges','exchanged','exchanging'], why:'Regular past: exchange → exchanged.' },
+  { tense:'past', base:'It was my turn, so I ___ the top again.', ans:'spun', form:'past',
+    opts:['spin','spins','spun','spinning'], why:'spin → spun.' },
+  { tense:'past', base:'Everyone ___ and did the same thing.', ans:'laughed', form:'past',
+    opts:['laugh','laughs','laughed','laughing'], why:'Regular past: laughed.' },
+  /* ---- IRREGULAR ---- */
+  { tense:'irregular', base:'go → ___', ans:'went', form:'past',
+    opts:['goed','went','gone','going'], why:'go → went.' },
+  { tense:'irregular', base:'eat → ___', ans:'ate', form:'past',
+    opts:['eated','ate','eaten','eating'], why:'eat → ate.' },
+  { tense:'irregular', base:'see → ___', ans:'saw', form:'past',
+    opts:['seed','saw','seen','seeing'], why:'see → saw.' },
+  { tense:'irregular', base:'run → ___', ans:'ran', form:'past',
+    opts:['runned','ran','run','running'], why:'run → ran.' },
+  { tense:'irregular', base:'come → ___', ans:'came', form:'past',
+    opts:['comed','came','come','coming'], why:'come → came.' },
+  { tense:'irregular', base:'fall → ___', ans:'fell', form:'past',
+    opts:['falled','fell','fallen','falling'], why:'fall → fell.' },
+  { tense:'irregular', base:'sing → ___', ans:'sang', form:'past',
+    opts:['singed','sang','sung','singing'], why:'sing → sang.' },
+  { tense:'irregular', base:'bring → ___', ans:'brought', form:'past',
+    opts:['bringed','brought','brang','bringing'], why:'bring → brought.' },
+  { tense:'irregular', base:'win → ___', ans:'won', form:'past',
+    opts:['winned','won','wan','winning'], why:'win → won.' },
+  { tense:'irregular', base:'make → ___', ans:'made', form:'past',
+    opts:['maked','made','maden','making'], why:'make → made.' },
+  { tense:'irregular', base:'buy → ___', ans:'bought', form:'past',
+    opts:['buyed','bought','buied','buying'], why:'buy → bought.' },
+  { tense:'irregular', base:'teach → ___', ans:'taught', form:'past',
+    opts:['teached','taught','teachd','teaching'], why:'teach → taught.' },
+  { tense:'irregular', base:'think → ___', ans:'thought', form:'past',
+    opts:['thinked','thought','thunk','thinking'], why:'think → thought.' },
+  { tense:'irregular', base:'catch → ___', ans:'caught', form:'past',
+    opts:['catched','caught','catcht','catching'], why:'catch → caught.' },
+  { tense:'irregular', base:'fly → ___', ans:'flew', form:'past',
+    opts:['flied','flew','flyed','flying'], why:'fly → flew.' },
+  { tense:'irregular', base:'say → ___', ans:'said', form:'past',
+    opts:['sayed','said','sed','saying'], why:'say → said.' },
+  { tense:'irregular', base:'tell → ___', ans:'told', form:'past',
+    opts:['telled','told','tolden','telling'], why:'tell → told.' },
+  { tense:'irregular', base:'have → ___', ans:'had', form:'past',
+    opts:['haved','had','hadd','having'], why:'have → had.' },
+  { tense:'irregular', base:'do → ___', ans:'did', form:'past',
+    opts:['doed','did','done','doing'], why:'do → did.' },
+  { tense:'irregular', base:'hurt → ___', ans:'hurt', form:'past',
+    opts:['hurted','hurt','hurten','hurting'], why:'hurt → hurt. It does not change.' },
+  { tense:'irregular', base:'put → ___', ans:'put', form:'past',
+    opts:['putted','put','putten','putting'], why:'put → put. It does not change.' },
+  { tense:'irregular', base:'read → ___', ans:'read', form:'past',
+    opts:['readed','read','reading','reads'], why:'read → read. Same spelling, different sound.' }
+];
+
+/* story-gap cloze items reuse the passages */
+const CLOZE_ITEMS = [
+  { title:'Great-uncle’s birthday', paras:[
+    'Last weekend, my family and I {went} to a walled village for my great-uncle’s 70th birthday. My cousin Jamie {came} too. Jamie and I are the same age.',
+    'Great-uncle {met} us at the main gate. He {showed} us around. We {listened} to his stories about the past. “People {built} their houses close to each other,” he explained.',
+    'I {spun} the top and it flew into the air. I {raced} after it and {fell} into some mud.',
+    'The other children {laughed} at me. I was upset. “We shouldn’t make fun of each other,” {said} Jamie. Then we all {played} some games together.'
+  ]},
+  { title:'There is a sport for everyone', paras:[
+    'Ben {enjoys} doing sport but Daisy does not. Ben always {does} sport on weekdays. He {goes} jogging five times a week.',
+    'Daisy seldom {does} sport. She only {plays} badminton once a year.',
+    'One day, Ben {told} Daisy about dodgebee. Daisy worried that the bee might {hurt} the players.',
+    'Daisy {listened} to Ben and {tried} playing dodgebee. She {loves} playing dodgebee now.'
+  ]},
+  { title:'Ken’s thank-you to Tim', paras:[
+    'Tim {is} my neighbour. We {were} best friends when we were small.',
+    'One day, I {hurt} my leg and could not {go} to school for a while. Tim {came} to see me every day and {played} games with me.',
+    'He is calmer and smarter than me, but he sometimes {lets} me win. Tim {is} the friendliest person I know.'
+  ]}
+];
+
+function clozeQuestions() {
+  const out = [];
+  for (const c of CLOZE_ITEMS) {
+    for (const para of c.paras) {
+      const parts = para.split(/\{([^}]+)\}/);
+      for (let i = 1; i < parts.length; i += 2) {
+        const ans = parts[i];
+        const sentence = para.replace(/\{[^}]+\}/g, '___');
+        out.push({ tense: 'cloze', base: sentence, ans, story: c.title,
+          opts: null, why: `“${ans}” fits here — keep the tense of the whole story.` });
+      }
+    }
+  }
+  return out;
+}
+
+/* =========================================================================
+   GAMES
+   ========================================================================= */
+const GAMES = [
+  { id:'timeMachine', title:'Time Machine', unit:0, desc:'Choose present or past — the clock spins and the sentence fixes itself.',
+    tags:['Tense','Present · Past'], art:Art.timeMachine },
+  { id:'fishing', title:'Tense Fishing', unit:0, desc:'Reel in the fish holding the verb that fits the sentence.',
+    tags:['Tense','Verb forms'], art:Art.fishing },
+  { id:'verbShuffle', title:'Verb Shuffle', unit:0, desc:'Tap the verb cards in the right order to build a correct sentence.',
+    tags:['Tense','Word order'], art:Art.shuffle },
+  { id:'calendar', title:'Adverb Calendar', unit:1, desc:'“How often?” Slap the right adverb — always, often, sometimes, seldom, never.',
+    tags:['Unit 1','Frequency'], art:Art.calendar },
+  { id:'shopping', title:'Festival Shopping', unit:5, desc:'Fill the basket with what each festival needs — Christmas, Easter, Halloween and more.',
+    tags:['Unit 5','Festivals'], art:Art.shopping },
+  { id:'clock', title:'Preposition Clock', unit:5, desc:'at / in / on / from…to — spin the dial to the right time word.',
+    tags:['Unit 5','at · in · on'], art:Art.clock },
+  { id:'detective', title:'Story Detective', unit:4, desc:'Read the clue and name the genre: adventure, detective, fairy tale, horror, love, true.',
+    tags:['Unit 4','Story types'], art:Art.detective },
+  { id:'basket', title:'Adjective Basket', unit:3, desc:'Sort describing words into the “people” basket or the “stories” basket.',
+    tags:['Unit 3–4','People · Stories'], art:Art.basket },
+  { id:'lanterns', title:'Lantern Spell', unit:5, desc:'Catch the falling letters and spell the festival word before it lands.',
+    tags:['Unit 5','Spelling'], art:Art.lanterns },
+  { id:'trophy', title:'Grand Tense Trophy', unit:0, desc:'Twenty mixed questions from every unit — answer before the bar runs out.',
+    tags:['All units','Challenge'], art:Art.trophy }
+];
+
+let arcadeCleanup = null;
+function renderArcade() {
+  $('#gameStage').innerHTML = '';
+  $('#gameStage').hidden = true;
+  $('#gameGrid').hidden = false;
+  const chrome = $('#arcadeChrome');
+  if (chrome) chrome.hidden = false;
+  $('#gameGrid').innerHTML = GAMES.map(g => {
+    const s = (store['game:' + g.id] || {}).stars || 0;
+    return `<button class="game-card" data-game="${g.id}">
+      <span class="game-stars">${'★'.repeat(s)}${'☆'.repeat(3 - s)}</span>
+      <span class="game-art">${g.art()}</span>
+      <span class="game-body">
+        <h3>${esc(g.title)}</h3>
+        <p>${esc(g.desc)}</p>
+        <span class="play-cta">Let’s play →</span>
+        <span class="game-tags">${g.tags.map(t => `<span class="game-tag">${esc(t)}</span>`).join('')}</span>
+      </span>
+    </button>`;
+  }).join('');
+}
+function mountGame(id) {
+  if (arcadeCleanup) { try { arcadeCleanup(); } catch (e) {} arcadeCleanup = null; }
+  const g = GAMES.find(x => x.id === id);
+  $('#gameGrid').hidden = true;
+  const chrome = $('#arcadeChrome');
+  if (chrome) chrome.hidden = true;
+  const stage = $('#gameStage');
+  stage.hidden = false;
+  stage.innerHTML = `
+    <div class="stage-head">
+      <button class="btn sm" id="backBtn">← All games</button>
+      <h3>${esc(g.title)}</h3>
+    </div>
+    <div id="field"></div>`;
+  $('#backBtn').addEventListener('click', renderArcade);
+  STUDIO[id]($('#field'));
+  stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* helper: build a 4-option MC round from an item */
+function mcOptions(it) {
+  const opts = it.opts ? it.opts.slice() : [];
+  if (opts.includes(it.ans)) return shuffle(opts);
+  return shuffle([it.ans, ...opts]).slice(0, 4);
+}
+
+/* ---------- 1. Time Machine ---------- */
+function gameTimeMachine(host) {
+  const deck = pick(TENSE_ITEMS.filter(t => t.opts), 10);
+  let i = 0, right = 0, locked = false;
+  const clock = (deg) => `<svg class="scene" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="600" height="320" fill="#ece6f8"/>
+    <circle cx="300" cy="150" r="120" fill="#d8c8f2" opacity=".55"/>
+    <circle cx="300" cy="150" r="92" fill="#fff" stroke="#7a45c4" stroke-width="6"/>
+    ${Array.from({length:12},(_,k)=>{const a=(k*30-90)*Math.PI/180;
+      return `<line x1="${300+Math.cos(a)*78}" y1="${150+Math.sin(a)*78}" x2="${300+Math.cos(a)*86}" y2="${150+Math.sin(a)*86}" stroke="#a58ad8" stroke-width="4" stroke-linecap="round"/>`}).join('')}
+    <g style="transform:rotate(${deg}deg);transform-origin:300px 150px;transition:transform .6s cubic-bezier(.3,.9,.3,1)">
+      <line x1="300" y1="150" x2="300" y2="88" stroke="#7a45c4" stroke-width="7" stroke-linecap="round"/>
+    </g>
+    <line x1="300" y1="150" x2="352" y2="150" stroke="#e2572f" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="300" cy="150" r="9" fill="#7a45c4"/>
+  </svg>`;
+
+  function paint(deg = 0) {
+    if (i >= deck.length) return resultCard(host, { right, total: deck.length, award: 'timeMachine',
+      msg: 'The time machine is working! Present and past are sorted.' });
+    const it = deck[i];
+    const opts = mcOptions(it);
+    host.innerHTML = `<div class="scene-holder">${clock(deg)}<div class="play-overlay">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+        ${hud(right, null, `<span class="pip">⏳ ${i + 1} / ${deck.length}</span>`)}
+        ${say('Is the sentence about now or before?', '這句是說現在還是以前？')}
+      </div>
+      <div class="prompt-card">
+        <div class="pz">Fill the gap</div>
+        <p class="pq">${esc(it.base)}</p>
+        <div class="opt-btns">${opts.map(o => `<button class="ob" data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>
+      </div>
+    </div></div>`;
+    $$('.ob', host).forEach(b => b.addEventListener('click', () => {
+      if (locked) return; locked = true;
+      const ok = b.dataset.o === it.ans;
+      $$('.ob', host).forEach(x => {
+        if (x.dataset.o === it.ans) x.classList.add('correct');
+        else if (x === b) x.classList.add('wrong');
+        x.disabled = true;
+      });
+      const bub = host.querySelector('.bubble');
+      if (ok) {
+        right++; i++; Snd.ok();
+        paint(360);
+        setTimeout(() => { locked = false; }, 750);
+      } else {
+        Snd.bad();
+        if (bub) bub.innerHTML = `<b style="color:var(--bad)">Good try!</b> ${esc(it.why)}`;
+        setTimeout(() => { locked = false; i++; paint(); }, 1600);
+      }
+    }));
+  }
+  paint();
+}
+
+/* ---------- 2. Tense Fishing ---------- */
+function gameFishing(host) {
+  const deck = pick(TENSE_ITEMS, 10);
+  let i = 0, right = 0, locked = false;
+  const sea = () => `<svg class="scene" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="600" height="320" fill="#cfe9f7"/>
+    <path d="M0 170 q75 -20 150 0 q75 20 150 0 q75 -20 150 0 q75 20 150 0 v150 H0z" fill="#8fc9ea"/>
+    <path d="M0 220 q75 -20 150 0 q75 20 150 0 q75 -20 150 0 q75 20 150 0 v100 H0z" fill="#6fb5dc"/>
+    <circle cx="120" cy="60" r="26" fill="#ffe08a"/>
+  </svg>`;
+  function paint() {
+    if (i >= deck.length) return resultCard(host, { right, total: deck.length, award: 'fishing',
+      msg: right >= 8 ? 'A full bucket of fish!' : 'The fish got away — read the tense rule and try again.' });
+    const it = deck[i];
+    const opts = mcOptions(it);
+    host.innerHTML = `<div class="scene-holder">${sea()}<div class="play-overlay">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+        ${hud(right, null, `<span class="pip">🐟 ${i + 1} / ${deck.length}</span>`)}
+        ${say('Which fish has the right verb?', '哪一條魚身上的動詞才對？')}
+      </div>
+      <div class="prompt-card">
+        <div class="pz">Reel it in</div>
+        <p class="pq">${esc(it.base)}</p>
+        <div class="opt-btns">${opts.map(o => `<button class="ob" data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>
+      </div>
+    </div></div>`;
+    $$('.ob', host).forEach(b => b.addEventListener('click', () => {
+      if (locked) return; locked = true;
+      const ok = b.dataset.o === it.ans;
+      $$('.ob', host).forEach(x => {
+        if (x.dataset.o === it.ans) x.classList.add('correct');
+        else if (x === b) x.classList.add('wrong');
+        x.disabled = true;
+      });
+      if (ok) { right++; Snd.ting(); }
+      else { Snd.bad(); const bub = host.querySelector('.bubble');
+        if (bub) bub.innerHTML = `<b style="color:var(--bad)">Splash! Good try.</b> ${esc(it.why)}`; }
+      setTimeout(() => { locked = false; i++; paint(); }, ok ? 900 : 1700);
+    }));
+  }
+  paint();
+}
+
+/* ---------- 3. Verb Shuffle (tap tiles in order) ---------- */
+function gameVerbShuffle(host) {
+  const ROUNDS = [
+    { words:['Ben','always','does','sport','on','weekdays'], ans:'Ben always does sport on weekdays.',
+      note:'The adverb “always” goes before the verb.' },
+    { words:['Daisy','seldom','does','sport'], ans:'Daisy seldom does sport.',
+      note:'“seldom” goes before the verb.' },
+    { words:['We','should','look','after','each','other'], ans:'We should look after each other.',
+      note:'After “should” use the base verb.' },
+    { words:['She','often','does','karate','on','Saturdays'], ans:'She often does karate on Saturdays.',
+      note:'She + often + verb.' },
+    { words:['Jamie','and','I','are','the','same','age'], ans:'Jamie and I are the same age.',
+      note:'“the same” keeps “the”.' },
+    { words:['Adventure','stories','are','more','popular','than','horror','stories'], ans:'Adventure stories are more popular than horror stories.',
+      note:'Long adjectives use “more … than”.' },
+    { words:['Luna','is','the','fastest','runner','in','the','school','team'], ans:'Luna is the fastest runner in the school team.',
+      note:'Superlative = the + -est.' },
+    { words:['I','would','like','to','say','hello','to','the','reindeer'], ans:'I would like to say hello to the reindeer.',
+      note:'After “would like to”, use the base verb.' },
+    { words:['We','should','not','make','fun','of','each','other'], ans:'We should not make fun of each other.',
+      note:'“should not” + base verb.' },
+    { words:['The','WinterFest','is','from','22','November','to','1','January'], ans:'The WinterFest is from 22 November to 1 January.',
+      note:'from … to … for start and end.' }
+  ];
+  let i = 0, right = 0;
+  function paint() {
+    if (i >= ROUNDS.length) return resultCard(host, { right, total: ROUNDS.length, award: 'verbShuffle',
+      msg:'Every sentence built correctly!' });
+    const r = ROUNDS[i];
+    const bag = shuffle(r.words.map((w, k) => ({ w, k })));
+    let picked = [];
+    function draw(flash) {
+      host.innerHTML = `<div class="playfield" style="background:#eef7f1">
+        <div class="play-overlay">
+          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            ${hud(right, null, `<span class="pip">🧩 ${i + 1} / ${ROUNDS.length}</span>`)}
+            ${say('Tap the cards in the right order.', '按正確次序點擊詞卡。')}
+          </div>
+          <div class="prompt-card">
+            <div class="pz">Build the sentence</div>
+            <div class="slot-row" id="row">
+              ${r.words.map((_, n) => `<span class="slot-cell${picked[n] ? ' filled' : ''}" data-n="${n}">${picked[n] ? esc(picked[n].w) : n + 1}</span>`).join('')}
+            </div>
+            <div style="margin-top:14px;text-align:center">
+              ${bag.map(t => `<button class="word-tile${t.used ? ' picked' : ''}" data-k="${t.k}" ${t.used ? 'disabled' : ''}>${esc(t.w)}</button>`).join('')}
+            </div>
+            <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;justify-content:center">
+              <button class="btn sm" id="undo">↩ Undo</button>
+              <button class="btn sm" id="clear">Clear</button>
+            </div>
+            <div id="wfb" style="min-height:26px;margin-top:10px;font-size:16.5px"></div>
+          </div>
+        </div></div>`;
+      $$('.word-tile', host).forEach(b => b.addEventListener('click', () => {
+        const t = bag.find(x => x.k === +b.dataset.k);
+        if (!t || t.used) return;
+        t.used = true; picked.push(t); Snd.pop();
+        if (picked.length === r.words.length) { draw(); judge(); }
+        else draw();
+      }));
+      $('#undo', host).addEventListener('click', () => {
+        const t = picked.pop(); if (t) t.used = false; Snd.step(); draw();
+      });
+      $('#clear', host).addEventListener('click', () => {
+        bag.forEach(x => x.used = false); picked = []; draw();
+      });
+      if (flash) { const f = $('#wfb', host); if (f) f.innerHTML = flash; }
+    }
+    function judge() {
+      const made = picked.map(p => p.w).join(' ');
+      const ok = norm(made) === norm(r.ans);
+      const fb = $('#wfb', host);
+      if (ok) {
+        right++; Snd.great();
+        fb.innerHTML = `<b style="color:var(--ok)">✔ ${esc(r.ans)}</b><div style="color:var(--muted);font-size:15px">${esc(r.note)}</div>`;
+        setTimeout(() => { i++; paint(); }, 950);
+      } else {
+        Snd.bad();
+        // show the right sentence, then move on so the child always progresses
+        fb.innerHTML = `<b style="color:var(--bad)">Good try!</b> You built: “${esc(made)}”.<br>
+          <span style="color:var(--ok)">✔ ${esc(r.ans)}</span><br>
+          <span style="color:var(--muted);font-size:15px">${esc(r.note)}</span>`;
+        setTimeout(() => { i++; paint(); }, 2600);
+      }
+    }
+    draw();
+  }
+  paint();
+}
+
+/* ---------- 4. Adverb Calendar ---------- */
+function gameCalendar(host) {
+  const ADV = ['always','often','sometimes','seldom','never'];
+  const QS = [
+    { s:'Ben does sport on every single weekday. → Ben ___ does sport on weekdays.', a:'always', why:'Every single day = always.' },
+    { s:'He does karate on most Saturdays. → He ___ does karate on Saturdays.', a:'often', why:'Most of the time, but not every time = often.' },
+    { s:'He does it on some Sundays, but not many. → He ___ does it on Sundays.', a:'sometimes', why:'Some of the time = sometimes.' },
+    { s:'Daisy almost never does sport. → Daisy ___ does sport.', a:'seldom', why:'Almost never = seldom.' },
+    { s:'She does not do sport at any time. → She ___ does sport.', a:'never', why:'Not at any time = never.' },
+    { s:'I play dodgebee on Monday, Wednesday and Friday. → I ___ play dodgebee.', a:'often', why:'Three days out of seven is a lot — often.' },
+    { s:'Luna runs every morning without missing a day. → Luna ___ runs in the morning.', a:'always', why:'Without missing a day = always.' },
+    { s:'Tim visits on the odd weekend. → Tim ___ visits at the weekend.', a:'sometimes', why:'Now and then = sometimes.' },
+    { s:'My brother refuses to eat vegetables. → My brother ___ eats vegetables.', a:'never', why:'Refuses = never.' },
+    { s:'She plays badminton once a year. → She ___ plays badminton.', a:'seldom', why:'Once a year = seldom.' }
+  ];
+  let i = 0, right = 0, locked = false;
+  const cal = () => `<svg class="scene" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="600" height="320" fill="#fdeee8"/>
+    <g transform="translate(120 40)">
+      <rect width="360" height="230" rx="20" fill="#fff" stroke="#e2572f" stroke-width="5"/>
+      <rect width="360" height="54" rx="20" fill="#e2572f"/>
+      <text x="180" y="37" font-size="26" text-anchor="middle" fill="#fff" font-family="system-ui" font-weight="800">HOW OFTEN?</text>
+      ${Array.from({length:15},(_,k)=>{const c=k%5,r=Math.floor(k/5);
+        return `<rect x="${24+c*66}" y="${80+r*52}" width="52" height="40" rx="7" fill="#fbe2d8"/>`}).join('')}
+    </g>
+  </svg>`;
+  function paint() {
+    if (i >= QS.length) return resultCard(host, { right, total: QS.length, award: 'calendar',
+      msg:'You know your adverbs of frequency!' });
+    const q = QS[i];
+    host.innerHTML = `<div class="scene-holder">${cal()}<div class="play-overlay">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        ${hud(right, null, `<span class="pip">📅 ${i + 1} / ${QS.length}</span>`)}
+        ${say('How often is it?', '多久一次？')}
+      </div>
+      <div class="prompt-card">
+        <div class="pz">Choose the adverb</div>
+        <p class="pq" style="font-size:20px">${esc(q.s)}</p>
+        <div class="opt-btns">${shuffle(ADV).map(a => `<button class="ob" data-a="${a}">${a}<span class="cn" style="display:block;font-size:13px;color:var(--muted)">${({always:'總是',often:'經常',sometimes:'有時',seldom:'很少',never:'從不'})[a]}</span></button>`).join('')}</div>
+      </div>
+    </div></div>`;
+    $$('.ob', host).forEach(b => b.addEventListener('click', () => {
+      if (locked) return; locked = true;
+      const ok = b.dataset.a === q.a;
+      $$('.ob', host).forEach(x => {
+        if (x.dataset.a === q.a) x.classList.add('correct');
+        else if (x === b) x.classList.add('wrong');
+        x.disabled = true;
+      });
+      if (ok) { right++; Snd.ok(); }
+      else { Snd.bad(); const bub = host.querySelector('.bubble');
+        if (bub) bub.innerHTML = `<b style="color:var(--bad)">It is “${q.a}”.</b> ${esc(q.why)}`; }
+      setTimeout(() => { locked = false; i++; paint(); }, ok ? 850 : 1700);
+    }));
+  }
+  paint();
+}
+
+/* ---------- 5. Festival Shopping ---------- */
+function gameShopping(host) {
+  const FEST = [
+    { f:'Christmas', items:[['decorate the Christmas tree',1],['exchange Christmas gifts',1],['wear a swimsuit',0],['paint Easter eggs',0]] },
+    { f:'Easter', items:[['paint Easter eggs',1],['wear bunny ears',1],['watch dragon boat races',0],['go trick or treating',0]] },
+    { f:'Dragon Boat Festival', items:[['eat rice dumplings',1],['watch dragon boat races',1],['look at the full moon',0],['decorate the Christmas tree',0]] },
+    { f:'Mid-Autumn Festival', items:[['look at the full moon',1],['watch the fire dragon dance',1],['eat rice dumplings',0],['wear costumes',0]] },
+    { f:'Halloween', items:[['go trick or treating',1],['wear costumes',1],['exchange Christmas gifts',0],['paint Easter eggs',0]] }
+  ];
+  const deck = shuffle(FEST);
+  let i = 0, right = 0, locked = false;
+  const shop = () => `<svg class="scene" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="600" height="320" fill="#e9f3e2"/>
+    <rect y="250" width="600" height="70" fill="#cfe2c1"/>
+    <g transform="translate(70 60)">
+      <rect width="200" height="150" rx="14" fill="#fff" stroke="#1a8a5a" stroke-width="5"/>
+      <path d="M0 46 h200" stroke="#1a8a5a" stroke-width="4"/>
+      <circle cx="56" cy="24" r="10" fill="#f2a03c"/><circle cx="100" cy="24" r="10" fill="#e2572f"/>
+      <circle cx="144" cy="24" r="10" fill="#2b7bd8"/>
+    </g>
+    <g transform="translate(400 180)">
+      <path d="M0 0 h26 l26 74 h68 l20 -52 H36" fill="none" stroke="#1a8a5a" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="66" cy="96" r="13" fill="#1a8a5a"/><circle cx="112" cy="96" r="13" fill="#1a8a5a"/>
+    </g>
+  </svg>`;
+  function paint() {
+    if (i >= deck.length) return resultCard(host, { right, total: deck.length, award: 'shopping',
+      msg:'Every basket packed correctly!' });
+    const f = deck[i];
+    host.innerHTML = `<div class="scene-holder">${shop()}<div class="play-overlay">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        ${hud(right, null, `<span class="pip">🛒 ${i + 1} / ${deck.length}</span>`)}
+        ${say('Which activity belongs to this festival?', '哪一項活動屬於這個節日？')}
+      </div>
+      <div class="prompt-card">
+        <div class="pz">${esc(f.f)}</div>
+        <p class="pq">Pick the activity for ${esc(f.f)}.</p>
+        <div class="opt-btns">${shuffle(f.items).map(([txt, good]) => `<button class="ob" data-g="${good}">${esc(txt)}</button>`).join('')}</div>
+      </div>
+    </div></div>`;
+    $$('.ob', host).forEach(b => b.addEventListener('click', () => {
+      if (locked) return; locked = true;
+      const ok = b.dataset.g === '1';
+      $$('.ob', host).forEach(x => {
+        if (x.dataset.g === '1') x.classList.add('correct');
+        else if (x === b) x.classList.add('wrong');
+        x.disabled = true;
+      });
+      if (ok) { right++; Snd.thunk(); }
+      else { Snd.bad(); const bub = host.querySelector('.bubble');
+        if (bub) bub.innerHTML = `<b style="color:var(--bad)">That one is for another festival.</b> Look at the green card.`; }
+      setTimeout(() => { locked = false; i++; paint(); }, ok ? 900 : 1700);
+    }));
+  }
+  paint();
+}
+
+/* ---------- 6. Preposition Clock ---------- */
+function gameClock(host) {
+  const QS = [
+    { s:'There is the WinterFest ___ Christmas.', a:'at', why:'Use “at” with a festival: at Christmas.' },
+    { s:'I am very busy ___ December.', a:'in', why:'Use “in” with a month.' },
+    { s:'I bring gifts ___ Christmas Eve.', a:'on', why:'Use “on” with a day.' },
+    { s:'The WinterFest is ___ 22 November ___ 1 January.', a:'from … to', why:'“from … to …” shows start and end.' },
+    { s:'We celebrated Easter ___ 29 March.', a:'on', why:'A date takes “on”.' },
+    { s:'Easter is usually ___ March or April.', a:'in', why:'Months take “in”.' },
+    { s:'Everyone meets ___ the Mid-Autumn Festival.', a:'at', why:'A festival takes “at”.' },
+    { s:'Dad bought me a lantern ___ August.', a:'in', why:'August is a month → in.' },
+    { s:'The event takes place ___ 21 September.', a:'on', why:'A date → on.' },
+    { s:'Our school sports day is ___ Friday.', a:'on', why:'A day of the week → on.' }
+  ];
+  let i = 0, right = 0, locked = false;
+  const dial = () => `<svg class="scene" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="600" height="320" fill="#e7edfb"/>
+    <circle cx="300" cy="160" r="115" fill="#fff" stroke="#2b7bd8" stroke-width="6"/>
+    <circle cx="300" cy="160" r="88" fill="#dce8fa"/>
+    ${['at','in','on','from','to'].map((w,k)=>{const a=(k*72-90)*Math.PI/180;
+      return `<text x="${300+Math.cos(a)*72}" y="${160+Math.sin(a)*72+6}" font-size="20" text-anchor="middle" fill="#2b7bd8" font-family="system-ui" font-weight="800">${w}</text>`}).join('')}
+    <circle cx="300" cy="160" r="8" fill="#2b7bd8"/>
+  </svg>`;
+  function paint() {
+    if (i >= QS.length) return resultCard(host, { right, total: QS.length, award: 'clock',
+      msg:'at / in / on — all sorted!' });
+    const q = QS[i];
+    const opts = q.a === 'from … to' ? ['from … to','at','in','on'] : shuffle(['at','in','on','from … to']);
+    host.innerHTML = `<div class="scene-holder">${dial()}<div class="play-overlay">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        ${hud(right, null, `<span class="pip">🕰️ ${i + 1} / ${QS.length}</span>`)}
+        ${say('Turn the dial to the right word.', '把指針轉到正確的介詞。')}
+      </div>
+      <div class="prompt-card">
+        <div class="pz">Time preposition</div>
+        <p class="pq">${esc(q.s)}</p>
+        <div class="opt-btns">${opts.map(o => `<button class="ob" data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>
+      </div>
+    </div></div>`;
+    $$('.ob', host).forEach(b => b.addEventListener('click', () => {
+      if (locked) return; locked = true;
+      const ok = b.dataset.o === q.a;
+      $$('.ob', host).forEach(x => {
+        if (x.dataset.o === q.a) x.classList.add('correct');
+        else if (x === b) x.classList.add('wrong');
+        x.disabled = true;
+      });
+      if (ok) { right++; Snd.ting(); }
+      else { Snd.bad(); const bub = host.querySelector('.bubble');
+        if (bub) bub.innerHTML = `<b style="color:var(--bad)">It is “${esc(q.a)}”.</b> ${esc(q.why)}`; }
+      setTimeout(() => { locked = false; i++; paint(); }, ok ? 900 : 1700);
+    }));
+  }
+  paint();
+}
+
+/* ---------- 7. Story Detective ---------- */
+function gameDetective(host) {
+  const CLUES = [
+    { c:'Ollie starts having scary experiences after getting a storybook. She hears strange noises at night.', a:'horror story' },
+    { c:'A boy sails across the sea and finds a hidden island full of treasure.', a:'adventure story' },
+    { c:'A girl finds a frog who says he is really a prince. She must keep a promise.', a:'fairy tale' },
+    { c:'The detective finds a footprint and follows it to the thief’s house.', a:'detective story' },
+    { c:'Beauty learns to see past the Beast’s appearance, and they care for each other.', a:'love story' },
+    { c:'The book tells the true life of Mother Teresa and the people she helped.', a:'true story' },
+    { c:'A haunted house in the woods has a door that will not open — until midnight.', a:'horror story' },
+    { c:'Sherlock Holmes reads a note and works out who wrote it.', a:'detective story' },
+    { c:'The Frog Prince is a famous tale with a spell and a happy ending.', a:'fairy tale' },
+    { c:'A girl joins a ship’s crew and crosses the ocean to find her father.', a:'adventure story' }
+  ];
+  const TYPES = ['adventure story','detective story','fairy tale','horror story','love story','true story'];
+  let i = 0, right = 0, locked = false;
+  const desk = () => `<svg class="scene" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="600" height="320" fill="#f0e6d2"/>
+    <rect y="230" width="600" height="90" fill="#d8c4a0"/>
+    <g transform="translate(210 70) rotate(-3)">
+      <rect width="180" height="140" rx="10" fill="#fff" stroke="#a8843f" stroke-width="4"/>
+      <path d="M22 40 h120 M22 64 h136 M22 88 h100" stroke="#e2d5b8" stroke-width="7" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(430 110)">
+      <circle r="44" fill="rgba(255,255,255,.6)" stroke="#6b5a3a" stroke-width="8"/>
+      <path d="M32 32 l28 28" stroke="#6b5a3a" stroke-width="13" stroke-linecap="round"/>
+    </g>
+  </svg>`;
+  function paint() {
+    if (i >= CLUES.length) return resultCard(host, { right, total: CLUES.length, award: 'detective',
+      msg:'Case closed, detective!' });
+    const q = CLUES[i];
+    host.innerHTML = `<div class="scene-holder">${desk()}<div class="play-overlay">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        ${hud(right, null, `<span class="pip">🔍 ${i + 1} / ${CLUES.length}</span>`)}
+        ${say('What kind of story is this?', '這是哪一種故事？')}
+      </div>
+      <div class="prompt-card">
+        <div class="pz">Clue ${i + 1}</div>
+        <p class="pq" style="font-size:20px">${esc(q.c)}</p>
+        <div class="opt-btns">${shuffle(TYPES).map(t => `<button class="ob" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+      </div>
+    </div></div>`;
+    $$('.ob', host).forEach(b => b.addEventListener('click', () => {
+      if (locked) return; locked = true;
+      const ok = b.dataset.t === q.a;
+      $$('.ob', host).forEach(x => {
+        if (x.dataset.t === q.a) x.classList.add('correct');
+        else if (x === b) x.classList.add('wrong');
+        x.disabled = true;
+      });
+      if (ok) { right++; Snd.ok(); }
+      else { Snd.bad(); const bub = host.querySelector('.bubble');
+        if (bub) bub.innerHTML = `<b style="color:var(--bad)">It is “${esc(q.a)}”.</b>`; }
+      setTimeout(() => { locked = false; i++; paint(); }, ok ? 900 : 1700);
+    }));
+  }
+  paint();
+}
+
+/* ---------- 8. Adjective Basket ---------- */
+function gameBasket(host) {
+  const WORDS = [
+    ['calm','people'],['friendly','people'],['healthy','people'],['humble','people'],['kind','people'],
+    ['naughty','people'],['neat','people'],['shy','people'],['smart','people'],['sporty','people'],
+    ['boring','stories'],['exciting','stories'],['frightening','stories'],['interesting','stories'],
+    ['popular','stories'],['touching','stories']
+  ];
+  const deck = shuffle(WORDS).slice(0, 12);
+  let i = 0, right = 0, locked = false;
+  const scene = () => `<svg class="scene" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="600" height="320" fill="#eef4e6"/>
+    <rect y="250" width="600" height="70" fill="#cfe2c1"/>
+    <g transform="translate(80 110)">
+      <path d="M0 0 h150 l-18 80 H18z" fill="#d9a05b" stroke="#a87a38" stroke-width="4"/>
+      <text x="75" y="50" font-size="20" text-anchor="middle" fill="#fff" font-family="system-ui" font-weight="800">PEOPLE</text>
+    </g>
+    <g transform="translate(370 110)">
+      <path d="M0 0 h150 l-18 80 H18z" fill="#8fc9ea" stroke="#4a90b8" stroke-width="4"/>
+      <text x="75" y="50" font-size="20" text-anchor="middle" fill="#fff" font-family="system-ui" font-weight="800">STORIES</text>
+    </g>
+  </svg>`;
+  function paint() {
+    if (i >= deck.length) return resultCard(host, { right, total: deck.length, award: 'basket',
+      msg:'Everything sorted into the right basket!' });
+    const [w, cat] = deck[i];
+    host.innerHTML = `<div class="scene-holder">${scene()}<div class="play-overlay">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        ${hud(right, null, `<span class="pip">🧺 ${i + 1} / ${deck.length}</span>`)}
+        ${say('Does this word describe a person or a story?', '這個詞形容人還是形容故事？')}
+      </div>
+      <div class="prompt-card" style="text-align:center">
+        <div class="pz">Sort the word</div>
+        <p class="pq" style="font-size:34px">${esc(w)}</p>
+        <div class="opt-btns" style="grid-template-columns:1fr 1fr">
+          <button class="ob" data-c="people">👤 describes a person</button>
+          <button class="ob" data-c="stories">📖 describes a story</button>
+        </div>
+      </div>
+    </div></div>`;
+    $$('.ob', host).forEach(b => b.addEventListener('click', () => {
+      if (locked) return; locked = true;
+      const ok = b.dataset.c === cat;
+      $$('.ob', host).forEach(x => {
+        if (x.dataset.c === cat) x.classList.add('correct');
+        else if (x === b) x.classList.add('wrong');
+        x.disabled = true;
+      });
+      if (ok) { right++; Snd.thunk(); }
+      else { Snd.bad(); const bub = host.querySelector('.bubble');
+        if (bub) bub.innerHTML = `<b style="color:var(--bad)">“${esc(w)}” describes a ${cat === 'people' ? 'person' : 'story'}.</b>`; }
+      setTimeout(() => { locked = false; i++; paint(); }, ok ? 800 : 1600);
+    }));
+  }
+  paint();
+}
+
+/* ---------- 9. Lantern Spell ---------- */
+function gameLanternSpell(host) {
+  const WORDS = [
+    ['moon','月亮'],['coat','外套'],['snow','雪'],['bone','骨頭'],['soap','肥皂'],
+    ['gifts','禮物'],['lantern','燈籠'],['festival','節日'],['costume','戲服'],['dumpling','糰子'],
+    ['neighbour','鄰居'],['friendly','友善的'],['pumpkin','南瓜'],['reindeer','馴鹿'],['holiday','假日']
+  ];
+  const deck = shuffle(WORDS).slice(0, 6);
+  let i = 0, right = 0, locked = false;
+  const night = () => `<svg class="scene" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="600" height="320" fill="#241b3a"/>
+    <circle cx="500" cy="60" r="34" fill="#ffe9a8"/>
+    <circle cx="486" cy="50" r="30" fill="#241b3a"/>
+    <path d="M0 250 q75 -18 150 0 q75 18 150 0 q75 -18 150 0 q75 18 150 0 v70 H0z" fill="#33264f"/>
+  </svg>`;
+  function paint() {
+    if (i >= deck.length) return resultCard(host, { right, total: deck.length, award: 'lanterns',
+      msg:'Every lantern caught and spelt!' });
+    const [w, zh] = deck[i];
+    host.innerHTML = `<div class="scene-holder">${night()}<div class="play-overlay">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        ${hud(right, null, `<span class="pip">🏮 ${i + 1} / ${deck.length}</span>`)}
+        ${say('Type the word to catch the lantern.', '輸入正確的詞語，就能接住燈籠。')}
+      </div>
+      <div class="prompt-card" style="text-align:center">
+        <div class="pz">Spell it</div>
+        <p class="pq" style="font-size:32px;font-weight:800">${esc(zh)}</p>
+        <input class="kb-input" id="kbIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type the word…">
+        <button class="btn primary" id="kbCheck" style="margin-top:12px;width:100%">Catch it</button>
+        <div id="kbFb" style="margin-top:10px;font-size:16px;min-height:22px"></div>
+      </div>
+    </div></div>`;
+    const inp = $('#kbIn', host);
+    inp.focus();
+    const judge = () => {
+      if (locked) return;
+      const v = inp.value.trim();
+      if (!v) return;
+      locked = true;
+      const ok = norm(v) === norm(w);
+      inp.disabled = true; $('#kbCheck', host).disabled = true;
+      const fb = $('#kbFb', host);
+      if (ok) {
+        right++; Snd.ting();
+        fb.innerHTML = `<b style="color:var(--ok)">✔ ${esc(w)}</b>`;
+        setTimeout(() => { locked = false; i++; paint(); }, 900);
+      } else {
+        Snd.bad();
+        let d = '';
+        for (let k = 0; k < w.length; k++) {
+          const a = v[k], t = w[k];
+          d += (a && a.toLowerCase() === t.toLowerCase()) ? esc(t) : `<b>${esc(t)}</b>`;
+        }
+        fb.innerHTML = `<b style="color:var(--bad)">Good try — here is the word:</b><div class="letter-diff">${d}</div>`;
+        setTimeout(() => { locked = false; i++; paint(); }, 2100);
+      }
+    };
+    $('#kbCheck', host).addEventListener('click', judge);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') judge(); });
+  }
+  paint();
+}
+
+/* ---------- 10. Grand Tense Trophy ---------- */
+function gameTrophy(host) {
+  const deck = shuffle(TENSE_ITEMS).slice(0, 20);
+  let i = 0, right = 0, locked = false, timer = null, left = 0;
+  const scene = () => `<svg class="scene" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="600" height="320" fill="#fdf3d6"/>
+    <g transform="translate(300 150)" opacity=".16">
+      <path d="M-60 -70 h120 v50 a60 60 0 0 1 -120 0z" fill="#e8b21b"/>
+      <rect x="-12" y="-20" width="24" height="44" fill="#c99312"/>
+      <rect x="-44" y="24" width="88" height="20" rx="8" fill="#c99312"/>
+    </g>
+  </svg>`;
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  function paint() {
+    stop();
+    if (i >= deck.length) return resultCard(host, { right, total: deck.length, award: 'trophy',
+      msg: right >= 16 ? 'Champion! Lift the trophy!' : 'So close — the trophy is waiting.' });
+    const it = deck[i];
+    const opts = it.opts ? mcOptions(it) : null;
+    const secs = 15;
+    left = secs;
+    host.innerHTML = `<div class="scene-holder">${scene()}<div class="play-overlay">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        ${hud(right, null, `<span class="pip">🏆 ${i + 1} / ${deck.length}</span>`)}
+        ${say('Answer before the bar runs out!', '在時間用完前作答！')}
+      </div>
+      <div class="prompt-card">
+        <div class="pz">Final challenge</div>
+        <p class="pq">${esc(it.base)}</p>
+        ${opts ? `<div class="opt-btns">${opts.map(o => `<button class="ob" data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>`
+               : `<input class="kb-input" id="tIn" placeholder="type the answer"><button class="btn primary" id="tGo" style="margin-top:10px;width:100%">✅ Check</button>`}
+        ${timerBar()}
+      </div>
+    </div></div>`;
+    const bar = $('#tbar > i', host);
+    timer = setInterval(() => {
+      left -= .25;
+      if (bar) bar.style.width = Math.max(0, (left / secs) * 100) + '%';
+      const tb = $('#tbar', host); if (tb) tb.classList.toggle('low', left < 4);
+      if (left <= 0) { stop(); judge(null); }
+    }, 250);
+    function judge(chosen) {
+      if (locked) return; locked = true; stop();
+      let ok;
+      if (opts) {
+        ok = chosen && chosen.dataset.o === it.ans;
+        $$('.ob', host).forEach(x => {
+          if (x.dataset.o === it.ans) x.classList.add('correct');
+          else if (x === chosen) x.classList.add('wrong');
+          x.disabled = true;
+        });
+      } else {
+        const inp = $('#tIn', host);
+        ok = !!inp && norm(inp.value) === norm(it.ans);
+        if (inp) inp.disabled = true;
+        const g = $('#tGo', host); if (g) g.disabled = true;
+      }
+      if (ok) { right++; Snd.great(); }
+      else { Snd.bad(); const bub = host.querySelector('.bubble');
+        if (bub) bub.innerHTML = `<b style="color:var(--bad)">It is “${esc(it.ans)}”.</b> ${esc(it.why)}`; }
+      setTimeout(() => { locked = false; i++; paint(); }, ok ? 850 : 1800);
+    }
+    if (opts) $$('.ob', host).forEach(b => b.addEventListener('click', () => judge(b)));
+    else {
+      const inp = $('#tIn', host);
+      inp.focus();
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') judge(null); });
+      $('#tGo', host).addEventListener('click', () => judge(null));
+    }
+  }
+  arcadeCleanup = stop;
+  paint();
+}
+
+const STUDIO = {
+  timeMachine: gameTimeMachine,
+  fishing: gameFishing,
+  verbShuffle: gameVerbShuffle,
+  calendar: gameCalendar,
+  shopping: gameShopping,
+  clock: gameClock,
+  detective: gameDetective,
+  basket: gameBasket,
+  lanterns: gameLanternSpell,
+  trophy: gameTrophy
+};
+
+/* =========================================================================
+   TENSES EXPLORER
+   ========================================================================= */
+let tenseTab = 'present';
+function renderTenseChips() {
+  $$('#tenseChips .chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.tense === tenseTab)));
+}
+function renderTense() {
+  const host = $('#tenseRoot');
+  if (tenseTab === 'present') {
+    host.innerHTML = `
+      <div class="card" style="--accent:var(--t1)">
+        <h3 style="font-size:24px">Present tense <span class="cn" style="font-size:18px;color:var(--muted)">（現在式）</span></h3>
+        <p class="lede" style="margin-top:6px">Use it for things that happen <b>every day</b>, <b>usually</b>, or are <b>true now</b>. Look for: every day, always, often, sometimes, usually, on Mondays.</p>
+        <div class="tbox">
+          <h3>The big idea</h3>
+          <div class="cnsub">I / you / we / they = base verb · he / she / it = verb + s</div>
+          <div class="rule2">
+            I <code>play</code> badminton. &nbsp;·&nbsp; We <code>go</code> jogging.<br>
+            He <code>plays</code> badminton. &nbsp;·&nbsp; She <code>goes</code> jogging.<br>
+            Ben <code>does</code> sport. &nbsp;·&nbsp; Daisy <code>seldom does</code> sport.
+          </div>
+        </div>
+        <div class="tbox">
+          <h3>How to spell the -s form</h3>
+          <p class="guide-bubble" style="margin:0 0 12px"><span class="buddy-mini" aria-hidden="true">🦊</span><span><b>Buddy says:</b> Just read one line of this table. You do not need to learn it all at once!</span></p>
+          <table class="ttable">
+            <tr><th>Rule</th><th>Examples</th></tr>
+            <tr><td>most verbs: add <b>-s</b></td><td class="v">play → plays · run → runs · like → likes</td></tr>
+            <tr><td>ends in <b>s, sh, ch, x, o</b>: add <b>-es</b></td><td class="v">go → goes · watch → watches · do → does · teach → teaches</td></tr>
+            <tr><td>consonant + <b>y</b>: y → <b>ies</b></td><td class="v">fly → flies · tidy → tidies</td></tr>
+            <tr><td><b>have</b> is special</td><td class="v">have → has</td></tr>
+            <tr><td><b>be</b> is special</td><td class="v">am / is / are</td></tr>
+          </table>
+        </div>
+        <div class="tbox">
+          <h3>Questions and “not” sentences</h3>
+          <div class="rule2">
+            <code>Do</code> / <code>Does</code> + base verb &nbsp;—&nbsp; <em>Does she go jogging?</em><br>
+            <code>do not</code> / <code>does not</code> (don’t / doesn’t) + base verb &nbsp;—&nbsp; <em>She doesn’t go jogging.</em>
+          </div>
+        </div>
+        <div class="trap"><b>Watch out!</b> After <em>does / doesn’t</em> the verb loses its <b>-s</b>.
+          ✗ <em>Does she goes…?</em> ✓ <em>Does she <b>go</b>…?</em>
+          在 does 之後，動詞要用原形。</div>
+        <div class="tbox">
+          <h3>Sentences from your school book</h3>
+          <ul class="exlist">
+            <li>Ben <b>always does</b> sport on weekdays. <span class="zh cn">Ben 平日總是做運動。</span></li>
+            <li>She <b>plays</b> badminton once a year. <span class="zh cn">她一年打一次羽毛球。</span></li>
+            <li>Everyone <b>wants</b> to join the event. <span class="zh cn">人人都想參加這個活動。</span></li>
+          </ul>
+        </div>
+      </div>`;
+  } else if (tenseTab === 'past') {
+    host.innerHTML = `
+      <div class="card" style="--accent:var(--t2)">
+        <h3 style="font-size:24px">Past tense <span class="cn" style="font-size:18px;color:var(--muted)">（過去式）</span></h3>
+        <p class="lede" style="margin-top:6px">Use it for things that <b>already happened</b>. Look for: yesterday, last week, last Sunday, ago, one day, in 2020.</p>
+        <div class="tbox">
+          <h3>Most verbs — add -ed</h3>
+          <div class="rule2">
+            play → <code>played</code> &nbsp;·&nbsp; watch → <code>watched</code> &nbsp;·&nbsp; laugh → <code>laughed</code><br>
+            race → <code>raced</code> &nbsp;·&nbsp; listen → <code>listened</code> &nbsp;·&nbsp; show → <code>showed</code>
+          </div>
+        </div>
+        <div class="tbox">
+          <h3>How to spell -ed</h3>
+          <p class="guide-bubble" style="margin:0 0 12px"><span class="buddy-mini" aria-hidden="true">🦊</span><span><b>Buddy says:</b> Try just two word pairs today, then come back for two more!</span></p>
+          <table class="ttable">
+            <tr><th>Rule</th><th>Examples</th></tr>
+            <tr><td>most verbs: add <b>-ed</b></td><td class="v">play → played · watch → watched</td></tr>
+            <tr><td>ends in <b>e</b>: add <b>-d</b></td><td class="v">race → raced · like → liked</td></tr>
+            <tr><td>consonant + <b>y</b>: y → <b>ied</b></td><td class="v">carry → carried · tidy → tidied</td></tr>
+            <tr><td>short vowel + consonant: double it</td><td class="v">stop → stopped · plan → planned</td></tr>
+          </table>
+        </div>
+        <div class="tbox">
+          <h3>Special verbs — say them aloud</h3>
+          <p class="lede">These do <b>not</b> take -ed. All of these appear in your Units 1–5 books.</p>
+          <table class="ttable">
+            <tr><th>Now</th><th>Past</th><th>Now</th><th>Past</th></tr>
+            <tr><td class="v">go</td><td>went</td><td class="v">eat</td><td>ate</td></tr>
+            <tr><td class="v">see</td><td>saw</td><td class="v">run</td><td>ran</td></tr>
+            <tr><td class="v">come</td><td>came</td><td class="v">fall</td><td>fell</td></tr>
+            <tr><td class="v">sing</td><td>sang</td><td class="v">bring</td><td>brought</td></tr>
+            <tr><td class="v">win</td><td>won</td><td class="v">make</td><td>made</td></tr>
+            <tr><td class="v">buy</td><td>bought</td><td class="v">teach</td><td>taught</td></tr>
+            <tr><td class="v">think</td><td>thought</td><td class="v">catch</td><td>caught</td></tr>
+            <tr><td class="v">fly</td><td>flew</td><td class="v">say</td><td>said</td></tr>
+            <tr><td class="v">tell</td><td>told</td><td class="v">have</td><td>had</td></tr>
+            <tr><td class="v">do</td><td>did</td><td class="v">meet</td><td>met</td></tr>
+            <tr><td class="v">hurt</td><td>hurt</td><td class="v">put</td><td>put</td></tr>
+            <tr><td class="v">read</td><td>read</td><td class="v">spin</td><td>spun</td></tr>
+          </table>
+        </div>
+        <div class="trap"><b>Watch out!</b> Some verbs do <b>not</b> change at all: <em>hurt → hurt</em>, <em>put → put</em>, <em>read → read</em>. Never write “hurted” or “putted”.
+          有些動詞的過去式跟原形一樣。</div>
+        <div class="tbox">
+          <h3>Sentences from your school book</h3>
+          <ul class="exlist">
+            <li>Last weekend, my family and I <b>went</b> to a walled village. <span class="zh cn">上個週末，我和家人去了一條圍村。</span></li>
+            <li>I <b>spun</b> the top and it <b>flew</b> into the air. <span class="zh cn">我轉動陀螺，它飛到半空中。</span></li>
+            <li>I <b>fell</b> into some mud. <span class="zh cn">我跌進了泥濘裡。</span></li>
+          </ul>
+        </div>
+      </div>`;
+  } else {
+    host.innerHTML = `
+      <div class="card" style="--accent:var(--t3)">
+        <h3 style="font-size:24px">Irregular verbs <span class="cn" style="font-size:18px;color:var(--muted)">（不規則動詞）</span></h3>
+        <p class="lede" style="margin-top:6px">These are the special verbs from your books. Learn them in little families — one family at a time!</p>
+        <div class="guide-bubble"><span class="buddy-mini" aria-hidden="true">🦊</span><span><b>Buddy says:</b> Clap the pairs — <em>go-went</em>, <em>see-saw</em>. Your ears can help you remember!</span></div>
+
+        <div class="tbox">
+          <h3>Family 1 — completely different</h3>
+          <div class="rule2">go → <code>went</code> · see → <code>saw</code> · eat → <code>ate</code> · run → <code>ran</code> ·
+            come → <code>came</code> · fall → <code>fell</code> · fly → <code>flew</code></div>
+        </div>
+
+        <div class="tbox">
+          <h3>Family 2 — the “-ought / -aught” family</h3>
+          <div class="rule2">bring → <code>brought</code> · buy → <code>bought</code> · think → <code>thought</code><br>
+            teach → <code>taught</code> · catch → <code>caught</code></div>
+          <p class="lede" style="margin-top:10px">Say them aloud: <b>ought</b> and <b>aught</b> both sound like “ort”.</p>
+        </div>
+
+        <div class="tbox">
+          <h3>Family 3 — “-old / -ade / -ung”</h3>
+          <div class="rule2">tell → <code>told</code> · say → <code>said</code> · make → <code>made</code> ·
+            sing → <code>sang</code> · win → <code>won</code> · spin → <code>spun</code></div>
+        </div>
+
+        <div class="tbox">
+          <h3>Family 4 — no change at all</h3>
+          <div class="rule2">hurt → <code>hurt</code> · put → <code>put</code> · read → <code>read</code>
+            <span class="cn" style="color:var(--muted);font-size:16px">（讀音變成 “red”）</span></div>
+        </div>
+
+        <div class="tbox">
+          <h3>Family 5 — “be” and “have”</h3>
+          <table class="ttable">
+            <tr><th>Now</th><th>Past</th><th>Example</th></tr>
+            <tr><td class="v">am / is</td><td>was</td><td>Tim <b>was</b> sad.</td></tr>
+            <tr><td class="v">are</td><td>were</td><td>We <b>were</b> best friends.</td></tr>
+            <tr><td class="v">have / has</td><td>had</td><td>We <b>had</b> a delicious meal.</td></tr>
+            <tr><td class="v">do / does</td><td>did</td><td>Great-uncle <b>did</b> not come.</td></tr>
+          </table>
+        </div>
+
+        <div class="trap"><b>Memory trick</b> Say the pairs in a rhythm — <em>go-went, see-saw, eat-ate, run-ran</em>. Your ear remembers the pattern even when your memory is tired.
+          <span class="cn">用節奏朗讀，耳朵會幫你記住。</span></div>
+      </div>`;
+  }
+}
+
+/* =========================================================================
+   TENSE PRACTICE (quiz)
+   ========================================================================= */
+let drillMode = 'all';
+
+function buildItems() {
+  if (drillMode === 'cloze') return clozeQuestions();
+  if (drillMode === 'present') return TENSE_ITEMS.filter(t => t.tense === 'present');
+  if (drillMode === 'past') return TENSE_ITEMS.filter(t => t.tense === 'past');
+  if (drillMode === 'irregular') return TENSE_ITEMS.filter(t => t.tense === 'irregular');
+  return TENSE_ITEMS;
+}
+
+function renderDrillChips() {
+  $$('#drillChips .chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.drill === drillMode)));
+}
+
+function renderDrill() {
+  const host = $('#drillRoot');
+  const items = buildItems();
+  // Keep the counts honest while the visible labels stay short and friendly.
+  const allChip = $('#drillChips [data-drill="all"]');
+  if (allChip) allChip.textContent = `🌟 All mixed · ${TENSE_ITEMS.length}`;
+  const clozeChip = $('#drillChips [data-drill="cloze"]');
+  if (clozeChip) clozeChip.textContent = `📖 Story gaps · ${clozeQuestions().length}`;
+  const presChip = $('#drillChips [data-drill="present"]');
+  const pastChip = $('#drillChips [data-drill="past"]');
+  const irrChip = $('#drillChips [data-drill="irregular"]');
+  if (presChip) presChip.textContent = `🔵 Present · ${TENSE_ITEMS.filter(t => t.tense === 'present').length}`;
+  if (pastChip) pastChip.textContent = `🟠 Past · ${TENSE_ITEMS.filter(t => t.tense === 'past').length}`;
+  if (irrChip) irrChip.textContent = `🟣 Special verbs · ${TENSE_ITEMS.filter(t => t.tense === 'irregular').length}`;
+
+  const state = { i: 0, right: 0, done: 0, missed: [] };
+  let order = shuffle(items).map(it => {
+    if (!it.opts) return it;
+    return { ...it, opts: shuffle(it.opts) };
+  });
+  host.style.setProperty('--accent', 'var(--t3)');
+
+  function paint() {
+    if (state.i >= order.length) return summary();
+    const it = order[state.i];
+    let answered = false;
+    const opts = it.opts;
+    host.innerHTML = `
+      <div class="quiz-top">
+        <span class="badge ${{present:'t1',past:'t2',irregular:'t3',cloze:'t1'}[it.tense] || 't3'}">${it.tense === 'cloze' ? 'Story gaps' : it.tense}</span>
+        <div class="progress"><i style="width:${(state.i / order.length) * 100}%"></i></div>
+        <span class="counter">${state.i + 1} / ${order.length}</span>
+      </div>
+      <div class="qcard">
+        <div class="qnum">${it.story ? esc(it.story) : 'Your turn · ' + (state.i + 1)}</div>
+        <div class="qtext">${esc(it.base).replace(/___/g, '<span class="slot">＿＿</span>')}</div>
+        ${opts
+          ? `<div class="opts">${opts.map((o, k) => `<button class="opt" data-k="${k}">
+               <span class="key">${'ABCD'[k]}</span><span>${esc(o)}</span></button>`).join('')}</div>`
+          : `<div class="answerline">
+               <input id="da" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the missing verb here">
+               <button class="btn primary" id="dcheck">✅ Check</button>
+             </div>`}
+        <div class="feedback" id="dfb" aria-live="polite"></div>
+        <div class="qfoot">
+          <button class="btn primary" id="dnext" disabled>Next one →</button>
+          <span class="score-pill">${state.right} stars so far ⭐</span>
+        </div>
+      </div>`;
+
+    function finish(ok) {
+      answered = true;
+      state.done++;
+      if (ok) state.right++; else state.missed.push(it);
+      if (ok) Snd.ok(); else Snd.bad();
+      const fb = $('#dfb', host);
+      fb.className = 'feedback show ' + (ok ? 'ok' : 'bad');
+      fb.innerHTML = `<span class="fb-head">${ok ? '🎉 Yes! Well done!' : '🌱 Good try — here is the answer.'}</span>`
+        + (ok ? `<div class="why">${esc(it.why)}</div><div class="why">Nice work — one more question?</div>`
+              : `<div><b>Answer:</b> ${esc(it.ans)}</div><div class="why">${esc(it.why)}</div><div class="why">Read the clue, then try the next one. You can do it!</div>`);
+      $('#dnext', host).disabled = false;
+      $('.score-pill', host).textContent = state.right + ' stars so far ⭐';
+    }
+
+    if (opts) {
+      $$('.opt', host).forEach(b => b.addEventListener('click', () => {
+        if (answered) return;
+        const k = +b.dataset.k;
+        const ok = opts[k] === it.ans;
+        $$('.opt', host).forEach((x, j) => {
+          if (opts[j] === it.ans) x.classList.add('correct');
+          else if (x === b) x.classList.add('wrong');
+          x.disabled = true;
+        });
+        finish(ok);
+      }));
+    } else {
+      const inp = $('#da', host);
+      inp.focus();
+      const go = () => {
+        if (answered) return;
+        const v = inp.value.trim();
+        if (!v) return;
+        inp.disabled = true;
+        $('#dcheck', host).disabled = true;
+        finish(norm(v) === norm(it.ans));
+      };
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+      $('#dcheck', host).addEventListener('click', go);
+    }
+    $('#dnext', host).addEventListener('click', () => { state.i++; paint(); });
+  }
+
+  function summary() {
+    const pct = state.done ? Math.round(state.right / state.done * 100) : 0;
+    const rating = pct >= 85 ? 3 : pct >= 60 ? 2 : 1;
+    const stars = '★'.repeat(rating) + '☆'.repeat(3 - rating);
+    Snd.cheer();
+    host.innerHTML = `<div class="card summary" style="--accent:var(--t3)">
+      <div class="big">${state.right}<span style="font-size:24px;color:var(--muted)"> / ${state.done}</span></div>
+      <div class="stars" aria-label="${rating} out of 3 stars">${stars}</div>
+      <p>🌟 You finished the quiz! Every question helped you practise.</p>
+      ${state.missed.length ? `<div class="missed">
+        <div class="badge" style="margin-bottom:10px">Let’s look at these together</div>
+        <ul>${state.missed.map(m => `<li>${esc(m.base)} → <b>${esc(m.ans)}</b></li>`).join('')}</ul>
+      </div>` : '<p class="lede" style="margin:0 auto">Amazing — nothing missed! 🎉</p>'}
+      <p class="guide-bubble" style="text-align:left"><span class="buddy-mini" aria-hidden="true">🦊</span><span><b>Buddy says:</b> Take a little break, then try another quiz when you are ready.</span></p>
+      <div style="margin-top:18px"><button class="btn primary" id="again">🔄 Practise again</button></div>
+    </div>`;
+    $('#again').addEventListener('click', () => { renderDrill(); });
+  }
+
+  paint();
+}
+
+/* =========================================================================
+   FRIENDLY GUIDE — routes through the tense rules, drills and game units.
+   Every card opens existing material; no extra quiz answers are created.
+   ========================================================================= */
+function initKidGuide() {
+  // The welcome map is shown only on arrival or when "Map" is chosen.
+  // On a fresh visit, or when the URL asks for #start, show the game map.
+  if (location.hash === '#start' || (!location.hash && !sessionStorage.getItem('p4games:visited'))) {
+    document.body.classList.add('start-here');
+    history.replaceState(null, '', '#start');
+  }
+  try { sessionStorage.setItem('p4games:visited', '1'); } catch (e) {}
+  if (location.hash !== '#start' && /^#(arcade|tense|drill)$/.test(location.hash)) {
+    const id = location.hash.slice(1);
+    $$('.tab').forEach(t => t.setAttribute('aria-selected', String(t.id === 'tab-' + id)));
+    $$('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + id));
+  }
+  window.addEventListener('hashchange', () => {
+    const id = location.hash.slice(1);
+    if (id === 'start') {
+      document.body.classList.add('start-here');
+      $$('.tab').forEach(t => t.setAttribute('aria-selected', 'false'));
+      $$('.panel').forEach(p => p.classList.remove('active'));
+      $('#guideBack').hidden = true;
+    } else if (/^(arcade|tense|drill)$/.test(id)) showPanel(id);
+  });
+  const start = document.body.classList.contains('start-here');
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', String(!start && t.id === 'tab-arcade')));
+  $$('.panel').forEach(p => p.classList.toggle('active', !start && p.id === 'panel-arcade'));
+  const back = $('#guideBack');
+  if (back) {
+    back.hidden = start;
+    back.addEventListener('click', () => {
+      document.body.classList.add('start-here');
+      $$('.tab').forEach(t => t.setAttribute('aria-selected', 'false'));
+      $$('.panel').forEach(p => p.classList.remove('active'));
+      back.hidden = true;
+      history.replaceState(null, '', '#start');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  const MAP = [
+    { unit:1, icon:'🏃', tint:'#fbe9e3', color:'#e2572f', title:'Sports words',
+      sub:'Dictation 1 · frequency words', game:'calendar' },
+    { unit:2, icon:'🤝', tint:'#e6effc', color:'#2b7bd8', title:'Friendly actions',
+      sub:'Dictation 2 · should & each other', game:'fishing' },
+    { unit:3, icon:'🌟', tint:'#fbf1d8', color:'#a66e00', title:'Describing people',
+      sub:'Dictation 3 · adjectives', game:'basket' },
+    { unit:4, icon:'📚', tint:'#e3f3ec', color:'#1a8a5a', title:'Story types',
+      sub:'Adventure, detective, fairy tale…', game:'detective' },
+    { unit:5, icon:'🎄', tint:'#eee8fb', color:'#6f4fd0', title:'Festivals',
+      sub:'at · in · on · festival words', game:'clock' }
+  ];
+  $('#unitMap').innerHTML = MAP.map(m => `
+    <button type="button" data-unit="${m.unit}" data-game="${m.game}" aria-label="Unit ${m.unit}: ${esc(m.title)}"
+      style="--unit-color:${m.color};--unit-tint:${m.tint}">
+      <span class="unit-icon" aria-hidden="true">${m.icon}</span>
+      <span><b>Unit ${m.unit} · ${esc(m.title)}</b><small>${esc(m.sub)}</small></span>
+    </button>`).join('');
+
+  $$('[data-guide]').forEach(b => b.addEventListener('click', () => showPanel(b.dataset.guide)));
+  $('#unitMap').addEventListener('click', e => {
+    const b = e.target.closest('[data-unit]');
+    if (!b) return;
+    showPanel('arcade');
+    mountGame(b.dataset.game);
+  });
+}
+
+/* =========================================================================
+   BOOT
+   ========================================================================= */
+function showPanel(id) {
+  Snd.pop();
+  // The welcome map has its own hash so the browser Back button returns to it.
+  history.replaceState(null, '', id === 'start' ? '#start' : '#' + id);
+  document.body.classList.toggle('start-here', id === 'start');
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', String(t.id === 'tab-' + id)));
+  $$('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + id));
+  const back = $('#guideBack');
+  if (back) back.hidden = document.body.classList.contains('start-here');
+  window.scrollTo({ top: 0 });
+}
+$$('.tab').forEach(t => t.addEventListener('click', () => showPanel(t.id.replace('tab-', ''))));
+
+$('#gameGrid').addEventListener('click', e => {
+  const c = e.target.closest('[data-game]');
+  if (c) mountGame(c.dataset.game);
+});
+$('#tenseChips').addEventListener('click', e => {
+  const b = e.target.closest('[data-tense]');
+  if (!b) return;
+  Snd.step();
+  tenseTab = b.dataset.tense;
+  renderTenseChips(); renderTense();
+});
+$('#drillChips').addEventListener('click', e => {
+  const b = e.target.closest('[data-drill]');
+  if (!b) return;
+  Snd.step();
+  drillMode = b.dataset.drill;
+  renderDrillChips(); renderDrill();
+});
+
+initKidGuide();
+renderStars();
+renderArcade();
+renderTenseChips(); renderTense();
+renderDrillChips(); renderDrill();
+
+/* Every click on a button, card, tab, chip or option gets a sound.
+   pointerdown in the capture phase fires before any handler can
+   re-render the element out from under us. */
+document.addEventListener('pointerdown', e => {
+  if (e.pointerType === 'mouse' && e.button !== 0) return;   // ignore right / middle click
+  const hit = e.target.closest('button, .opt, .ob, .chip, .tab, summary, [role="tab"]');
+  if (!hit) return;                                          // only interactive things
+  if (e.target.closest('#sndBtn')) return;                   // the toggle has its own sound
+
+  if (hit.matches('.tab, .chip')) Snd.pick();
+  else if (hit.matches('.opt, .ob, .game-card')) Snd.card();
+  else if (hit.matches('summary')) Snd.open();
+  else Snd.tap();
+}, true);
+</script>
+</body>
+</html>

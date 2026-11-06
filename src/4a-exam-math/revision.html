@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="P4 數學溫習">
+<meta name="theme-color" content="#4f46e5">
+<meta name="format-detection" content="telephone=no">
+<title>P4 數學考試溫習室 ｜ 4上A + 4上B</title>
+<style>
+  :root{
+    --bg:#f4f6ff;
+    --card:#ffffff;
+    --ink:#1b2140;
+    --ink-soft:#5b6285;
+    --line:#e3e7f5;
+    --indigo:#4f46e5;
+    --indigo-soft:#eef0ff;
+    --amber:#f59e0b;
+    --amber-soft:#fff5e0;
+    --green:#16a34a;
+    --green-soft:#e8f8ee;
+    --red:#dc2626;
+    --red-soft:#fdeaea;
+    --sky:#0ea5e9;
+    --sky-soft:#e6f6fe;
+    --purple:#9333ea;
+    --pink:#db2777;
+    --shadow:0 6px 24px rgba(35,45,110,.08);
+    --shadow-lg:0 14px 40px rgba(35,45,110,.13);
+    --r:20px;
+    --nav-h:60px;
+    --pad:clamp(16px,3.2vw,28px);
+  }
+  *{box-sizing:border-box}
+  html{
+    scroll-behavior:smooth;
+    -webkit-text-size-adjust:100%;
+    text-size-adjust:100%;
+  }
+  body{
+    margin:0;
+    font-family:"PingFang HK","PingFang TC","Microsoft JhengHei","Noto Sans TC",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    font-size:18px;
+    line-height:1.9;
+    -webkit-font-smoothing:antialiased;
+    -webkit-tap-highlight-color:transparent;
+    overscroll-behavior-y:none;
+    touch-action:manipulation;
+  }
+  a,button,summary,label,input{touch-action:manipulation}
+  .wrap{
+    max-width:1080px;margin:0 auto;
+    padding-left:max(var(--pad),env(safe-area-inset-left));
+    padding-right:max(var(--pad),env(safe-area-inset-right));
+    padding-bottom:calc(110px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- header ---------- */
+  header.hero{
+    background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 45%,#db2777 100%);
+    color:#fff;
+    padding:calc(30px + env(safe-area-inset-top)) max(var(--pad),env(safe-area-inset-right)) 30px max(var(--pad),env(safe-area-inset-left));
+    position:relative;overflow:hidden;
+  }
+  header.hero::after{
+    content:"";position:absolute;inset:auto -60px -120px auto;
+    width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,.12);
+  }
+  header.hero::before{
+    content:"";position:absolute;left:-70px;top:-90px;
+    width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.10);
+  }
+  .hero-inner{max-width:1080px;margin:0 auto;position:relative;z-index:1}
+  .hero h1{margin:0 0 8px;font-size:clamp(30px,5vw,44px);letter-spacing:.5px;line-height:1.3}
+  .hero p.sub{margin:0;opacity:.95;font-size:clamp(16px,2vw,19px)}
+  .badges{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+  .badge{
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);
+    padding:8px 17px;border-radius:999px;font-size:16px;
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  }
+  .badge strong{font-size:19px}
+
+  /* ---------- nav ---------- */
+  nav.tabs{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.94);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 2px 14px rgba(35,45,110,.06);
+  }
+  .tabs-inner{
+    max-width:1080px;margin:0 auto;
+    padding:8px max(var(--pad),env(safe-area-inset-right)) 8px max(var(--pad),env(safe-area-inset-left));
+    display:flex;gap:8px;overflow-x:auto;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    scroll-snap-type:x proximity;
+    scroll-padding-left:max(var(--pad),env(safe-area-inset-left));
+  }
+  .tabs-inner::-webkit-scrollbar{display:none}
+  nav.tabs a{
+    flex:0 0 auto;scroll-snap-align:center;
+    text-decoration:none;color:var(--ink-soft);
+    font-size:17px;font-weight:700;
+    min-height:50px;display:inline-flex;align-items:center;
+    padding:0 19px;border-radius:999px;
+    border:1px solid var(--line);background:#fff;
+    transition:background .16s,color .16s,border-color .16s,transform .12s;
+    white-space:nowrap;
+  }
+  nav.tabs a:active{transform:scale(.96)}
+  nav.tabs a.on{
+    background:var(--indigo);color:#fff;border-color:var(--indigo);
+    box-shadow:0 4px 14px rgba(79,70,229,.32);
+  }
+  .navprogress{position:absolute;left:0;right:0;bottom:-1px;height:3px;pointer-events:none}
+  .navprogress i{
+    display:block;height:100%;width:0;
+    background:linear-gradient(90deg,var(--indigo),var(--pink));
+    transition:width .12s linear;
+  }
+
+  /* ---------- sections ---------- */
+  section{margin-top:38px;scroll-margin-top:calc(var(--nav-h) + 16px)}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+  .sec-num{
+    flex:0 0 auto;width:46px;height:46px;border-radius:15px;
+    display:grid;place-items:center;font-size:22px;background:var(--indigo-soft);
+  }
+  .sec-head h2{margin:0;font-size:clamp(24px,3.2vw,30px);letter-spacing:.4px;line-height:1.35}
+  .sec-head .tag{
+    margin-left:auto;font-size:15px;font-weight:700;
+    padding:6px 14px;border-radius:999px;
+    background:var(--amber-soft);color:#92600a;white-space:nowrap;
+  }
+  .sec-lead{margin:0 0 18px;color:var(--ink-soft);font-size:17px}
+
+  .card{
+    background:var(--card);border-radius:var(--r);
+    box-shadow:var(--shadow);padding:clamp(18px,2.6vw,24px);
+    margin:14px 0;border:1px solid #eef0fa;
+  }
+  .card h3{margin:0 0 12px;font-size:21px;display:flex;align-items:center;gap:10px;line-height:1.5}
+  .card h3 .dot{width:11px;height:11px;border-radius:50%;background:var(--indigo);flex:0 0 auto}
+  .card h4{margin:22px 0 8px;font-size:19px;color:#33395e}
+
+  /* callouts */
+  .note{border-radius:14px;padding:16px 19px;margin:14px 0;font-size:17px;border-left:6px solid}
+  .note .lbl{font-weight:800;font-size:15px;letter-spacing:.6px;display:block;margin-bottom:4px}
+  .note.tip{background:var(--green-soft);border-color:var(--green)}
+  .note.tip .lbl{color:var(--green)}
+  .note.warn{background:var(--red-soft);border-color:var(--red)}
+  .note.warn .lbl{color:var(--red)}
+  .note.key{background:var(--amber-soft);border-color:var(--amber)}
+  .note.key .lbl{color:#92600a}
+  .note.info{background:var(--sky-soft);border-color:var(--sky)}
+  .note.info .lbl{color:#0369a1}
+
+  /* callout with a play button */
+  .note.play{
+    background:linear-gradient(120deg,#7c3aed,#db2777);border-left:none;color:#fff;
+    display:flex;align-items:center;gap:16px;padding:18px 20px;
+    box-shadow:0 10px 28px rgba(124,58,237,.26);border-radius:18px;
+    text-decoration:none;transition:transform .16s,box-shadow .16s;
+  }
+  .note.play:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(124,58,237,.34)}
+  .note.play:active{transform:scale(.988)}
+  .note.play .pl-ico{
+    flex:0 0 auto;width:54px;height:54px;border-radius:50%;
+    background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.5);
+    display:grid;place-items:center;font-size:22px;
+    animation:playpulse 2.4s ease-in-out infinite;
+  }
+  @keyframes playpulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.34)}
+    55%{box-shadow:0 0 0 12px rgba(255,255,255,0)}
+  }
+  .note.play .pl-tx{flex:1;min-width:0}
+  .note.play .pl-k{font-size:13px;letter-spacing:1.4px;font-weight:800;opacity:.82;display:block}
+  .note.play .pl-m{font-size:18.5px;font-weight:800;line-height:1.45;display:block}
+  .note.play .pl-a{font-size:26px;opacity:.85;flex:0 0 auto}
+
+  /* vertical arithmetic */
+  pre.work{
+    font-family:"SF Mono",ui-monospace,"Cascadia Mono","Consolas","Courier New",monospace;
+    font-size:clamp(16px,2.2vw,19px);line-height:1.7;
+    background:#fbfcff;border:1px dashed #c9cfec;border-radius:12px;
+    padding:17px 20px;margin:12px 0;overflow-x:auto;
+    color:#242a52;-webkit-overflow-scrolling:touch;
+  }
+  pre.work b{color:var(--red)}
+
+  .steps{counter-reset:s;margin:10px 0 4px;padding:0;list-style:none}
+  .steps li{counter-increment:s;position:relative;padding-left:42px;margin:13px 0;font-size:17px}
+  .steps li::before{
+    content:counter(s);position:absolute;left:0;top:4px;
+    width:29px;height:29px;border-radius:50%;
+    background:var(--indigo);color:#fff;font-size:15px;font-weight:700;
+    display:grid;place-items:center;
+  }
+  .steps.green li::before{background:var(--green)}
+  .steps.red li::before{background:var(--red)}
+
+  /* tables */
+  .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0;border-radius:12px}
+  table{width:100%;border-collapse:collapse;font-size:17px;background:#fff;min-width:460px}
+  th,td{border:1px solid var(--line);padding:13px 13px;text-align:center}
+  th{background:#f0f3ff;font-weight:700;font-size:16px}
+  td.l,th.l{text-align:left}
+  .yes{color:var(--green);font-weight:800}
+  .no{color:#c7cbe0;font-weight:800}
+
+  /* quiz */
+  .qgrid{display:grid;grid-template-columns:1fr;gap:9px}
+  @media(min-width:900px){.qgrid{grid-template-columns:1fr 1fr;align-items:start}}
+  details.qa{
+    background:#fff;border:1px solid var(--line);border-radius:14px;
+    margin:0;overflow:hidden;transition:border-color .16s,box-shadow .16s;
+  }
+  details.qa[open]{border-color:#c7ccf7;box-shadow:0 4px 16px rgba(79,70,229,.10)}
+  details.qa summary{
+    cursor:pointer;padding:16px 18px;font-weight:600;font-size:17.5px;
+    list-style:none;display:flex;gap:12px;align-items:flex-start;
+    min-height:60px;transition:background .15s;line-height:1.6;
+  }
+  details.qa summary::-webkit-details-marker{display:none}
+  details.qa summary:active{background:#f0f2ff}
+  details.qa summary .q{
+    flex:0 0 auto;width:28px;height:28px;border-radius:9px;
+    background:var(--indigo-soft);color:var(--indigo);
+    display:grid;place-items:center;font-size:14px;font-weight:800;margin-top:1px;
+  }
+  details.qa summary .chev{
+    margin-left:auto;flex:0 0 auto;color:#b6bcd8;font-size:15px;
+    transition:transform .2s;margin-top:3px;
+  }
+  details.qa[open] summary .chev{transform:rotate(180deg)}
+  details.qa[open] summary{background:#f7f8ff;border-bottom:1px solid var(--line)}
+  details.qa .ans{padding:15px 18px 17px 58px;font-size:17px;color:#2a3157;background:#fcfdff;line-height:1.85}
+  details.qa .ans b{color:var(--indigo)}
+
+  /* chips */
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0}
+  .chip{
+    padding:8px 17px;border-radius:999px;font-size:16px;font-weight:700;
+    background:var(--indigo-soft);color:#3b34c9;border:1px solid #d9ddfb;
+  }
+  .chip.g{background:var(--green-soft);color:#0f7a3a;border-color:#c6eed4}
+  .chip.a{background:var(--amber-soft);color:#8a5a06;border-color:#fbe3b3}
+  .chip.r{background:var(--red-soft);color:#b91c1c;border-color:#f8caca}
+
+  .big{font-size:22px;font-weight:800;color:var(--indigo)}
+  .hl{background:linear-gradient(transparent 62%,#ffe08a 62%);font-weight:700;padding:0 2px}
+  svg{max-width:100%;height:auto;display:block;margin:8px auto}
+
+  /* checklist */
+  .check{list-style:none;padding:0;margin:6px 0}
+  .check li{border-bottom:1px dashed #e8ebf7}
+  .check li:last-child{border-bottom:none}
+  .check label{
+    display:flex;gap:15px;align-items:flex-start;
+    padding:16px 4px;font-size:18px;cursor:pointer;min-height:60px;line-height:1.7;
+  }
+  .check input{
+    width:30px;height:30px;margin:0;accent-color:var(--green);
+    flex:0 0 auto;cursor:pointer;
+  }
+  .check input:checked + span{color:#9aa0bd;text-decoration:line-through}
+
+  /* plan */
+  .plan{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:760px){.plan{grid-template-columns:repeat(3,1fr)}}
+  .plan .day{
+    background:#fff;border-radius:16px;padding:16px 18px;
+    border:1px solid var(--line);box-shadow:var(--shadow);
+  }
+  .plan .day h4{margin:0 0 10px;font-size:18px;color:var(--indigo)}
+  .plan .day ul{margin:0;padding-left:20px;font-size:16.5px;color:var(--ink-soft)}
+  .plan .day li{margin:7px 0}
+
+  /* section footer nav */
+  .secnav{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:22px 0 4px}
+  .secnav a{
+    display:flex;flex-direction:column;gap:3px;
+    text-decoration:none;background:#fff;border:1px solid var(--line);
+    border-radius:16px;padding:16px 19px;min-height:76px;justify-content:center;
+    box-shadow:var(--shadow);transition:transform .14s,border-color .14s;
+  }
+  .secnav a:active{transform:scale(.975)}
+  .secnav a.next{text-align:right;align-items:flex-end}
+  .secnav a .dir{font-size:14px;color:var(--ink-soft);font-weight:600}
+  .secnav a .name{font-size:18px;font-weight:800;color:var(--indigo)}
+  .secnav a.ghost{visibility:hidden}
+
+  footer{
+    text-align:center;color:#9aa0bd;font-size:15px;
+    padding:34px 0 10px;line-height:1.9;
+  }
+  .top{
+    position:fixed;right:max(18px,env(safe-area-inset-right));
+    bottom:calc(84px + env(safe-area-inset-bottom));z-index:60;
+    width:52px;height:52px;border-radius:50%;
+    background:var(--indigo);color:#fff;border:none;
+    font-size:21px;cursor:pointer;box-shadow:var(--shadow-lg);
+    display:grid;place-items:center;
+    opacity:0;pointer-events:none;transform:translateY(10px);
+    transition:opacity .22s,transform .22s;
+  }
+  .top.show{opacity:1;pointer-events:auto;transform:none}
+  .top:active{transform:scale(.93)}
+
+  /* ---------- bottom app tab bar ---------- */
+  .tabbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:70;
+    padding:7px max(14px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));
+    background:rgba(255,255,255,.90);
+    -webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);
+    border-top:1px solid rgba(35,45,110,.08);
+    box-shadow:0 -6px 26px rgba(35,45,110,.10);
+  }
+  .tabbar-in{
+    max-width:600px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(5,1fr);gap:3px;
+  }
+  .tabitem{
+    position:relative;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    min-height:54px;border-radius:15px;text-decoration:none;
+    color:#8b91b3;font-size:11.5px;font-weight:800;letter-spacing:.1px;
+    transition:color .16s,background .16s,transform .1s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .tabitem .ti{font-size:21px;line-height:1;transition:transform .22s cubic-bezier(.4,1.5,.5,1);filter:grayscale(.55);opacity:.85}
+  .tabitem:active{transform:scale(.95);background:rgba(79,70,229,.07)}
+  .tabitem.on{color:var(--indigo);background:linear-gradient(180deg,rgba(79,70,229,.10),rgba(79,70,229,.03))}
+  .tabitem.on .ti{filter:none;opacity:1;transform:translateY(-1px) scale(1.1)}
+  .tabitem.on::after{
+    content:"";position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+    width:22px;height:3px;border-radius:99px;
+    background:linear-gradient(90deg,var(--indigo),var(--pink));
+  }
+  .tabitem:not(.on):hover{color:var(--ink);background:rgba(35,45,110,.05)}
+  .tabitem:not(.on):hover .ti{filter:grayscale(0);opacity:1}
+  .tabbadge{
+    position:absolute;top:3px;left:calc(50% + 8px);
+    min-width:20px;height:20px;padding:0 6px;border-radius:99px;
+    background:linear-gradient(135deg,#ef4444,#db2777);color:#fff;
+    font-size:11.5px;font-weight:800;line-height:20px;
+    box-shadow:0 2px 8px rgba(220,38,38,.45);
+    display:grid;place-items:center;
+  }
+  .tabbadge[hidden]{display:none}
+
+  @media print{
+    header.hero{background:#4f46e5 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    nav.tabs,.top,footer,.secnav,.tabbar{display:none}
+    .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+    details.qa{break-inside:avoid}
+    details.qa .ans{display:block}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>🎯 P4 數學考試溫習室</h1>
+    <p class="sub">四年級上學期　4上A + 4上B　｜　考試日：2026 年 11 月 9 日（星期一）</p>
+    <div class="badges">
+      <span class="badge">倒數 <strong id="daysLeft">3</strong> 天</span>
+      <span class="badge">6 個單元</span>
+      <span class="badge">重點 ＋ 例題 ＋ 陷阱</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <div class="tabs-inner" id="tabsInner">
+    <a href="#plan">📅 溫習計劃</a>
+    <a href="#mul">✖️ 乘法</a>
+    <a href="#shape">🔷 四邊形</a>
+    <a href="#div">➗ 除法</a>
+    <a href="#rule">🎯 整除性</a>
+    <a href="#dir">🧭 方向</a>
+    <a href="#num">🔢 倍數和因數</a>
+    <a href="#final">⚡ 考前總複習</a>
+  </div>
+  <div class="navprogress"><i id="navProgress"></i></div>
+</nav>
+
+<div class="wrap">
+
+<!-- ================= PLAN ================= -->
+<section id="plan" data-name="📅 溫習計劃">
+  <div class="sec-head">
+    <div class="sec-num">📅</div>
+    <h2>三日衝刺計劃</h2>
+    <span class="tag">跟著做就夠</span>
+  </div>
+  <p class="sec-lead">今天（11 月 6 日）到考試日只有 3 天。每天 40 分鐘，比一次過看 4 小時有效得多。</p>
+
+  <div class="plan">
+    <div class="day">
+      <h4>第 1 天　11/6（五）</h4>
+      <ul>
+        <li>乘法：直式 ＋ 巧算（20 分鐘）</li>
+        <li>除法：試商法（15 分鐘）</li>
+        <li>玩「乘法快閃」5 分鐘</li>
+      </ul>
+    </div>
+    <div class="day">
+      <h4>第 2 天　11/7（六）</h4>
+      <ul>
+        <li>四邊形：性質表 ＋ 關係（15 分鐘）</li>
+        <li>整除性（10 分鐘）</li>
+        <li>方向：八方向 ＋ 轉向（15 分鐘）</li>
+      </ul>
+    </div>
+    <div class="day">
+      <h4>第 3 天　11/8（日）</h4>
+      <ul>
+        <li>倍數和因數（15 分鐘）</li>
+        <li>重看「常犯錯誤」（10 分鐘）</li>
+        <li>玩「終極混合挑戰」15 分鐘</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note info" style="margin-top:20px">
+    <span class="lbl">📝 想真正練熟？</span>
+    看懂了不等於會做。去 <a href="practice.html" style="font-weight:800;color:#0369a1">無限練習</a> 做同一課的題目，
+    一直做到連續答對 5 題為止——這才是「練熟」。
+  </div>
+
+  <a class="note play" href="concepts.html">
+    <span class="pl-ico" aria-hidden="true">▶</span>
+    <span class="pl-tx">
+      <span class="pl-k">🎬 動畫圖解</span>
+      <span class="pl-m">看動畫，一步步搞懂最難的 8 個概念</span>
+    </span>
+    <span class="pl-a" aria-hidden="true">›</span>
+  </a>
+
+  <div class="note info">
+    <span class="lbl">考試當天早上</span>
+    只看「⚡ 考前總複習」那一頁，約 10 分鐘。不要在考試前做新的難題，會緊張。
+  </div>
+</section>
+
+<!-- ================= MULTIPLICATION ================= -->
+<section id="mul" data-name="✖️ 乘法">
+  <div class="sec-head">
+    <div class="sec-num">✖️</div>
+    <h2>單元一　乘法</h2>
+    <span class="tag">4上A P.2–23</span>
+  </div>
+  <p class="sec-lead">三課：乘法(一) 乘 10／乘整十數　｜　乘法(二) 兩位數 × 兩位數　｜　乘法(三) 乘法巧算</p>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 1　乘 10、乘 20、乘 50 的規律</h3>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="l">算式</th><th class="l">做法</th><th>答案</th></tr>
+        <tr><td class="l">14 × 10</td><td class="l">14 後面補 <b>1 個 0</b></td><td>140</td></tr>
+        <tr><td class="l">14 × 100</td><td class="l">14 後面補 <b>2 個 0</b></td><td>1400</td></tr>
+        <tr><td class="l">37 × 20</td><td class="l">先算 37 × 2 = 74，再補 <b>1 個 0</b></td><td>740</td></tr>
+        <tr><td class="l">41 × 50</td><td class="l">先算 41 × 5 = 205，再補 <b>1 個 0</b></td><td>2050</td></tr>
+        <tr><td class="l">60 × 80</td><td class="l">先算 6 × 8 = 48，再補 <b>2 個 0</b></td><td>4800</td></tr>
+      </table>
+    </div>
+    <div class="note warn">
+      <span class="lbl">⚠ 最常見錯誤</span>
+      <b>乘 20 只補一個 0</b>，不是兩個！因為 20 本身只有一個 0。<br>
+      41 × 50：41 × 5 = 205 → 補一個 0 → <b>2050</b>（不是 20500）。
+    </div>
+    <div class="note tip">
+      <span class="lbl">✓ 交換性質</span>
+      兩個數交換位置相乘，結果不變：30 × 15 ＝ 15 × 30 ＝ 450。看見 50 × 28 覺得難，可以倒過來想 28 × 50。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 2　兩位數 × 兩位數（直式）</h3>
+    <p>例：<b>19 × 24</b></p>
+    <pre class="work">   1 9
+×  2 4
+─────────
+ 3 8 0      ← 19 × 20
+   7 6      ← 19 × 4（向左移一位）
+─────────
+ 4 5 6</pre>
+    <ol class="steps">
+      <li>先用 <b>個位</b> 的 4 乘 19：4 × 19 = 76，寫在第二行（對齊個位）。</li>
+      <li>再用 <b>十位</b> 的 2 乘 19：2 × 19 = 38，但 2 代表 <b>20</b>，所以要向左移一位寫成 380。</li>
+      <li>兩行相加：380 + 76 = <b>456</b>。</li>
+    </ol>
+    <div class="note warn">
+      <span class="lbl">⚠ 最常見錯誤</span>
+      第二行沒有向左移一位 → 會變成 380 + 760 = 錯。<br>
+      <b>口訣：第二行縮一格。</b>
+    </div>
+
+    <h4>再試一次：36 × 21</h4>
+    <pre class="work">   3 6
+×  2 1
+─────────
+ 7 2 0      ← 36 × 20
+   3 6      ← 36 × 1
+─────────
+ 7 5 6</pre>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 3　三位數 × 兩位數</h3>
+    <p>例：<b>316 × 23</b>　→　316 × 20 和 316 × 3，再加起來。</p>
+    <pre class="work">   3 1 6
+×    2 3
+───────────
+ 6 3 2 0      ← 316 × 20
+   9 4 8      ← 316 × 3
+───────────
+ 7 2 6 8</pre>
+    <div class="note key">
+      <span class="lbl">★ 中間有 0 的時候</span>
+      例如 <b>206 × 35</b>，中間的 0 也要乘！5 × 0 = 0，3 × 0 = 0，不可以跳過。<br>
+      206 × 35 = 7210
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 4　乘法巧算（最快得分位）</h3>
+    <div class="chips">
+      <span class="chip">25 × 4 = 100</span>
+      <span class="chip">50 × 2 = 100</span>
+      <span class="chip">20 × 5 = 100</span>
+      <span class="chip g">125 × 8 = 1000</span>
+    </div>
+    <p style="margin-top:4px">看到這些組合，<span class="hl">先把它們湊成 100 或 1000</span>，就會快很多。</p>
+
+    <h4>方法 A：交換 ＋ 結合</h4>
+    <pre class="work">25 × 17 × 4
+= 17 × 25 × 4        （先交換位置）
+= 17 × (25 × 4)      （把 25 × 4 先算）
+= 17 × 100
+= 1700</pre>
+
+    <h4>方法 B：把一個數拆開</h4>
+    <pre class="work">25 × 28
+= 25 × 4 × 7         （28 = 4 × 7）
+= 100 × 7
+= 700</pre>
+    <pre class="work">14 × 150
+= 7 × 2 × 150        （14 = 7 × 2）
+= 7 × 300
+= 2100</pre>
+
+    <div class="note tip">
+      <span class="lbl">✓ 乘法結合性質</span>
+      (a × b) × c ＝ a × (b × c)，結果相同。<br>
+      所以 25 × 30 × 4 可以寫成 30 × (25 × 4) = 30 × 100 = 3000。
+    </div>
+
+    <h4>練習（點開看答案）</h4>
+    <div class="qgrid">
+      <details class="qa"><summary><span class="q">1</span><span>49 × 5 × 20 = ?</span><span class="chev">▾</span></summary><div class="ans">
+        <b>= 49 × (5 × 20) = 49 × 100 = 4900</b>
+      </div></details>
+      <details class="qa"><summary><span class="q">2</span><span>13 × 8 × 25 = ?</span><span class="chev">▾</span></summary><div class="ans">
+        <b>= 13 × 2 × 4 × 25 = 13 × 2 × 100 = 2600</b><br>
+        （8 拆成 2 × 4，因為 4 × 25 = 100）
+      </div></details>
+      <details class="qa"><summary><span class="q">3</span><span>160 × 25 = ?</span><span class="chev">▾</span></summary><div class="ans">
+        <b>= 40 × 4 × 25 = 40 × 100 = 4000</b>
+      </div></details>
+      <details class="qa"><summary><span class="q">4</span><span>25 × 79 × 4 = ?</span><span class="chev">▾</span></summary><div class="ans">
+        <b>= 79 × (25 × 4) = 79 × 100 = 7900</b>
+      </div></details>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 5　先估算，再計算</h3>
+    <p>把數約到最近的整十或整百，就知道答案大概是多少，<b>可以用來檢查有沒有算錯</b>。</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="l">題目</th><th class="l">估法</th><th>大約</th><th>準確答案</th></tr>
+        <tr><td class="l">58 × 31</td><td class="l">60 × 30</td><td>1800</td><td>1798</td></tr>
+        <tr><td class="l">71 × 89</td><td class="l">70 × 90</td><td>6300</td><td>6319</td></tr>
+        <tr><td class="l">608 × 29</td><td class="l">600 × 30</td><td>18000</td><td>17632</td></tr>
+        <tr><td class="l">195 × 42</td><td class="l">200 × 40</td><td>8000</td><td>8190</td></tr>
+      </table>
+    </div>
+    <div class="note key">
+      <span class="lbl">★ 選擇題秘技</span>
+      如果題目給你 4 個答案（例如 526 × 21），先估：500 × 20 = 10000。
+      答案一定要接近 10000 → 只有 11046 合理，其他都差太遠。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>應用題：看清「倍」字</h3>
+    <div class="note info">
+      <span class="lbl">方向很重要</span>
+      「<b>A 是 B 的 18 倍</b>」＝ A ＝ B × 18（用乘法）。<br>
+      「<b>A 有 B 的多少倍</b>」＝ A ÷ B（用除法）。
+    </div>
+    <p>例：每部舒適牌風扇的售價是幸運牌的 18 倍，幸運牌每部 264 元。</p>
+    <pre class="work">264 × 18 = 4752
+每部舒適牌風扇的售價是 4752 元。</pre>
+    <div class="note tip">
+      <span class="lbl">✓ 答句兩種寫法（都接受）</span>
+      <b>答句式：</b>264 × 18 = 4752 → 每部風扇售 4752 元。<br>
+      <b>敘述句式：</b>每部風扇售：264 × 18 = 4752（元）
+    </div>
+    <div class="note warn">
+      <span class="lbl">⚠ 單位要抄對</span>
+      問「多少<b>厘米</b>」就答厘米，問「多少<b>元</b>」就答元。1 米 = 100 厘米，這個轉換最常考。
+    </div>
+  </div>
+</section>
+
+<!-- ================= QUADRILATERALS ================= -->
+<section id="shape" data-name="🔷 四邊形">
+  <div class="sec-head">
+    <div class="sec-num">🔷</div>
+    <h2>單元二　四邊形</h2>
+    <span class="tag">4上A P.26–45</span>
+  </div>
+  <p class="sec-lead">兩課：菱形　｜　四邊形之間的關係。這一課考「判斷句」和「性質表」，背熟就穩袋分。</p>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 1　菱形是甚麼？</h3>
+    <p>把一個正方形「輕輕一推」，四條邊的長度沒有變，但角變斜了——這就是<b>菱形</b>。</p>
+    <div class="chips">
+      <span class="chip g">四條邊長度相等</span>
+      <span class="chip g">兩對對邊平行</span>
+      <span class="chip a">四個角不一定都是直角</span>
+    </div>
+    <div class="note warn">
+      <span class="lbl">⚠ 最常考的錯誤描述</span>
+      「菱形<b>只有一對</b>對邊平行」→ <b>錯！</b>菱形有 <b>兩對</b>對邊平行。<br>
+      「菱形的四個角一定不是直角」→ <b>錯！</b>正方形也是菱形，正方形的四個角就是直角。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 2　四邊形性質表（背這個表！）</h3>
+    <div class="tablewrap">
+      <table>
+        <tr>
+          <th class="l">性質</th>
+          <th>正方形</th><th>長方形</th><th>菱形</th><th>平行四邊形</th>
+        </tr>
+        <tr><td class="l">四邊長度相等</td><td class="yes">✓</td><td class="no">✗</td><td class="yes">✓</td><td class="no">✗</td></tr>
+        <tr><td class="l">四個角都是直角</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">✗</td><td class="no">✗</td></tr>
+        <tr><td class="l">對邊長度相等</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td class="l">對邊平行</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      </table>
+    </div>
+    <div class="note key">
+      <span class="lbl">★ 三個必背結論</span>
+      ① 所有<b>正方形</b>皆是<b>長方形</b>。<br>
+      ② 所有<b>正方形</b>皆是<b>菱形</b>。<br>
+      ③ 所有<b>正方形、長方形、菱形</b>皆是<b>平行四邊形</b>。
+    </div>
+    <div class="note warn">
+      <span class="lbl">⚠ 反過來全部錯！</span>
+      「所有菱形都是正方形」✗　「所有長方形都是正方形」✗　「所有平行四邊形都是長方形」✗<br>
+      <b>口訣：小的可以說成大的，大的不可以說成小的。</b>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 3　溫氏圖（看圖就懂）</h3>
+    <svg viewBox="0 0 640 380" role="img" aria-label="四邊形關係溫氏圖">
+      <rect x="8" y="8" width="624" height="364" rx="26" fill="#f0f3ff" stroke="#c7ccf7" stroke-width="2"/>
+      <text x="26" y="40" font-size="22" font-weight="700" fill="#4f46e5">平行四邊形</text>
+
+      <ellipse cx="238" cy="205" rx="152" ry="112" fill="#dbeafe" opacity=".85" stroke="#60a5fa" stroke-width="2"/>
+      <text x="150" y="120" font-size="21" font-weight="700" fill="#1d4ed8">長方形</text>
+
+      <ellipse cx="402" cy="205" rx="152" ry="112" fill="#fde68a" opacity=".62" stroke="#f59e0b" stroke-width="2"/>
+      <text x="486" y="120" font-size="21" font-weight="700" fill="#92600a">菱形</text>
+
+      <ellipse cx="320" cy="217" rx="66" ry="64" fill="#bbf7d0" stroke="#16a34a" stroke-width="2.5"/>
+      <text x="320" y="224" font-size="20" font-weight="800" fill="#15803d" text-anchor="middle">正方形</text>
+
+      <text x="320" y="352" font-size="17" fill="#5b6285" text-anchor="middle">綠色重疊部分＝既是長方形，又是菱形 → 就是正方形</text>
+    </svg>
+
+    <h4>判斷對錯練習（先想，再點開）</h4>
+    <div class="qgrid">
+      <details class="qa"><summary><span class="q">1</span><span>所有正方形都是菱形。</span><span class="chev">▾</span></summary><div class="ans"><b>✓ 對。</b>正方形四邊相等、對邊平行，完全符合菱形的性質。</div></details>
+      <details class="qa"><summary><span class="q">2</span><span>所有菱形都是正方形。</span><span class="chev">▾</span></summary><div class="ans"><b>✗ 錯。</b>菱形不一定要有直角。把正方形推斜一點，就不是正方形了。</div></details>
+      <details class="qa"><summary><span class="q">3</span><span>所有長方形都是平行四邊形。</span><span class="chev">▾</span></summary><div class="ans"><b>✓ 對。</b>長方形的對邊平行，所以是平行四邊形的一種。</div></details>
+      <details class="qa"><summary><span class="q">4</span><span>平行四邊形既是長方形，又是菱形。</span><span class="chev">▾</span></summary><div class="ans"><b>✗ 錯。</b>反過來了。是長方形和菱形屬於平行四邊形，不是平行四邊形屬於它們。</div></details>
+      <details class="qa"><summary><span class="q">5</span><span>菱形有四條邊長度相等。</span><span class="chev">▾</span></summary><div class="ans"><b>✓ 對。</b>這就是菱形最基本的定義。</div></details>
+      <details class="qa"><summary><span class="q">6</span><span>正方形、長方形和菱形都具備「對邊平行」的性質。</span><span class="chev">▾</span></summary><div class="ans"><b>✓ 對。</b>三者都是平行四邊形，所以對邊一定平行。</div></details>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 4　「猜四邊形」題型</h3>
+    <p>題目會給你一句描述，要你說出<b>所有可能</b>的圖形。答案是「或」，不是「只有一個」。</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="l">描述</th><th class="l">可能是</th></tr>
+        <tr><td class="l">它的四邊長度相等</td><td class="l">正方形 <b>或</b> 菱形</td></tr>
+        <tr><td class="l">它的對邊平行，但四邊長度不相等</td><td class="l">長方形 <b>或</b> 平行四邊形</td></tr>
+        <tr><td class="l">它有四個直角</td><td class="l">正方形 <b>或</b> 長方形</td></tr>
+        <tr><td class="l">它有四個直角，而且四邊長度相等</td><td class="l">正方形</td></tr>
+        <tr><td class="l">它有兩對對邊平行，但沒有直角，四邊也不相等</td><td class="l">平行四邊形</td></tr>
+      </table>
+    </div>
+    <div class="note tip">
+      <span class="lbl">✓ 答題技巧</span>
+      看見「四邊相等」→ 想正方形 ＋ 菱形。<br>
+      看見「四個直角」→ 想正方形 ＋ 長方形。<br>
+      <b>兩句都有 → 只有正方形。</b>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DIVISION ================= -->
+<section id="div" data-name="➗ 除法">
+  <div class="sec-head">
+    <div class="sec-num">➗</div>
+    <h2>單元三　除法</h2>
+    <span class="tag">4上A P.48–80</span>
+  </div>
+  <p class="sec-lead">四課：除法(一)　｜　除法(二) 兩位數除數　｜　乘除應用題　｜　整除性（見下一節）</p>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 1　商是幾位數？先看最高兩位</h3>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="l">算式</th><th class="l">看哪裡</th><th class="l">判斷</th><th>商</th></tr>
+        <tr><td class="l">100 ÷ 20</td><td class="l">10 比 20 <b>小</b></td><td class="l">不夠除</td><td>5（一位數）</td></tr>
+        <tr><td class="l">800 ÷ 20</td><td class="l">80 比 20 <b>大</b></td><td class="l">夠除</td><td>40（兩位數）</td></tr>
+        <tr><td class="l">607 ÷ 30</td><td class="l">60 比 30 <b>大</b></td><td class="l">夠除</td><td>20…7（兩位數）</td></tr>
+      </table>
+    </div>
+    <div class="note key">
+      <span class="lbl">★ 一句記住</span>
+      被除數的<b>頭兩位</b>如果比除數小，商就少一位。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 2　試商法（兩位數除數的四步）</h3>
+    <ol class="steps">
+      <li>把除數<b>約到最近的整十</b>：23 → 20、64 → 60、72 → 70。</li>
+      <li>用約數<b>估一個商</b>。</li>
+      <li>用<b>真正的除數</b>乘一乘，看看會不會太大。</li>
+      <li>如果乘出來的數 <b>大於被除數</b> → 商要<b>減 1</b>，再乘一次。</li>
+    </ol>
+
+    <h4>例：427 ÷ 72</h4>
+    <pre class="work">72 約是 70
+70 × 6 = 420  ≤ 427   → 試 6
+但  72 × 6 = 432  > 427  → <b>太大，改用 5</b>
+
+      5
+72 ) 4 2 7
+     3 6 0      ← 72 × 5
+     ─────
+       6 7      ← 427 − 360
+
+427 ÷ 72 = 5 … 67</pre>
+
+    <h4>例：529 ÷ 21</h4>
+    <pre class="work">      2 5
+21 ) 5 2 9
+     4 2       ← 21 × 20
+     ─────
+     1 0 9
+     1 0 5     ← 21 × 5
+     ─────
+         4
+
+529 ÷ 21 = 25 … 4</pre>
+    <div class="note warn">
+      <span class="lbl">⚠ 兩條鐵律</span>
+      ① <b>餘數一定要小於除數</b>（餘 4 而除數 21 ✓；餘 30 而除數 21 ✗）。<br>
+      ② 試商時乘積<b>不可以大於</b>被除數。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 3　驗算（30 秒保命）</h3>
+    <div class="note tip">
+      <span class="lbl">✓ 公式</span>
+      <span class="big">商 × 除數 ＋ 餘數 ＝ 被除數</span><br>
+      5 × 72 + 67 = 360 + 67 = <b>427</b> ✓　答案正確。
+    </div>
+    <p>如果算出來不等於被除數，就是算錯了，立刻重做。</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 4　應用題：捨去還是進一？（最易失分）</h3>
+    <div class="note info">
+      <span class="lbl">「最多」→ 只要商（餘數不要）</span>
+      「最多可分多少盒？」「最多可買多少個？」「最多可做多少台？」<br>
+      → <b>答商，餘數不用理</b>
+    </div>
+    <div class="note warn">
+      <span class="lbl">「最少」→ 商 ＋ 1（進一）</span>
+      「最少需要多少個箱？」「最少需要多少層／天／次／組？」<br>
+      → <b>有餘數就要 商 ＋ 1</b>
+    </div>
+
+    <h4>例 A（捨去）</h4>
+    <p>手工班有車廂 256 個，做一台摩天輪需要 18 個。最多可做多少台？</p>
+    <pre class="work">256 ÷ 18 = 14 … 4
+餘下的 4 個不夠做一台 → 最多可做 14 台</pre>
+
+    <h4>例 B（進一）</h4>
+    <p>書架每層可放 28 本，現有圖書 241 本。最少需要多少層？</p>
+    <pre class="work">241 ÷ 28 = 8 … 17
+8 層放滿後還有 17 本 → 要多開 1 層
+最少需要 8 + 1 = 9 層</pre>
+
+    <h4>例 C（兩樣都要答）</h4>
+    <p>六年級 124 人，平均分成 12 組。每組多少人？還餘多少人？</p>
+    <pre class="work">124 ÷ 12 = 10 … 4
+每組有 10 人，還餘 4 人。</pre>
+    <p>（如果問「餘下的歸入最後一組，這組有多少人？」→ 10 + 4 = <b>14 人</b>）</p>
+
+    <h4>例 D（連除）</h4>
+    <p>870 塊曲奇，每 15 塊一包，每 2 包一盒。共分成多少盒？</p>
+    <pre class="work">870 ÷ 15 = 58（包）
+58 ÷ 2 = 29（盒）</pre>
+
+    <h4>例 E（要再準備多少）</h4>
+    <p>350 張書籤分給 73 人，每人 4 張，餘 58 張。如果要每人多分 1 張，最少要多準備多少張？</p>
+    <pre class="work">每人多 1 張，需要 73 張
+已有 58 張（餘下的）
+要多準備：73 − 58 = 15 張</pre>
+
+    <div class="note key">
+      <span class="lbl">★ 圈關鍵詞</span>
+      做應用題時，先用筆<b>圈起</b>「最多」、「最少」、「平均」、「還餘」、「每」這些字。
+      一個字不同，答案就完全不同。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>計一計（點開對答案）</h3>
+    <div class="qgrid">
+      <details class="qa"><summary><span class="q">1</span><span>648 ÷ 27 = ?</span><span class="chev">▾</span></summary><div class="ans"><b>24</b>　（27 × 24 = 648）</div></details>
+      <details class="qa"><summary><span class="q">2</span><span>581 ÷ 55 = ?</span><span class="chev">▾</span></summary><div class="ans"><b>10 … 31</b>　（55 × 10 = 550，581 − 550 = 31）</div></details>
+      <details class="qa"><summary><span class="q">3</span><span>267 ÷ 42 = ?</span><span class="chev">▾</span></summary><div class="ans"><b>6 … 15</b>　（42 × 6 = 252，267 − 252 = 15）</div></details>
+      <details class="qa"><summary><span class="q">4</span><span>900 ÷ 36 ÷ 5 = ?</span><span class="chev">▾</span></summary><div class="ans"><b>5</b>　（900 ÷ 36 = 25，25 ÷ 5 = 5）</div></details>
+      <details class="qa"><summary><span class="q">5</span><span>990 枝顏色筆，每 36 枝一盒，最多可分多少盒？</span><span class="chev">▾</span></summary><div class="ans"><b>27 盒</b>　（990 ÷ 36 = 27 … 18，餘下的不夠一盒）</div></details>
+      <details class="qa"><summary><span class="q">6</span><span>要製造 80 個蛋撻，焗爐每次可焗 24 個，最少要焗多少次？</span><span class="chev">▾</span></summary><div class="ans"><b>4 次</b>　（80 ÷ 24 = 3 … 8，有餘數要進一 → 3 + 1 = 4）</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DIVISIBILITY ================= -->
+<section id="rule" data-name="🎯 整除性">
+  <div class="sec-head">
+    <div class="sec-num">🎯</div>
+    <h2>單元三　整除性</h2>
+    <span class="tag">4上A P.72–77</span>
+  </div>
+  <p class="sec-lead">只要看「個位數字」或「數字和」，不用真的一步步除。這一節最容易全取分。</p>
+
+  <div class="card">
+    <h3><span class="dot"></span>四個規則</h3>
+    <div class="tablewrap">
+      <table>
+        <tr><th>可以被…整除</th><th class="l">看甚麼</th><th class="l">例子</th></tr>
+        <tr>
+          <td class="big">2</td>
+          <td class="l">個位數字是 <b>0、2、4、6、8</b>（偶數）</td>
+          <td class="l">856 ✓　112 ✓　403 ✗　71 ✗</td>
+        </tr>
+        <tr>
+          <td class="big">5</td>
+          <td class="l">個位數字是 <b>0 或 5</b></td>
+          <td class="l">250 ✓　95 ✓　700 ✓　502 ✗</td>
+        </tr>
+        <tr>
+          <td class="big">10</td>
+          <td class="l">個位數字是 <b>0</b></td>
+          <td class="l">680 ✓　2040 ✓　75 ✗　345 ✗</td>
+        </tr>
+        <tr>
+          <td class="big">3</td>
+          <td class="l">把<b>各位數字加起來</b>，和可以被 3 整除</td>
+          <td class="l">375：3+7+5=15 ✓<br>138：1+3+8=12 ✓<br>98：9+8=17 ✗</td>
+        </tr>
+      </table>
+    </div>
+    <div class="note key">
+      <span class="lbl">★ 三條必記結論</span>
+      ① 可以被 10 整除的數，<b>一定</b>也可以被 2 和 5 整除。<br>
+      ② 同時可以被 2 和 5 整除 → 個位一定是 <b>0</b> → 也一定可以被 10 整除。<br>
+      ③ 個位是 0 的數，可以<b>同時</b>被 2、5、10 整除。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>題型 A　「★ 是甚麼數字？」</h3>
+    <p>題目問「有多少個可能的答案」，<span class="hl">要全部列出來</span>，不可以只寫一個。</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="l">題目</th><th class="l">思考過程</th><th class="l">答案</th></tr>
+        <tr>
+          <td class="l">三位數 73★ 可被 <b>2</b> 整除</td>
+          <td class="l">個位可以是 0,2,4,6,8</td>
+          <td class="l"><b>0、2、4、6、8</b></td>
+        </tr>
+        <tr>
+          <td class="l">三位數 61★ 可被 <b>5</b> 整除</td>
+          <td class="l">個位可以是 0 或 5</td>
+          <td class="l"><b>0、5</b></td>
+        </tr>
+        <tr>
+          <td class="l">三位數 96★ 可被 <b>3</b> 整除</td>
+          <td class="l">9+6 = 15，已經被 3 整除<br>所以 ★ 只能是 0、3、6、9</td>
+          <td class="l"><b>0、3、6、9</b></td>
+        </tr>
+        <tr>
+          <td class="l">三位數 83★ 可被 <b>3</b> 整除</td>
+          <td class="l">8+3 = 11<br>11+1=12 ✓　11+4=15 ✓　11+7=18 ✓</td>
+          <td class="l"><b>1、4、7</b></td>
+        </tr>
+        <tr>
+          <td class="l">三位數 96★ 同時可被 <b>2 和 5</b> 整除</td>
+          <td class="l">個位必須是 0</td>
+          <td class="l"><b>0</b></td>
+        </tr>
+      </table>
+    </div>
+
+    <h4>題型 B　用數卡組成指定的數</h4>
+    <p>用數卡 <b>2、5、4</b> 組成三位數：</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="l">要求</th><th class="l">做法</th><th class="l">答案</th></tr>
+        <tr><td class="l">可被 2 整除的<b>最小</b>三位數</td><td class="l">個位要雙數 → 4 或 2；百位要最小 → 2</td><td class="l"><b>254</b></td></tr>
+        <tr><td class="l">可被 5 整除的<b>最大</b>三位數</td><td class="l">個位要 5 或 0 → 只有 5；百位要最大 → 4</td><td class="l"><b>425</b></td></tr>
+        <tr><td class="l">可被 3 整除的<b>最大</b>三位數</td><td class="l">2+5+4 = 11，不是 3 的倍數 → <b>不可能</b></td><td class="l"><b>沒有</b></td></tr>
+      </table>
+    </div>
+
+    <h4>練習（點開對答案）</h4>
+    <div class="qgrid">
+      <details class="qa"><summary><span class="q">1</span><span>以下哪些可以被 3 整除？　412　502　234　704</span><span class="chev">▾</span></summary><div class="ans">
+        412：4+1+2=7 ✗　｜　502：5+0+2=7 ✗　｜　234：2+3+4=9 <b>✓</b>　｜　704：7+0+4=11 ✗<br>
+        答案：<b>234</b>
+      </div></details>
+      <details class="qa"><summary><span class="q">2</span><span>1 0 ★ 5 是一個四位數，可以被 3 整除，★ 可能是甚麼？</span><span class="chev">▾</span></summary><div class="ans">
+        1+0+5 = 6，已經可以被 3 整除 → ★ 可以是 <b>0、3、6、9</b>
+      </div></details>
+      <details class="qa"><summary><span class="q">3</span><span>以下哪個數可以同時被 2、5 和 10 整除？　75　345　2040　507</span><span class="chev">▾</span></summary><div class="ans">
+        要個位是 0 → 只有 <b>2040</b>。
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DIRECTION ================= -->
+<section id="dir" data-name="🧭 方向">
+  <div class="sec-head">
+    <div class="sec-num">🧭</div>
+    <h2>單元四　方向</h2>
+    <span class="tag">4上B P.2–17</span>
+  </div>
+  <p class="sec-lead">兩課：方向(一) 八個方向　｜　方向(二) 指南針測方向。考「轉向」和「走路線」。</p>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 1　八個方向</h3>
+    <svg viewBox="0 0 320 320" role="img" aria-label="八個方向羅盤">
+      <circle cx="160" cy="160" r="126" fill="#fff" stroke="#c7ccf7" stroke-width="2"/>
+      <circle cx="160" cy="160" r="106" fill="#f7f9ff"/>
+      <g stroke="#8f96c9" stroke-width="1.8">
+        <line x1="160" y1="54" x2="160" y2="266"/>
+        <line x1="54" y1="160" x2="266" y2="160"/>
+        <line x1="85" y1="85" x2="235" y2="235" stroke-dasharray="4 4"/>
+        <line x1="235" y1="85" x2="85" y2="235" stroke-dasharray="4 4"/>
+      </g>
+      <circle cx="160" cy="160" r="6" fill="#4f46e5"/>
+      <g font-size="20" font-weight="700" fill="#1b2140" text-anchor="middle" dominant-baseline="middle">
+        <text x="160" y="24" fill="#dc2626">北</text>
+        <text x="272" y="58">東北</text>
+        <text x="296" y="161">東</text>
+        <text x="272" y="264">東南</text>
+        <text x="160" y="300">南</text>
+        <text x="48" y="264">西南</text>
+        <text x="22" y="161">西</text>
+        <text x="48" y="58">西北</text>
+      </g>
+    </svg>
+    <div class="tablewrap">
+      <table>
+        <tr><th>方位</th><th>英文縮寫</th><th>English</th><th>相反方向</th></tr>
+        <tr><td>北</td><td>N</td><td>North</td><td>南</td></tr>
+        <tr><td>東北</td><td>NE</td><td>Northeast</td><td>西南</td></tr>
+        <tr><td>東</td><td>E</td><td>East</td><td>西</td></tr>
+        <tr><td>東南</td><td>SE</td><td>Southeast</td><td>西北</td></tr>
+        <tr><td>南</td><td>S</td><td>South</td><td>北</td></tr>
+        <tr><td>西南</td><td>SW</td><td>Southwest</td><td>東北</td></tr>
+        <tr><td>西</td><td>W</td><td>West</td><td>東</td></tr>
+        <tr><td>西北</td><td>NW</td><td>Northwest</td><td>東南</td></tr>
+      </table>
+    </div>
+    <div class="note tip">
+      <span class="lbl">✓ 相對位置</span>
+      如果 A 在 B 的東北方，那麼 <b>B 就在 A 的西南方</b>。兩個方向一定是「相反」的一對。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 2　左轉、右轉（必考）</h3>
+    <div class="note key">
+      <span class="lbl">★ 兩個關鍵定義</span>
+      <b>左轉 ＝ 逆時針</b>　　<b>右轉 ＝ 順時針</b><br>
+      <b>1 個直角 ＝ 轉 90°</b>（每轉一次，換一個方向）
+    </div>
+
+    <p>想想時鐘：順時針方向是 <b>北 → 東 → 南 → 西</b>。</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="l">開始面向</th><th>右轉 1 個直角</th><th>右轉 2 個直角</th><th>右轉 3 個直角</th></tr>
+        <tr><td class="l">北</td><td>東</td><td>南</td><td>西</td></tr>
+        <tr><td class="l">東北</td><td>東南</td><td>西南</td><td>西北</td></tr>
+        <tr><td class="l">東</td><td>南</td><td>西</td><td>北</td></tr>
+        <tr><td class="l">東南</td><td>西南</td><td>西北</td><td>東北</td></tr>
+        <tr><td class="l">南</td><td>西</td><td>北</td><td>東</td></tr>
+        <tr><td class="l">西南</td><td>西北</td><td>東北</td><td>東南</td></tr>
+        <tr><td class="l">西</td><td>北</td><td>東</td><td>南</td></tr>
+        <tr><td class="l">西北</td><td>東北</td><td>東南</td><td>西南</td></tr>
+      </table>
+    </div>
+    <p style="font-size:16.5px;color:var(--ink-soft)">左轉的話，就往相反方向找：左轉 1 ＝ 右轉 3，左轉 2 ＝ 右轉 2，左轉 3 ＝ 右轉 1。</p>
+
+    <h4>例：卓楠面向西南，向右轉 2 個直角</h4>
+    <ol class="steps">
+      <li>先找西南在表中的位置。</li>
+      <li>向右轉 1 → 西北</li>
+      <li>向右轉 2 → <b>東北</b></li>
+    </ol>
+    <div class="note tip">
+      <span class="lbl">✓ 更好用的方法</span>
+      轉 2 個直角＝轉 <b>180°</b>＝面向<b>完全相反</b>的方向。西南的相反是<b>東北</b>，一秒答完。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 3　指南針的三個步驟</h3>
+    <ol class="steps green">
+      <li>把指南針<b>平放</b>，慢慢轉動它。</li>
+      <li>使「<b>北</b>」字與<b>紅色指針</b>重疊。</li>
+      <li>這樣就可以找出八個方向了。</li>
+    </ol>
+    <div class="note warn">
+      <span class="lbl">⚠ 看圖題的陷阱</span>
+      如果圖中的指南針「北」字<b>沒有</b>和紅色指針重疊，就要先把它「轉正」再判斷。
+      不要只看指針，要看盤面上的字。
+    </div>
+    <p>描述位置時：<b>「×× 在 ○○ 的 △△ 方」</b>——站在 ○○ 的位置，看 ×× 在哪一邊。</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 4　走路線（分段看）</h3>
+    <p>題目會給你 A → B → C 的走法，要你逐段寫出方向。</p>
+    <h4>例：由鐵路站出發，先向西南方走到幼稚園，再向哪一方走可到仲謙家？</h4>
+    <ol class="steps">
+      <li>先在<b>鐵路站</b>放「方向膠片」，向西南找到<b>幼稚園</b>。</li>
+      <li>再把方向膠片移到<b>幼稚園</b>。</li>
+      <li>看看仲謙家在幼稚園的哪一邊 → <b>東南</b>。</li>
+    </ol>
+    <div class="note key">
+      <span class="lbl">★ 兩個技巧</span>
+      ① <b>每一段都要重新定位</b>：上一段的方向不等於下一段。<br>
+      ② 問「<b>最短</b>路線」時，看有沒有<b>直線</b>可以走。有直線就一定最短，不要繞經其他地點。
+    </div>
+  </div>
+</section>
+
+<!-- ================= MULTIPLES & FACTORS ================= -->
+<section id="num" data-name="🔢 倍數和因數">
+  <div class="sec-head">
+    <div class="sec-num">🔢</div>
+    <h2>單元五　倍數和因數</h2>
+    <span class="tag">4上B P.20–31</span>
+  </div>
+  <p class="sec-lead">兩課：倍數　｜　因數。搞清楚「倍數」和「因數」是一對相反的概念，就不會混。</p>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 1　倍數（用乘法找）</h3>
+    <p>把一個數分別乘 1、2、3、4……，得到的結果就是它的<b>倍數</b>。</p>
+    <pre class="work">4 的倍數：
+4 × 1 = 4      ← 第 1 個倍數
+4 × 2 = 8      ← 第 2 個倍數
+4 × 3 = 12     ← 第 3 個倍數
+4 × 4 = 16  … 如此類推</pre>
+    <p>所以 <b>4 最初 4 個倍數是 4、8、12、16</b>。第 n 個倍數 ＝ 4 × n。</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="l">問題</th><th class="l">做法</th><th class="l">答案</th></tr>
+        <tr><td class="l">4 的第 11 個倍數</td><td class="l">4 × 11</td><td class="l">44</td></tr>
+        <tr><td class="l">9 的第 12 個倍數</td><td class="l">9 × 12</td><td class="l">108</td></tr>
+        <tr><td class="l">7 的第 8 個倍數</td><td class="l">7 × 8</td><td class="l">56</td></tr>
+        <tr><td class="l">50 以內 8 的倍數</td><td class="l">8,16,24,32,40,48</td><td class="l">6 個</td></tr>
+        <tr><td class="l">30 和 70 之間 13 的倍數</td><td class="l">13×3=39、13×4=52、13×5=65</td><td class="l">39、52、65</td></tr>
+      </table>
+    </div>
+    <div class="note key">
+      <span class="lbl">★ 倍數的三條性質</span>
+      ① 任何數的<b>最小倍數</b>是<b>它自己</b>（乘 1）。<br>
+      ② 倍數<b>沒有最大</b>，可以一直乘下去，無限多個。<br>
+      ③ 任何數都是 1 的倍數。
+    </div>
+    <div class="note warn">
+      <span class="lbl">⚠ 「以內」和「之間」不同</span>
+      「50 <b>以內</b>」＝ 包括 50　｜　「30 <b>和</b> 70 <b>之間</b>」＝ <b>不包括</b> 30 和 70。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 2　因數（用除法找）</h3>
+    <p>如果一個數<b>除另一個數沒有餘數</b>，它就是那個數的<b>因數</b>。</p>
+    <pre class="work">8 ÷ 1 = 8      沒有餘數  →  1 是因數
+8 ÷ 2 = 4      沒有餘數  →  2 是因數
+8 ÷ 3 = 2 … 2  有餘數    →  3 不是因數
+8 ÷ 4 = 2      沒有餘數  →  4 是因數
+8 ÷ 8 = 1      沒有餘數  →  8 是因數
+
+8 的所有因數是：1、2、4、8</pre>
+
+    <h4>方法 A：乘法配對（最快，推薦）</h4>
+    <pre class="work">18 = 1 × 18
+   = 2 × 9
+   = 3 × 6
+（不會再有了，因為下一對是 4 × ?，除不盡）
+
+18 的所有因數：1、2、3、6、9、18</pre>
+    <pre class="work">30 = 1 × 30
+   = 2 × 15
+   = 3 × 10
+   = 5 × 6
+
+30 的所有因數：1、2、3、5、6、10、15、30</pre>
+
+    <h4>方法 B：逐個試除（1、2、3、4……）</h4>
+    <pre class="work">12 ÷ 1 = 12  ✓
+12 ÷ 2 = 6   ✓
+12 ÷ 3 = 4   ✓
+12 ÷ 4 = 3   （和上面的重複了，可以停）
+
+12 的所有因數：1、2、3、4、6、12</pre>
+    <div class="note tip">
+      <span class="lbl">✓ 甚麼時候可以停？</span>
+      當<b>商開始小於或等於除數</b>時就可以停，因為後面的會重複。
+    </div>
+
+    <div class="note key">
+      <span class="lbl">★ 因數的三條性質</span>
+      ① 任何數的<b>最小因數</b>是 <b>1</b>。<br>
+      ② 任何數的<b>最大因數</b>是<b>它自己</b>。<br>
+      ③ <b>1 只有一個因數</b>（就是 1 本身）。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>重點 3　倍數 ↔ 因數 是一對</h3>
+    <div class="note info" style="font-size:19px;text-align:center">
+      <b>如果 A 是 B 的因數，那麼 B 就是 A 的倍數。</b>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="l">句子</th><th class="l">對／錯</th><th class="l">原因</th></tr>
+        <tr><td class="l">7 是 28 的因數</td><td class="l"><span class="yes">✓ 對</span></td><td class="l">28 ÷ 7 = 4，沒有餘數</td></tr>
+        <tr><td class="l">28 是 7 的倍數</td><td class="l"><span class="yes">✓ 對</span></td><td class="l">7 × 4 = 28</td></tr>
+        <tr><td class="l">6 是 3 的倍數</td><td class="l"><span class="yes">✓ 對</span></td><td class="l">3 × 2 = 6</td></tr>
+        <tr><td class="l">3 是 6 的因數</td><td class="l"><span class="yes">✓ 對</span></td><td class="l">6 ÷ 3 = 2，沒有餘數</td></tr>
+        <tr><td class="l">5 是 12 的因數</td><td class="l"><span class="no">✗ 錯</span></td><td class="l">12 ÷ 5 = 2 … 2，有餘數</td></tr>
+      </table>
+    </div>
+    <div class="note warn">
+      <span class="lbl">⚠ 別搞亂</span>
+      倍數通常<b>大於或等於</b>原數（除了乘 0）；因數通常<b>小於或等於</b>原數。<br>
+      看到「因數」就想<b>除</b>，看到「倍數」就想<b>乘</b>。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>練習（點開對答案）</h3>
+    <div class="qgrid">
+      <details class="qa"><summary><span class="q">1</span><span>寫出 24 的所有因數。</span><span class="chev">▾</span></summary><div class="ans">
+        24 = 1×24 = 2×12 = 3×8 = 4×6<br>
+        <b>1、2、3、4、6、8、12、24</b>（共 8 個）
+      </div></details>
+      <details class="qa"><summary><span class="q">2</span><span>寫出 36 的所有因數。</span><span class="chev">▾</span></summary><div class="ans">
+        36 = 1×36 = 2×18 = 3×12 = 4×9 = 6×6<br>
+        <b>1、2、3、4、6、9、12、18、36</b>（共 9 個）
+      </div></details>
+      <details class="qa"><summary><span class="q">3</span><span>100 以內，12 的倍數有哪些？</span><span class="chev">▾</span></summary><div class="ans">
+        <b>12、24、36、48、60、72、84、96</b>（共 8 個；108 已超過 100）
+      </div></details>
+      <details class="qa"><summary><span class="q">4</span><span>13 的因數有哪些？</span><span class="chev">▾</span></summary><div class="ans">
+        13 = 1 × 13，沒有其他配對<br>
+        <b>1、13</b>（只有 1 和它自己）
+      </div></details>
+      <details class="qa"><summary><span class="q">5</span><span>一個數的最大因數是 42，這個數是甚麼？</span><span class="chev">▾</span></summary><div class="ans">
+        任何數的最大因數就是<b>它自己</b>，所以答案是 <b>42</b>。
+      </div></details>
+      <details class="qa"><summary><span class="q">6</span><span>96 是 16 的倍數，下一個 16 的倍數是甚麼？</span><span class="chev">▾</span></summary><div class="ans">
+        16 × 6 = 96，所以下一個是 16 × 7 = <b>112</b>
+      </div></details>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>延伸（如果老師有教）</h3>
+    <div class="qgrid">
+      <details class="qa"><summary><span class="q">＋</span><span>甚麼是質數和合成數？</span><span class="chev">▾</span></summary><div class="ans">
+        <b>質數：</b>只有 2 個因數（1 和它自己）的數。例如 2、3、5、7、11、13、17、19、23、29、31……<br>
+        <b>合成數：</b>有 3 個或以上因數的數。例如 4、6、8、9、10、12……<br>
+        <b>1</b> 只有一個因數，所以既不是質數，也不是合成數。
+      </div></details>
+      <details class="qa"><summary><span class="q">＋</span><span>甚麼是公因數、最大公因數？</span><span class="chev">▾</span></summary><div class="ans">
+        兩個數<b>共同</b>的因數叫公因數，其中最大的一個叫<b>最大公因數（H.C.F.）</b>。<br>
+        例：12 的因數 1,2,3,4,6,12；18 的因數 1,2,3,6,9,18<br>
+        公因數：1、2、3、6　→　最大公因數是 <b>6</b>
+      </div></details>
+      <details class="qa"><summary><span class="q">＋</span><span>甚麼是公倍數、最小公倍數？</span><span class="chev">▾</span></summary><div class="ans">
+        兩個數<b>共同</b>的倍數叫公倍數，其中最小的一個叫<b>最小公倍數（L.C.M.）</b>。<br>
+        例：4 的倍數 4,8,12,16,20,24…；6 的倍數 6,12,18,24…<br>
+        公倍數：12、24、36…　→　最小公倍數是 <b>12</b>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINAL ================= -->
+<section id="final" data-name="⚡ 考前總複習">
+  <div class="sec-head">
+    <div class="sec-num">⚡</div>
+    <h2>考前總複習</h2>
+    <span class="tag">考試當天早上看這個</span>
+  </div>
+  <p class="sec-lead">10 分鐘看完，然後深呼吸，去考試。你已經準備好了。</p>
+
+  <div class="card">
+    <h3><span class="dot"></span>數字口訣</h3>
+    <div class="chips">
+      <span class="chip">25 × 4 = 100</span>
+      <span class="chip">50 × 2 = 100</span>
+      <span class="chip">20 × 5 = 100</span>
+      <span class="chip g">125 × 8 = 1000</span>
+      <span class="chip a">商 × 除數 + 餘數 = 被除數</span>
+      <span class="chip r">餘數 &lt; 除數</span>
+    </div>
+    <div class="chips" style="margin-top:10px">
+      <span class="chip">× 10 補 1 個 0</span>
+      <span class="chip">× 100 補 2 個 0</span>
+      <span class="chip">× 20 先乘 2 再補 1 個 0</span>
+      <span class="chip">× 50 先乘 5 再補 1 個 0</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>4 個最多人失分的地方</h3>
+    <div class="tablewrap">
+      <table>
+        <tr><th>陷阱</th><th class="l">正確做法</th></tr>
+        <tr><td>直式第二行沒移位</td><td class="l"><b>第二行縮一格</b>（因為它代表「× 幾十」）</td></tr>
+        <tr><td>試商太大</td><td class="l">乘積 &gt; 被除數 → <b>商減 1</b> 再乘</td></tr>
+        <tr><td>「最多」答了商 +1</td><td class="l"><b>最多＝捨去餘數</b>；最少＝商 +1</td></tr>
+        <tr><td>說「所有菱形都是正方形」</td><td class="l"><b>小的說成大的才對</b>：正方形是菱形</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>答題檢查清單</h3>
+    <ul class="check" id="checklist">
+      <li><label><input type="checkbox" id="c1"><span>直式有沒有<b>對齊位值</b>？</span></label></li>
+      <li><label><input type="checkbox" id="c2"><span>進位的數有沒有<b>加上去</b>？</span></label></li>
+      <li><label><input type="checkbox" id="c3"><span>除法的<b>餘數小於除數</b>嗎？</span></label></li>
+      <li><label><input type="checkbox" id="c4"><span>應用題<b>圈了關鍵詞</b>（最多／最少／平均／還餘）嗎？</span></label></li>
+      <li><label><input type="checkbox" id="c5"><span>應用題寫了<b>答句</b>和<b>單位</b>嗎？</span></label></li>
+      <li><label><input type="checkbox" id="c6"><span>「所有可能的答案」<b>全部列出</b>了嗎？</span></label></li>
+      <li><label><input type="checkbox" id="c7"><span>選擇題用<b>估算</b>核對過嗎？</span></label></li>
+      <li><label><input type="checkbox" id="c8"><span>最後 5 分鐘<b>重看一次</b>計算題？</span></label></li>
+    </ul>
+  </div>
+
+  <div class="card" style="background:linear-gradient(135deg,#eef0ff,#fdecf5);border:1px solid #e0e3fb">
+    <h3 style="margin-bottom:6px">💪 你可以的</h3>
+    <p style="margin:0;font-size:18px">
+      考試不是要比賽誰聰明，是比誰<b>少犯錯</b>。把上面 8 項檢查做好，
+      你已經比大部分人高分。慢一點、看清楚、算兩次——<b>第一名就是這樣拿的。</b>
+    </p>
+  </div>
+</section>
+
+<footer>
+  溫習室為 4上A ＋ 4上B 課本範圍而設<br>
+  配合 <b>practice.html</b> 練題、<b>games.html</b> 測試速度，效果最好
+</footer>
+</div>
+
+<button class="top" id="topBtn" aria-label="回到頂部">↑</button>
+
+<nav class="tabbar" aria-label="頁面切換">
+  <div class="tabbar-in">
+    <a class="tabitem on" href="revision.html" aria-current="page">
+      <span class="ti" aria-hidden="true">📖</span><span>溫習</span>
+    </a>
+    <a class="tabitem" href="concepts.html">
+      <span class="ti" aria-hidden="true">🎬</span><span>動畫</span>
+    </a>
+    <a class="tabitem" href="practice.html">
+      <span class="ti" aria-hidden="true">✏️</span><span>練習</span>
+      <span class="tabbadge" id="tabBadge" hidden>0</span>
+    </a>
+    <a class="tabitem" href="diagnose.html"><span class="ti" aria-hidden="true">🔬</span><span>診斷</span></a>
+    <a class="tabitem" href="games.html">
+      <span class="ti" aria-hidden="true">🎮</span><span>遊戲</span>
+    </a>
+  </div>
+</nav>
+
+<script src="./assets/wb.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- 倒數 ---------- */
+  var exam = new Date(2026, 10, 9);
+  var now  = new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var diff = Math.round((exam - today) / 86400000);
+  var dl = document.getElementById('daysLeft');
+  if (dl) dl.textContent = diff > 0 ? diff : (diff === 0 ? '今天' : '已完成');
+
+  /* ---------- 建立每節的「上一節／下一節」 ---------- */
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section[data-name]'));
+  sections.forEach(function(sec, i){
+    var prev = sections[i - 1], next = sections[i + 1];
+    var nav = document.createElement('div');
+    nav.className = 'secnav';
+
+    var a1 = document.createElement('a');
+    if (prev) {
+      a1.href = '#' + prev.id;
+      a1.className = 'prev';
+      a1.innerHTML = '<span class="dir">← 上一節</span><span class="name">' + prev.dataset.name + '</span>';
+    } else {
+      a1.className = 'ghost';
+      a1.setAttribute('aria-hidden', 'true');
+    }
+
+    var a2 = document.createElement('a');
+    if (next) {
+      a2.href = '#' + next.id;
+      a2.className = 'next';
+      a2.innerHTML = '<span class="dir">下一節 →</span><span class="name">' + next.dataset.name + '</span>';
+    } else {
+      a2.className = 'ghost';
+      a2.setAttribute('aria-hidden', 'true');
+    }
+
+    nav.appendChild(a1);
+    nav.appendChild(a2);
+    sec.appendChild(nav);
+  });
+
+  /* ---------- 導覽列：高亮 + 自動捲到可見位置 ---------- */
+  var tabsInner = document.getElementById('tabsInner');
+  var tabLinks = Array.prototype.slice.call(tabsInner.querySelectorAll('a'));
+  var activeIdx = -1;
+
+  function setActive(i) {
+    if (i === activeIdx) return;
+    activeIdx = i;
+    tabLinks.forEach(function(a, k){ a.classList.toggle('on', k === i); });
+    var a = tabLinks[i];
+    if (!a) return;
+    // 只在需要時才捲動，避免搶走使用者的手勢
+    var box = tabsInner.getBoundingClientRect();
+    var r = a.getBoundingClientRect();
+    if (r.left < box.left + 8 || r.right > box.right - 8) {
+      tabsInner.scrollTo({
+        left: a.offsetLeft - tabsInner.clientWidth / 2 + a.offsetWidth / 2,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  /* ---------- 閱讀進度條 ---------- */
+  var navProgress = document.getElementById('navProgress');
+  var topBtn = document.getElementById('topBtn');
+  var ticking = false;
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      ticking = false;
+
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - window.innerHeight;
+      var pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+      navProgress.style.width = Math.min(100, Math.max(0, pct)) + '%';
+
+      topBtn.classList.toggle('show', window.scrollY > 600);
+
+      // 找出目前所在的章節
+      var probe = window.scrollY + 140;
+      var idx = 0;
+      for (var i = 0; i < sections.length; i++) {
+        if (sections[i].offsetTop <= probe) idx = i;
+      }
+      setActive(idx);
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- 點導覽列：立即高亮 ---------- */
+  tabLinks.forEach(function(a, i){
+    a.addEventListener('click', function(){ setActive(i); });
+  });
+
+  /* ---------- 回到頂部 ---------- */
+  topBtn.addEventListener('click', function(){
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---------- 勾選清單記憶 ---------- */
+  try {
+    var boxes = document.querySelectorAll('#checklist input');
+    for (var i = 0; i < boxes.length; i++) {
+      (function(b){
+        if (localStorage.getItem('rev_' + b.id) === '1') b.checked = true;
+        b.addEventListener('change', function(){
+          try { localStorage.setItem('rev_' + b.id, b.checked ? '1' : '0'); } catch(e){}
+        });
+      })(boxes[i]);
+    }
+  } catch(e) {}
+
+  /* ---------- 錯題數量顯示在分頁標籤上 ---------- */
+  try {
+    var raw = localStorage.getItem('p4p_mistakes');
+    var ms = raw ? JSON.parse(raw) : [];
+    var badge = document.getElementById('tabBadge');
+    if (badge && ms && ms.length) {
+      badge.textContent = ms.length > 99 ? '99+' : ms.length;
+      badge.hidden = false;
+    }
+  } catch (e) {}
+
+  /* ---------- 一次只開一個答案（同一組內） ---------- */
+  document.querySelectorAll('.qgrid').forEach(function(group){
+    group.addEventListener('toggle', function(e){
+      var d = e.target;
+      if (!d.open) return;
+      group.querySelectorAll('details.qa[open]').forEach(function(other){
+        if (other !== d) other.open = false;
+      });
+    }, true);
+  });
+})();
+</script>
+</body>
+</html>

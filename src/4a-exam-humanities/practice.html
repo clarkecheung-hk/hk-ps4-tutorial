@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>人文科 4上 · 練習題 | 溫習基地</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+<style>
+  .exam-hero{
+    margin:1.4rem 0;padding:1.9rem 1.7rem;border-radius:30px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#e8f6ff 0%,#f4fbff 50%,#eefaf0 100%);
+    border:3px solid #fff;box-shadow:var(--shadow);
+  }
+  .exam-hero h1{margin:0 0 .4rem;font-size:clamp(1.8rem,4.4vw,2.5rem);letter-spacing:1px}
+  .exam-hero p{margin:.25rem 0 0;color:var(--ink-2);font-size:1.05rem;line-height:1.7}
+  .exam-chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.9rem}
+  .exam-chip{
+    background:#fff;border:2px solid var(--line);border-radius:999px;
+    padding:.3rem .85rem;font-weight:800;font-size:.92rem;color:var(--ink-2);line-height:1.7;
+  }
+
+  /* 分數板：iPad 上不浮動，避免遮住題目 */
+  .scoreboard{
+    position:relative;z-index:40;margin:1.1rem 0;
+    background:#fff;border-radius:20px;padding:.75rem 1.1rem;
+    box-shadow:var(--shadow);border:2px solid #fff;
+    display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+  }
+  .sb-item{
+    font-weight:900;font-size:1rem;color:var(--ink-2);
+    display:flex;align-items:center;gap:.4rem;
+  }
+  .sb-item b{font-size:1.28rem;color:var(--sky-d)}
+  .sb-item.g b{color:var(--grass-d)}
+  .sb-item.r b{color:var(--coral-d)}
+  .sb-bar{flex:1;min-width:7rem;height:.75rem;background:#e7f3fa;border-radius:999px;overflow:hidden}
+  .sb-bar i{
+    display:block;height:100%;width:0;border-radius:999px;
+    background:linear-gradient(90deg,var(--sky),var(--grass));transition:width .35s;
+  }
+
+  /* 題目 */
+  .qitem{
+    background:#fff;border-radius:24px;padding:1.4rem 1.4rem;margin:1.1rem 0;
+    box-shadow:var(--shadow-sm);border:2px solid #fff;transition:.25s;
+  }
+  .qitem:hover{box-shadow:var(--shadow)}
+  .qitem.right{border-color:#b6e3bd;background:#fbfffc}
+  .qitem.miss{border-color:#ffc9c2;background:#fffbfa}
+  .qhead{display:block;margin-bottom:.85rem}
+  .qmeta{display:flex;align-items:center;gap:.5rem;margin-bottom:.55rem;flex-wrap:wrap}
+  .qno{
+    flex:none;background:linear-gradient(160deg,#63c4ef,#1f7fb8);color:#fff;font-weight:900;
+    font-size:.92rem;border-radius:12px;padding:.3rem .8rem;letter-spacing:.5px;line-height:1.7;
+  }
+  .qno.tf{background:linear-gradient(160deg,#ffd75e,#e09300);color:#4a3200}
+  .qno.fill{background:linear-gradient(160deg,#7ad98a,#2f9e44)}
+  .qno.long{background:linear-gradient(160deg,#b39ce8,#7a4fc0)}
+  .qno.data{background:linear-gradient(160deg,#ff9a8d,#e8503f)}
+  .qtext{
+    font-weight:800;font-size:1.14rem;line-height:1.75;margin:0;display:block;width:100%;
+  }
+  .qmark{
+    font-size:.86rem;color:var(--ink-2);font-weight:800;background:#f4f8fb;
+    border-radius:10px;padding:.15rem .6rem;white-space:nowrap;line-height:1.7;
+  }
+
+  .opts{display:grid;gap:.65rem;margin-top:.3rem}
+  .o{
+    font-family:inherit;font-size:1.08rem;font-weight:700;text-align:left;
+    padding:.9rem 1rem .9rem 3.5rem;border-radius:16px;border:2.5px solid var(--line);
+    background:#fff;cursor:pointer;transition:.15s;color:var(--ink);position:relative;
+    min-height:var(--tap);line-height:1.6;
+  }
+  .o::before{
+    content:attr(data-k);position:absolute;left:.95rem;top:50%;transform:translateY(-50%);
+    width:1.7rem;height:1.7rem;border-radius:50%;background:var(--sky-l);color:var(--sky-d);
+    display:grid;place-items:center;font-size:.9rem;font-weight:900;
+  }
+  .o:hover:not(.locked){border-color:var(--sky);background:#f4fbff;transform:translateX(4px)}
+  .o.correct{border-color:var(--grass-d);background:#e8f9ec;color:var(--grass-d)}
+  .o.correct::before{background:var(--grass-d);color:#fff}
+  .o.wrong{border-color:var(--coral-d);background:#ffefed;color:var(--coral-d)}
+  .o.wrong::before{background:var(--coral-d);color:#fff}
+  .o.locked{cursor:default}
+
+  /* 填充 */
+  .blank-in{
+    font-family:inherit;font-size:1.08rem;font-weight:800;color:var(--sky-d);
+    border:none;border-bottom:3px solid var(--sky);background:#f4fbff;
+    padding:.3rem .6rem;border-radius:8px 8px 0 0;
+    flex:1 1 9rem;min-width:7rem;max-width:100%;text-align:center;
+    outline:none;transition:.15s;
+  }
+  .blank-in:focus{background:#e3f4fd;border-bottom-color:var(--sun-d);box-shadow:0 3px 0 rgba(255,201,60,.3)}
+  .blank-in.correct{background:#e8f9ec;border-bottom-color:var(--grass-d);color:var(--grass-d)}
+  .blank-in.wrong{background:#ffefed;border-bottom-color:var(--coral-d);color:var(--coral-d)}
+  .blank-in:disabled{opacity:1}
+
+  /* 長答 */
+  .long-area{
+    width:100%;min-height:7rem;font-family:inherit;font-size:1.06rem;line-height:1.85;
+    border:2.5px solid var(--line);border-radius:18px;padding:.9rem 1rem;resize:vertical;
+    outline:none;transition:.15s;background:#fbfdff;color:var(--ink);
+  }
+  .long-area:focus{border-color:var(--sky);background:#fff;box-shadow:0 0 0 4px rgba(58,167,224,.1)}
+  .long-tools{display:flex;gap:.6rem;margin-top:.7rem;flex-wrap:wrap;align-items:center}
+
+  .btn-check{
+    font-family:inherit;font-weight:900;font-size:1.02rem;
+    padding:.7rem 1.3rem;border-radius:999px;min-height:var(--tap);
+    border:none;cursor:pointer;background:linear-gradient(180deg,#7ad98a,#2f9e44);color:#fff;
+    box-shadow:0 4px 0 rgba(30,120,50,.4);transition:.13s;
+  }
+  .btn-check:hover{transform:translateY(-2px)}
+  .btn-check:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(30,120,50,.4)}
+  .btn-show{
+    font-family:inherit;font-weight:900;font-size:1.02rem;
+    padding:.7rem 1.3rem;border-radius:999px;min-height:var(--tap);
+    border:2px solid var(--sky);cursor:pointer;background:#fff;color:var(--sky-d);
+    box-shadow:0 3px 0 rgba(31,127,184,.18);transition:.13s;
+  }
+  .btn-show:hover{background:var(--sky-l);transform:translateY(-2px)}
+
+  /* 答案 */
+  .answer{
+    margin-top:1rem;padding:1rem 1.15rem;border-radius:18px;background:#f2fbf4;
+    border-left:6px solid var(--grass-d);display:none;font-size:1.04rem;line-height:1.85;
+  }
+  .answer.on{display:block;animation:pop .32s}
+  .answer .at{
+    font-weight:900;color:var(--grass-d);display:flex;align-items:center;
+    gap:.45rem;margin-bottom:.4rem;font-size:1.1rem;
+  }
+  .answer ul{margin:.4rem 0;padding-left:1.3rem}
+  .answer li{margin:.3rem 0}
+  .mark-hint{
+    font-size:.95rem;color:#9a6b00;background:#fff8e1;border-radius:12px;
+    padding:.6rem .9rem;margin-top:.7rem;border-left:4px solid var(--sun-d);
+    font-weight:700;line-height:1.75;
+  }
+
+  .verdict{
+    font-weight:900;font-size:1.02rem;margin-top:.8rem;
+    display:none;align-items:flex-start;gap:.5rem;line-height:1.7;
+  }
+  .verdict.on{display:flex;animation:pop .3s}
+  .verdict.ok{color:var(--grass-d)}
+  .verdict.no{color:var(--coral-d)}
+
+  /* 資料題 */
+  .data-box{
+    background:#f7fcff;border:2px dashed #bfe3f7;border-radius:18px;
+    padding:1rem 1.1rem;margin:.9rem 0;font-size:1.02rem;line-height:1.8;
+  }
+  .data-box .dt{font-weight:900;color:var(--sky-d);margin-bottom:.4rem;font-size:1.06rem}
+  .data-box table{font-size:.98rem;margin:.5rem 0}
+  .data-box th,.data-box td{padding:.55rem .6rem}
+
+  /* 分區標題 */
+  .part-head{
+    display:flex;align-items:center;gap:.9rem;margin:2.4rem 0 1rem;padding:1rem 1.2rem;
+    border-radius:20px;background:linear-gradient(90deg,#eaf7ff,#f8fcff);
+    border-left:9px solid var(--sky);
+  }
+  .part-head .pnum{
+    flex:none;width:3rem;height:3rem;border-radius:16px;display:grid;place-items:center;
+    color:#fff;font-weight:900;font-size:1.35rem;background:linear-gradient(160deg,#63c4ef,#1f7fb8);
+  }
+  .part-head h2{margin:0;font-size:1.42rem;letter-spacing:.5px}
+  .part-head .pd{font-size:.95rem;color:var(--ink-2);font-weight:700;line-height:1.6}
+  .part-head.tf{border-left-color:var(--sun)}
+  .part-head.tf .pnum{background:linear-gradient(160deg,#ffd75e,#e09300);color:#4a3200}
+  .part-head.fill{border-left-color:var(--grass)}
+  .part-head.fill .pnum{background:linear-gradient(160deg,#7ad98a,#2f9e44)}
+  .part-head.data{border-left-color:var(--coral)}
+  .part-head.data .pnum{background:linear-gradient(160deg,#ff9a8d,#e8503f)}
+  .part-head.long{border-left-color:var(--grape)}
+  .part-head.long .pnum{background:linear-gradient(160deg,#b39ce8,#7a4fc0)}
+
+  /* TF 按鈕：加大至易點按 */
+  .tf-row{display:flex;gap:.7rem;margin-top:.4rem;flex-wrap:wrap}
+  .tf-btn{
+    font-family:inherit;font-weight:900;font-size:1.15rem;
+    padding:.85rem 2rem;border-radius:16px;min-height:3.4rem;min-width:7rem;
+    border:3px solid var(--line);background:#fff;cursor:pointer;transition:.15s;color:var(--ink);
+  }
+  .tf-btn:hover:not(.locked){transform:translateY(-2px);border-color:var(--sky);background:#f4fbff}
+  .tf-btn.locked{cursor:default}
+  .tf-btn.correct{border-color:var(--grass-d);background:#e8f9ec;color:var(--grass-d)}
+  .tf-btn.wrong{border-color:var(--coral-d);background:#ffefed;color:var(--coral-d)}
+
+  /* 完成畫面 */
+  .finish{
+    display:none;margin:2.4rem 0;padding:2.2rem 1.4rem;border-radius:28px;text-align:center;
+    background:linear-gradient(135deg,#eaf7ff,#fff8e1 55%,#eefaf0);
+    border:3px dashed var(--sun);box-shadow:var(--shadow);
+  }
+  .finish.on{display:block;animation:pop .6s}
+  .finish .em{font-size:4.6rem;line-height:1;animation:bob 1.8s ease-in-out infinite}
+  .finish h2{margin:.6rem 0;font-size:1.9rem;color:var(--sky-d)}
+  .finish .big-score{font-size:2.9rem;font-weight:900;color:var(--coral-d);letter-spacing:2px}
+  .finish p{color:var(--ink-2);font-size:1.08rem;font-weight:700;line-height:1.7}
+
+  /* ---------- 手機 ---------- */
+  @media (max-width:640px){
+    .scoreboard{padding:.6rem .75rem;gap:.55rem;margin:.8rem 0}
+    .sb-item{font-size:.9rem}
+    .sb-item b{font-size:1.08rem}
+    .qitem{padding:1rem .9rem;border-radius:20px}
+    .qtext{font-size:1.06rem;min-width:0}
+    .o{font-size:1rem;padding:.8rem .8rem .8rem 3rem}
+    .blank-in{min-width:6.5rem;font-size:1rem}
+    .part-head{padding:.8rem .9rem;gap:.6rem}
+    .part-head h2{font-size:1.24rem}
+    .tf-btn{font-size:1.05rem;padding:.75rem 1.4rem;min-width:6rem}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap"><div class="progress-bar"></div></div>
+<div class="bg-deco"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span>人文科 4上 · 溫習基地</div>
+    <button class="speak" id="soundToggle" data-nosfx title="音效：開">🔊</button>
+    <nav class="nav">
+      <a href="revision.html">📘 重點筆記</a>
+      <a href="games.html">🎮 遊戲</a>
+      <a href="practice.html" class="active">📝 練習</a>
+      </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="exam-hero">
+    <h1>📝 模擬試題練習</h1>
+    <p>共 <b>44 題</b>，分 5 部分。做完即時知對錯，仲有標準答案教你點答！</p>
+    <div class="exam-chips">
+      <span class="exam-chip">🅰️ 選擇題 ×15</span>
+      <span class="exam-chip">✅ 是非題 ×8</span>
+      <span class="exam-chip">✏️ 填充題 ×7</span>
+      <span class="exam-chip">📊 資料題 ×4 組（共 8 小題）</span>
+      <span class="exam-chip">🖊️ 長答題 ×6</span>
+    </div>
+  </div>
+
+  <!-- 分數板 -->
+  <div class="scoreboard">
+    <div class="sb-item">已完成 <b id="sb-done">0</b>/<span id="sb-total">40</span></div>
+    <div class="sb-item g">✅ <b id="sb-right">0</b></div>
+    <div class="sb-item r">❌ <b id="sb-wrong">0</b></div>
+    <div class="sb-bar"><i id="sb-fill"></i></div>
+    <button class="btn ghost" style="padding:.5rem 1rem;font-size:.92rem" id="resetAll">🔄 重做</button>
+  </div>
+
+  <!-- =====================================================
+       一、選擇題
+       ===================================================== -->
+  <div class="part-head">
+    <div class="pnum">一</div>
+    <div><h2>選擇題</h2><div class="pd">選出最適合的答案（每題 2 分）</div></div>
+  </div>
+
+  <div id="mcq-area"></div>
+
+  <!-- =====================================================
+       二、是非題
+       ===================================================== -->
+  <div class="part-head tf">
+    <div class="pnum">二</div>
+    <div><h2>是非題</h2><div class="pd">對的選 ✓，錯的選 ✗（每題 1 分）</div></div>
+  </div>
+
+  <div id="tf-area"></div>
+
+  <!-- =====================================================
+       三、填充題
+       ===================================================== -->
+  <div class="part-head fill">
+    <div class="pnum">三</div>
+    <div><h2>填充題</h2><div class="pd">在橫線上填上正確答案（每題 2 分）</div></div>
+  </div>
+
+  <div id="fill-area"></div>
+
+  <!-- =====================================================
+       四、資料題
+       ===================================================== -->
+  <div class="part-head data">
+    <div class="pnum">四</div>
+    <div><h2>資料題</h2><div class="pd">細閱資料，然後作答（每題 4 分）</div></div>
+  </div>
+
+  <div id="data-area"></div>
+
+  <!-- =====================================================
+       五、長答題
+       ===================================================== -->
+  <div class="part-head long">
+    <div class="pnum">五</div>
+    <div><h2>長答題</h2><div class="pd">寫出完整句子，運用關鍵詞（每題 4 分）</div></div>
+  </div>
+
+  <div id="long-area"></div>
+
+  <!-- 完成 -->
+  <div class="finish" id="finish">
+    <div class="em" id="finish-em">🏆</div>
+    <h2 id="finish-title">全部做完！</h2>
+    <div class="big-score"><span id="finish-score">0</span> / <span id="finish-max">0</span></div>
+    <p id="finish-msg"></p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px">
+      <button class="btn sun" id="finish-again">🔄 再做一次</button>
+      <a class="btn ghost" href="revision.html">📘 回去溫習</a>
+      <a class="btn grass" href="games.html">🎮 玩遊戲</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>📚 今日人文 4上 · 溫習基地</p>
+    <p><a href="revision.html">重點筆記</a> ｜ <a href="games.html">遊戲</a> ｜ <a href="practice.html">練習</a></p>
+  </div>
+</div>
+
+<button class="fab" id="toTop" title="回到頂部">⬆️</button>
+
+<script src="assets/app.js"></script>
+<script src="assets/wb.js"></script>
+<script>
+(function () {
+  "use strict";
+  var S = function (n) { if (window.HUMS) window.HUMS.play(n); };
+
+  /* ============ 題庫 ============ */
+
+  var MCQ = [
+    { q: "香港位於中國哪個省的東南沿岸？",
+      o: ["廣東省", "廣西壯族自治區", "福建省", "海南省"], a: 0,
+      e: "香港位於廣東省東南沿岸、珠江口東面。" },
+
+    { q: "香港的氣候屬於下列哪一種類型？",
+      o: ["溫帶季風氣候", "亞熱帶季風氣候", "熱帶雨林氣候", "地中海氣候"], a: 1,
+      e: "香港位於北緯約 22 度，屬<b>亞熱帶季風氣候</b>：四季分明、夏季高溫多雨、冬季寒冷乾燥。" },
+
+    { q: "香港最高的山峯是哪一座？",
+      o: ["鳳凰山", "大帽山", "獅子山", "太平山"], a: 1,
+      e: "大帽山高 <b>957 米</b>，是全港最高。第二位是鳳凰山（934 米）。" },
+
+    { q: "香港的地形有甚麼特徵？",
+      o: ["平地多、山地少", "山地多、平地少", "全部都是平地", "全部都是山地"], a: 1,
+      e: "香港約<b>三分之二</b>土地是山地和丘陵，平地很少，所以城市要向高發展和填海造地。" },
+
+    { q: "香港一共分為多少個行政區？",
+      o: ["15 區", "16 區", "18 區", "20 區"], a: 2,
+      e: "共 <b>18 區</b>：香港島 4 區、九龍 5 區、新界 9 區。" },
+
+    { q: "以下哪一項<b>不是</b>香港天文台發出的天氣警告？",
+      o: ["暴雨警告", "颱風警告", "空氣質素健康指數", "寒冷天氣警告"], a: 2,
+      e: "空氣質素健康指數由<b>環境保護署</b>發出，不是天文台。天文台負責天氣警告（颱風、暴雨、寒冷、酷熱、雷暴等）。" },
+
+    { q: "暴雨警告信號由輕微至嚴重，正確次序是：",
+      o: ["紅色 → 黃色 → 黑色", "黃色 → 紅色 → 黑色", "黑色 → 紅色 → 黃色", "黃色 → 黑色 → 紅色"], a: 1,
+      e: "黃 → 紅 → 黑。黑色暴雨代表雨量最多、最嚴重。" },
+
+    { q: "地球是太陽系由內向外數的第幾顆行星？",
+      o: ["第一顆", "第二顆", "第三顆", "第四顆"], a: 2,
+      e: "地球是第三顆行星（水星、金星、<b>地球</b>、火星……）。" },
+
+    { q: "地球表面大約有多少被海洋覆蓋？",
+      o: ["約 29%", "約 50%", "約 61%", "約 71%"], a: 3,
+      e: "約 <b>71% 是海洋</b>，29% 是陸地。海水反射陽光，所以地球又叫「藍色星球」。" },
+
+    { q: "地球自轉一周需要多久？",
+      o: ["約 12 小時", "約 24 小時", "約 30 日", "約 365 日"], a: 1,
+      e: "<b>自轉</b>一周約 <b>24 小時</b>（一日），造成晝夜交替。<b>公轉</b>一周約 365.25 日，造成四季。" },
+
+    { q: "七大洲之中，面積最大和最小的分別是：",
+      o: ["亞洲／大洋洲", "非洲／歐洲", "北美洲／南極洲", "亞洲／歐洲"], a: 0,
+      e: "由大到小：亞洲、非洲、北美洲、南美洲、南極洲、歐洲、大洋洲。<b>最大＝亞洲，最小＝大洋洲</b>。" },
+
+    { q: "四大洋之中，面積最大的是：",
+      o: ["大西洋", "印度洋", "太平洋", "北冰洋"], a: 2,
+      e: "由大到小：<b>太平洋</b>、大西洋、印度洋、北冰洋。香港南面的南海屬於太平洋。" },
+
+    { q: "以下哪一項是地球<b>自轉</b>造成的現象？",
+      o: ["四季變化", "晝夜交替", "潮汐漲退", "月圓月缺"], a: 1,
+      e: "自轉 → <b>晝夜交替</b>；公轉 → 四季變化。潮汐主要由月球引力造成。" },
+
+    { q: "3R 環保原則中，最優先應該做的是：",
+      o: ["Recycle 回收", "Reuse 重用", "Reduce 減少", "三者一樣重要"], a: 2,
+      e: "正確次序：<b>Reduce（減少）→ Reuse（重用）→ Recycle（回收）</b>。不製造垃圾才是最環保。" },
+
+    { q: "以下哪一種氣體是主要的溫室氣體？",
+      o: ["氧氣 O₂", "氮氣 N₂", "二氧化碳 CO₂", "氦氣 He"], a: 2,
+      e: "<b>二氧化碳（CO₂）</b>是主要溫室氣體，主要來自燃燒煤、石油和天然氣。它像「棉被」把熱力困住。" }
+  ];
+
+  var TF = [
+    { q: "香港位於北半球和東半球。", a: true,
+      e: "正確。香港約在北緯 22 度（赤道以北 → 北半球）、東經 114 度（本初子午線以東 → 東半球）。" },
+    { q: "香港冬季吹西南季風，帶來寒冷乾燥的天氣。", a: false,
+      e: "錯。香港<b>冬季吹東北季風</b>（來自內陸，寒冷乾燥）。<b>夏季才吹西南季風</b>（來自海洋，溫暖潮濕）。" },
+    { q: "香港秋季天晴少雨，是最適合戶外活動的季節。", a: true,
+      e: "正確。秋季涼爽乾燥、能見度高，適合行山、郊遊和戶外考察。" },
+    { q: "地球公轉一周約需 24 小時。", a: false,
+      e: "錯。公轉一周約需 <b>365.25 日（一年）</b>。<b>自轉</b>才約需 24 小時。" },
+    { q: "香港的土地約有三分之二是山地和丘陵。", a: true,
+      e: "正確。香港山多平地少，所以樓宇越建越高，也要靠填海造地。" },
+    { q: "八大行星中，地球是距離太陽最近的行星。", a: false,
+      e: "錯。距離太陽最近的是<b>水星</b>。地球是第三顆行星。" },
+    { q: "把廢紙放入回收箱是屬於「Reuse 重用」。", a: false,
+      e: "錯。回收再造是 <b>Recycle</b>；把紙的背面再寫一次才是 Reuse。" },
+    { q: "溫室效應加劇會令冰川融化和海平面上升。", a: true,
+      e: "正確。溫度上升 → 冰川融化 → 海水增加 → 海平面上升 → 低窪地區被淹沒。" }
+  ];
+
+  var FILL = [
+    { q: "香港位於中國 ______ 省東南沿岸，珠江口東面。",
+      a: ["廣東", "廣東省"],
+      e: "香港位於<b>廣東省</b>東南沿岸。" },
+    { q: "香港的氣候屬於 ______ 季風氣候。",
+      a: ["亞熱帶"],
+      e: "香港屬<b>亞熱帶</b>季風氣候。" },
+    { q: "香港最高的山峯是 ______，高 957 米。",
+      a: ["大帽山"],
+      e: "全港最高是<b>大帽山（957 米）</b>，位於新界中部。" },
+    { q: "地球表面約有 ______% 被海洋覆蓋。",
+      a: ["71", "71%", "百分之七十一", "七十一"],
+      e: "約 <b>71%</b> 是海洋，29% 是陸地。" },
+    { q: "地球 ______ 一周約需 24 小時，造成晝夜交替。",
+      a: ["自轉"],
+      e: "<b>自轉</b> 24 小時 → 晝夜；<b>公轉</b> 365.25 日 → 四季。" },
+    { q: "3R 是指 Reduce、Reuse 和 ______。",
+      a: ["recycle", "Recycle", "RECYCLE", "回收"],
+      e: "3R = Reduce（減少）、Reuse（重用）、<b>Recycle（回收）</b>。" },
+    { q: "劃分南北半球的緯線是 ______，緯度為 0°。",
+      a: ["赤道"],
+      e: "0° 緯線就是<b>赤道</b>；0° 經線是本初子午線。" }
+  ];
+
+  var DATA = [
+    {
+      q: "根據以下香港四季平均氣溫及雨量資料，回答問題。",
+      data: '<div class="data-box"><div class="dt">📊 香港四季平均氣溫與雨量</div>' +
+        '<table style="margin:6px 0"><thead><tr><th>季節</th><th>平均氣溫</th><th>平均月雨量</th></tr></thead>' +
+        '<tbody><tr><td>春季（3–5月）</td><td>22℃</td><td>120 毫米</td></tr>' +
+        '<tr><td>夏季（6–8月）</td><td>31℃</td><td>330 毫米</td></tr>' +
+        '<tr><td>秋季（9–11月）</td><td>25℃</td><td>110 毫米</td></tr>' +
+        '<tr><td>冬季（12–2月）</td><td>16℃</td><td>35 毫米</td></tr></tbody></table></div>',
+      sub: "(a) 哪一個季節的雨量最多？哪一個季節最少？",
+      a: ["夏季雨量最多", "冬季雨量最少", "夏季最多，冬季最少"],
+      key: ["夏季", "冬季"],
+      e: "夏季平均月雨量 <b>330 毫米</b>最多；冬季 <b>35 毫米</b>最少。",
+      sub2: "(b) 為甚麼夏季的雨量特別多？試從季風方面解釋。",
+      a2: "夏季吹西南季風，風由海洋吹向陸地，帶來大量水汽，所以高溫多雨。",
+      key2: ["西南季風", "海洋", "水汽", "潮濕"],
+      e2: "夏季吹<b>西南季風</b>，風從<b>海洋</b>吹來，帶來大量<b>水汽</b>，因此高溫多雨。"
+    },
+    {
+      q: "細閱以下新聞報道，然後回答問題。",
+      data: '<div class="data-box"><div class="dt">📰 新聞報道</div>' +
+        '天文台今日發出<b>黑色暴雨警告</b>，多區錄得超過 100 毫米雨量。多條道路嚴重水浸，部分港鐵站出入口關閉，教育局宣布全港學校停課。有市民被困車內，消防員到場救援。' +
+        '<div style="margin-top:.5rem;font-size:.92rem;color:#4a5c6b">（模擬報道）</div></div>',
+      sub: "(a) 報道中提及的是哪一種天氣警告？它屬於哪個級別？",
+      a: ["黑色暴雨警告", "黑色暴雨"],
+      key: ["黑色暴雨"],
+      e: "是<b>黑色暴雨警告</b>，屬於暴雨警告的<b>最高級別</b>（黃 → 紅 → <b>黑</b>）。",
+      sub2: "(b) 黑色暴雨對市民的生活造成哪些影響？寫出兩項。",
+      a2: "道路水浸、交通受阻；學校停課；市民被困、有生命危險。",
+      key2: ["水浸", "交通", "停課", "危險"],
+      e2: "① 道路<b>水浸</b>、<b>交通</b>受阻；② 學校<b>停課</b>；③ 市民被困，有生命<b>危險</b>。"
+    },
+    {
+      q: "細閱以下資料，然後回答問題。",
+      data: '<div class="data-box"><div class="dt">📊 全球平均氣溫變化（與 1900 年比較）</div>' +
+        '<table style="margin:6px 0"><thead><tr><th>年份</th><th>1900</th><th>1950</th><th>2000</th><th>2024</th></tr></thead>' +
+        '<tbody><tr><td>氣溫變化</td><td>0℃</td><td>+0.2℃</td><td>+0.6℃</td><td>+1.3℃</td></tr></tbody></table></div>',
+      sub: "(a) 根據資料，全球平均氣溫有甚麼趨勢？",
+      a: ["持續上升", "不斷上升", "上升", "越來越高"],
+      key: ["上升", "增加"],
+      e: "全球平均氣溫<b>持續上升</b>：由 1900 年的 0℃ 升至 2024 年的 +1.3℃。",
+      sub2: "(b) 這種現象的名稱是甚麼？主要成因是甚麼？",
+      a2: "這種現象叫全球暖化。主要成因是人類燃燒煤和石油等化石燃料，排放大量二氧化碳等溫室氣體，令溫室效應加劇。",
+      key2: ["全球暖化", "二氧化碳", "溫室氣體", "溫室效應", "燃燒"],
+      e2: "現象名稱：<b>全球暖化</b>。成因：人類燃燒化石燃料（煤、石油）排放大量<b>二氧化碳</b>等<b>溫室氣體</b>，令<b>溫室效應</b>加劇。"
+    },
+    {
+      q: "細閱以下資料，然後回答問題。",
+      data: '<div class="data-box"><div class="dt">📰 新聞報道</div>' +
+        '環保署公布，本港三個堆填區預計在 2030 年前飽和。現時香港每日產生約 1.1 萬公噸都市固體廢物，其中約三成是廚餘。政府呼籲市民實踐「Reduce、Reuse、Recycle」。' +
+        '<div style="margin-top:.5rem;font-size:.92rem;color:#4a5c6b">（模擬報道）</div></div>',
+      sub: "(a) 香港正面對甚麼環境問題？",
+      a: ["固體廢物問題", "堆填區飽和", "垃圾過多", "廢物過多"],
+      key: ["廢物", "垃圾", "堆填區"],
+      e: "香港面對<b>固體廢物（垃圾）過多</b>的問題，<b>堆填區</b>快將飽和。",
+      sub2: "(b) 作為小學生，你可以怎樣減少廚餘？寫出一項具體做法。",
+      a2: "我可以每次只取適量的食物，吃完再添，做到「光碟行動」，不浪費食物。",
+      key2: ["適量", "不浪費", "光碟", "吃完"],
+      e2: "例如：每次只取<b>適量</b>食物，吃完再添，做到「<b>光碟</b>行動」，<b>不浪費</b>食物。"
+    }
+  ];
+
+  var LONG = [
+    { q: "試比較香港夏季和冬季的天氣特徵（提示：氣溫、雨量、季風）。",
+      keys: ["炎熱", "寒冷", "多雨", "少雨", "西南", "東北"],
+      model: "香港夏季天氣炎熱，氣溫可達 31℃ 以上，雨量多，常有大雨和颱風，吹西南季風（來自海洋，潮濕）。冬季天氣寒冷乾燥，氣溫約 16℃，雨量少，吹東北季風（來自內陸，乾冷）。",
+      tip: "比較題必須<b>兩邊都寫</b>，並用「而」、「相比之下」等連接詞。" },
+
+    { q: "香港的地形有甚麼特徵？這些特徵對城市發展帶來甚麼影響？",
+      keys: ["山地", "平地", "三分之二", "高樓", "填海", "新市鎮"],
+      model: "香港山地多、平地少，約三分之二土地是山地和丘陵。因此可供發展的平地有限，樓宇要越建越高；政府也要填海造地和發展新市鎮（例如東涌、將軍澳），以增加土地供應。",
+      tip: "先寫「特徵」，再寫「影響／應對」，層次分明就可以拿滿分。" },
+
+    { q: "試解釋溫室效應加劇如何導致全球暖化。",
+      keys: ["二氧化碳", "溫室氣體", "棉被", "困", "氣溫上升", "燃燒"],
+      model: "人類燃燒煤和石油等化石燃料，排放大量二氧化碳等溫室氣體。這些氣體像一層棉被覆蓋地球，令地面反射的熱力被困在大氣層內，無法散失，於是地球氣溫不斷上升，造成全球暖化。",
+      tip: "用「<b>棉被</b>」比喻溫室氣體，老師最喜歡看到。" },
+
+    { q: "全球暖化會帶來哪些影響？寫出三項。",
+      keys: ["冰川融化", "海平面上升", "極端天氣", "動物", "低窪"],
+      model: "① 冰川融化，兩極冰塊減少；② 海平面上升，低窪地區和島國被淹沒；③ 極端天氣更頻繁（如超強颱風、暴雨、旱災）；④ 北極熊等動物失去棲息地。",
+      tip: "答「三項」時最好寫夠三項，並用 ①②③ 分點。" },
+
+    { q: "試說明 3R 的意義，並各舉一個小學生可以做到的例子。",
+      keys: ["Reduce", "Reuse", "Recycle", "減少", "重用", "回收"],
+      model: "Reduce 減少：少用即棄物品，例如自備水樽、不買膠袋。Reuse 重用：把物品再用一次，例如用舊膠樽做筆筒、舊衣物轉贈他人。Recycle 回收：把廢紙、膠樽、鋁罐分類放入回收箱，循環再造。",
+      tip: "記得寫出英文 + 中文 + 例子，三樣齊全才完整。" },
+
+    { q: "為甚麼我們要保護地球？試從兩方面說明。",
+      keys: ["家園", "有限", "下一代", "健康", "資源"],
+      model: "第一，地球是我們唯一的家園，天然資源有限，濫用會令資源枯竭，影響我們和下一代的生活。第二，環境污染會危害我們的健康，例如空氣污染會引致呼吸系統疾病。所以我們有責任保護地球。",
+      tip: "「兩方面」可以用「第一……第二……」或「一方面……另一方面……」。" }
+  ];
+
+  /* ============ 狀態 ============ */
+  var TOTAL = MCQ.length + TF.length + FILL.length + DATA.length * 2 + LONG.length; // 15+8+7+8+6 = 44
+  var state = { done: 0, right: 0, wrong: 0 };
+
+  function updateBoard() {
+    document.getElementById("sb-done").textContent = state.done;
+    document.getElementById("sb-right").textContent = state.right;
+    document.getElementById("sb-wrong").textContent = state.wrong;
+    document.getElementById("sb-fill").style.width = Math.min(100, state.done / TOTAL * 100) + "%";
+    if (state.done >= TOTAL && !document.getElementById("finish").classList.contains("on")) {
+      showFinish();
+    }
+  }
+
+  function mark(ok) {
+    state.done++;
+    if (ok) state.right++; else state.wrong++;
+    updateBoard();
+  }
+
+  /* ============ 選擇題 ============ */
+  var mcqEl = document.getElementById("mcq-area");
+  MCQ.forEach(function (item, idx) {
+    var d = document.createElement("div");
+    d.className = "qitem";
+    var keys = ["A", "B", "C", "D"];
+    var html = '<div class="qhead"><div class="qmeta"><span class="qno">第 ' + (idx + 1) + ' 題</span>' +
+               '<span class="qmark">2 分</span></div>' +
+               '<p class="qtext">' + item.q + '</p></div><div class="opts">';
+    item.o.forEach(function (t, k) {
+      html += '<button class="o" data-k="' + keys[k] + '" data-i="' + k + '">' + t + '</button>';
+    });
+    html += '</div><div class="answer"><div class="at">💡 答案與解釋</div><div>' + item.e + '</div></div>';
+    d.innerHTML = html;
+    mcqEl.appendChild(d);
+
+    var answered = false;
+    d.querySelectorAll(".o").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (answered) return;
+        answered = true;
+        var k = +btn.dataset.i;
+        var ok = k === item.a;
+        d.querySelectorAll(".o").forEach(function (o) {
+          o.classList.add("locked");
+          if (+o.dataset.i === item.a) o.classList.add("correct");
+        });
+        if (!ok) btn.classList.add("wrong");
+        d.classList.add(ok ? "right" : "miss");
+        d.querySelector(".answer").classList.add("on");
+        S(ok ? "correct" : "wrong");
+        mark(ok);
+      });
+    });
+  });
+
+  /* ============ 是非題 ============ */
+  var tfEl = document.getElementById("tf-area");
+  TF.forEach(function (item, idx) {
+    var d = document.createElement("div");
+    d.className = "qitem";
+    d.innerHTML =
+      '<div class="qhead"><div class="qmeta"><span class="qno tf">第 ' + (idx + 1) + ' 題</span>' +
+      '<span class="qmark">1 分</span></div><p class="qtext">' + item.q + '</p></div>' +
+      '<div class="tf-row">' +
+        '<button class="tf-btn" data-v="1">✓ 對</button>' +
+        '<button class="tf-btn" data-v="0">✗ 錯</button>' +
+      '</div>' +
+      '<div class="answer"><div class="at">💡 答案與解釋</div><div>' + item.e + '</div></div>';
+    tfEl.appendChild(d);
+
+    var answered = false;
+    d.querySelectorAll(".tf-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (answered) return;
+        answered = true;
+        var v = btn.dataset.v === "1";
+        var ok = v === item.a;
+        d.querySelectorAll(".tf-btn").forEach(function (b) {
+          b.classList.add("locked");
+          var bv = b.dataset.v === "1";
+          if (bv === item.a) b.classList.add("correct");
+        });
+        if (!ok) btn.classList.add("wrong");
+        d.classList.add(ok ? "right" : "miss");
+        d.querySelector(".answer").classList.add("on");
+        S(ok ? "correct" : "wrong");
+        mark(ok);
+      });
+    });
+  });
+
+  /* ============ 填充題 ============ */
+  var fillEl = document.getElementById("fill-area");
+  FILL.forEach(function (item, idx) {
+    var d = document.createElement("div");
+    d.className = "qitem";
+    var parts = item.q.split("______");
+    var qHtml = parts.map(function (p, i) {
+      if (i === 0) return p;
+      return '<input class="blank-in" type="text" autocomplete="off" spellcheck="false" data-i="' + idx + '">' + p;
+    }).join("");
+    d.innerHTML =
+      '<div class="qhead"><div class="qmeta"><span class="qno fill">第 ' + (idx + 1) + ' 題</span>' +
+      '<span class="qmark">2 分</span></div><p class="qtext">' + qHtml + '</p></div>' +
+      '<div class="long-tools"><button class="btn-check">✔ 核對答案</button></div>' +
+      '<div class="verdict"></div>' +
+      '<div class="answer"><div class="at">💡 正確答案</div><div>' + item.e + '</div></div>';
+    fillEl.appendChild(d);
+
+    var inp = d.querySelector(".blank-in");
+    var btn = d.querySelector(".btn-check");
+    var vd = d.querySelector(".verdict");
+
+    function check() {
+      if (btn.disabled) return;
+      var val = (inp.value || "").trim().toLowerCase().replace(/\s|，|,|。|\./g, "");
+      if (!val) { inp.focus(); S("tick"); return; }
+      var ok = item.a.some(function (x) {
+        var ax = x.toLowerCase().replace(/\s|%|，|,|。|\./g, "");
+        return val === ax || val.indexOf(ax) !== -1 || ax.indexOf(val) !== -1;
+      });
+      inp.classList.add(ok ? "correct" : "wrong");
+      inp.disabled = true;
+      btn.disabled = true;
+      vd.className = "verdict on " + (ok ? "ok" : "no");
+      vd.innerHTML = ok ? "✅ 答對了！" : "❌ 答錯了，正確答案見下方。";
+      d.querySelector(".answer").classList.add("on");
+      d.classList.add(ok ? "right" : "miss");
+      S(ok ? "correct" : "wrong");
+      mark(ok);
+    }
+    btn.addEventListener("click", check);
+    inp.addEventListener("keydown", function (e) { if (e.key === "Enter") check(); });
+  });
+
+  /* ============ 資料題 ============ */
+  var dataEl = document.getElementById("data-area");
+  DATA.forEach(function (item, idx) {
+    var d = document.createElement("div");
+    d.className = "qitem";
+    d.innerHTML =
+      '<div class="qhead"><div class="qmeta"><span class="qno data">資料 ' + (idx + 1) + '</span>' +
+      '<span class="qmark">4 分</span></div><p class="qtext">' + item.q + '</p></div>' + item.data;
+
+    /* (a) 短填 */
+    var a = document.createElement("div");
+    a.innerHTML =
+      '<p style="font-weight:800;margin:14px 0 8px">' + item.sub + '</p>' +
+      '<textarea class="long-area" style="min-height:64px" placeholder="在這裏作答…"></textarea>' +
+      '<div class="long-tools"><button class="btn-check">✔ 核對（關鍵詞）</button>' +
+      '<button class="btn-show">👀 看參考答案</button></div>' +
+      '<div class="verdict"></div>' +
+      '<div class="answer"><div class="at">✅ 參考答案</div><div>' + item.e + '</div>' +
+      '<div class="mark-hint">🔑 關鍵詞：' + item.key.join("、") + '</div></div>';
+    d.appendChild(a);
+
+    /* (b) 長答 */
+    var b = document.createElement("div");
+    b.style.marginTop = "18px";
+    b.style.paddingTop = "14px";
+    b.style.borderTop = "2px dashed #dbe8f0";
+    b.innerHTML =
+      '<p style="font-weight:800;margin:6px 0 8px">' + item.sub2 + '</p>' +
+      '<textarea class="long-area" placeholder="用完整句子作答…"></textarea>' +
+      '<div class="long-tools"><button class="btn-check">✔ 核對（關鍵詞）</button>' +
+      '<button class="btn-show">👀 看參考答案</button></div>' +
+      '<div class="verdict"></div>' +
+      '<div class="answer"><div class="at">✅ 參考答案</div><div>' + item.e2 + '</div>' +
+      '<div class="mark-hint">🔑 關鍵詞：' + item.key2.join("、") + '</div></div>';
+    d.appendChild(b);
+
+    dataEl.appendChild(d);
+
+    /* 綁定兩個小題 */
+    [
+      { root: a, keys: item.key },
+      { root: b, keys: item.key2 }
+    ].forEach(function (cfg) {
+      var ta = cfg.root.querySelector(".long-area");
+      var ck = cfg.root.querySelector(".btn-check");
+      var sh = cfg.root.querySelector(".btn-show");
+      var vd = cfg.root.querySelector(".verdict");
+      var ans = cfg.root.querySelector(".answer");
+      var graded = false;
+
+      ck.addEventListener("click", function () {
+        if (graded) return;
+        var txt = (ta.value || "").trim();
+        if (!txt) { ta.focus(); S("tick"); return; }
+        var hit = cfg.keys.filter(function (k) { return txt.indexOf(k) !== -1; });
+        var ok = hit.length >= Math.max(1, Math.ceil(cfg.keys.length * 0.6));
+        graded = true;
+        vd.className = "verdict on " + (ok ? "ok" : "no");
+        vd.innerHTML = ok
+          ? "✅ 很好！你答中了關鍵詞：" + hit.join("、") + "（自己對一對參考答案）"
+          : "❌ 未夠完整。你寫了：" + (hit.length ? hit.join("、") : "沒有關鍵詞") +
+            "。請看參考答案，補回缺少的關鍵詞。";
+        ans.classList.add("on");
+        ck.disabled = true;
+        ta.style.borderColor = ok ? "#2f9e44" : "#e8503f";
+        ta.style.background = ok ? "#fbfffc" : "#fffbfa";
+        S(ok ? "correct" : "wrong");
+        mark(ok);
+      });
+      sh.addEventListener("click", function () {
+        ans.classList.toggle("on");
+        if (ans.classList.contains("on")) S("pop");
+      });
+    });
+  });
+
+  /* ============ 長答題 ============ */
+  var longEl = document.getElementById("long-area");
+  LONG.forEach(function (item, idx) {
+    var d = document.createElement("div");
+    d.className = "qitem";
+    d.innerHTML =
+      '<div class="qhead"><div class="qmeta"><span class="qno long">第 ' + (idx + 1) + ' 題</span>' +
+      '<span class="qmark">4 分</span></div><p class="qtext">' + item.q + '</p></div>' +
+      '<textarea class="long-area" placeholder="用完整句子作答，記得寫出關鍵詞…"></textarea>' +
+      '<div class="long-tools">' +
+        '<span style="font-size:.95rem;font-weight:800;color:#4a5c6b">🔑 關鍵詞提示：' +
+          item.keys.join("、") + '</span>' +
+      '</div>' +
+      '<div class="long-tools"><button class="btn-check">✔ 自我檢查</button>' +
+      '<button class="btn-show">👀 看模範答案</button></div>' +
+      '<div class="verdict"></div>' +
+      '<div class="answer"><div class="at">🌟 模範答案</div><div>' + item.model + '</div>' +
+      '<div class="mark-hint">✍️ ' + item.tip + '</div></div>';
+    longEl.appendChild(d);
+
+    var ta = d.querySelector(".long-area");
+    var ck = d.querySelector(".btn-check");
+    var sh = d.querySelector(".btn-show");
+    var vd = d.querySelector(".verdict");
+    var ans = d.querySelector(".answer");
+    var graded = false;
+
+    ck.addEventListener("click", function () {
+      if (graded) return;
+      var txt = (ta.value || "").trim();
+      if (txt.length < 8) { ta.focus(); S("tick"); return; }
+      var hit = item.keys.filter(function (k) { return txt.indexOf(k) !== -1; });
+      var need = Math.ceil(item.keys.length * 0.55);
+      var ok = hit.length >= need;
+      var stars = hit.length >= item.keys.length * 0.9 ? "⭐⭐⭐" :
+                  hit.length >= need ? "⭐⭐" : "⭐";
+      graded = true;
+      vd.className = "verdict on " + (ok ? "ok" : "no");
+      vd.innerHTML = (ok ? "✅ " + stars + " 答得不錯！" : "❌ 內容未夠完整 " + stars) +
+        "　你寫中了 " + hit.length + " / " + item.keys.length + " 個關鍵詞" +
+        (hit.length ? "：" + hit.join("、") : "") +
+        "。對一對模範答案，把缺少的補上吧！";
+      ans.classList.add("on");
+      ck.disabled = true;
+      ta.style.borderColor = ok ? "#2f9e44" : "#e8503f";
+      ta.style.background = ok ? "#fbfffc" : "#fffbfa";
+      S(ok ? "correct" : "wrong");
+      mark(ok);
+    });
+
+    sh.addEventListener("click", function () {
+      ans.classList.toggle("on");
+      if (ans.classList.contains("on")) S("pop");
+    });
+  });
+
+  /* ============ 完成 ============ */
+  function showFinish() {
+    var pct = state.right / TOTAL;
+    var el = document.getElementById("finish");
+    el.classList.add("on");
+    document.getElementById("finish-score").textContent = state.right;
+    document.getElementById("finish-max").textContent = TOTAL;
+    var em, title, msg;
+    if (pct >= 0.9) { em = "🏆"; title = "太厲害了！"; msg = "你已經完全掌握！考試一定沒問題，保持信心！"; }
+    else if (pct >= 0.75) { em = "🎉"; title = "非常好！"; msg = "你掌握得不錯，把做錯的題目再看一次就更完美了。"; }
+    else if (pct >= 0.6) { em = "💪"; title = "不錯，繼續努力！"; msg = "有部分概念要再加強，回去看「重點筆記」再來一次吧。"; }
+    else { em = "📖"; title = "別灰心！"; msg = "先回去仔細看重點筆記和遊戲，然後再挑戰一次。"; }
+    document.getElementById("finish-em").textContent = em;
+    document.getElementById("finish-title").textContent = title;
+    document.getElementById("finish-msg").textContent = msg;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (pct >= 0.75) { S("win"); confetti(90); } else { S("lose"); }
+  }
+
+  /* 彩紙 */
+  function confetti(n) {
+    var cols = ["#ff7a6b", "#ffc93c", "#5cc46a", "#3aa7e0", "#9b6bdf", "#ff9ecb"];
+    for (var i = 0; i < n; i++) {
+      (function () {
+        var c = document.createElement("div");
+        c.style.cssText = "position:fixed;top:0;width:11px;height:16px;z-index:200;pointer-events:none;border-radius:2px;" +
+          "left:" + Math.random() * 100 + "vw;background:" + cols[Math.floor(Math.random() * cols.length)] +
+          ";animation:confettiFall linear forwards;animation-duration:" + (1.6 + Math.random() * 1.6) + "s";
+        document.body.appendChild(c);
+        setTimeout(function () { c.remove(); }, 3600);
+      })();
+    }
+  }
+
+  /* 重做 */
+  function resetAll() {
+    state = { done: 0, right: 0, wrong: 0 };
+    updateBoard();
+    document.querySelectorAll(".qitem").forEach(function (d) {
+      d.classList.remove("right", "miss");
+      d.querySelectorAll(".o,.tf-btn").forEach(function (b) {
+        b.classList.remove("locked", "correct", "wrong");
+      });
+      d.querySelectorAll(".blank-in").forEach(function (i) {
+        i.value = ""; i.disabled = false; i.classList.remove("correct", "wrong");
+      });
+      d.querySelectorAll(".long-area").forEach(function (t) {
+        t.value = ""; t.style.borderColor = ""; t.style.background = "";
+      });
+      d.querySelectorAll(".btn-check").forEach(function (b) { b.disabled = false; });
+      d.querySelectorAll(".answer").forEach(function (a) { a.classList.remove("on"); });
+      d.querySelectorAll(".verdict").forEach(function (v) { v.className = "verdict"; v.innerHTML = ""; });
+    });
+    document.getElementById("finish").classList.remove("on");
+    // 重新綁定：簡單起見整頁重載自己的資料
+    location.hash = "";
+    location.reload();
+  }
+  document.getElementById("resetAll").addEventListener("click", resetAll);
+  document.getElementById("finish-again").addEventListener("click", resetAll);
+
+  /* 初始化分數板 */
+  document.getElementById("sb-total").textContent = TOTAL;
+  updateBoard();
+
+  /* 答題時播放小音效 */
+  document.querySelectorAll(".blank-in").forEach(function (i) {
+    i.addEventListener("focus", function () { S("tick"); });
+  });
+})();
+</script>
+<style>
+  @keyframes confettiFall{
+    0%{transform:translateY(-20px) rotate(0);opacity:1}
+    100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+  }
+</style>
+</body>
+</html>

@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="錯題診斷">
+<meta name="theme-color" content="#4f46e5">
+<meta name="format-detection" content="telephone=no">
+<title>P4 數學　錯題診斷 ＋ 模擬試卷</title>
+<style>
+  :root{
+    --bg:#f4f6ff; --card:#fff; --ink:#1b2140; --ink-soft:#5b6285; --line:#e3e7f5;
+    --indigo:#4f46e5; --indigo-soft:#eef0ff;
+    --amber:#f59e0b; --amber-soft:#fff5e0;
+    --green:#16a34a; --green-soft:#e8f8ee;
+    --red:#dc2626; --red-soft:#fdeaea;
+    --sky:#0ea5e9; --sky-soft:#e6f6fe;
+    --purple:#9333ea; --pink:#db2777;
+    --shadow:0 6px 24px rgba(35,45,110,.08);
+    --shadow-lg:0 14px 40px rgba(35,45,110,.13);
+    --r:20px; --pad:clamp(16px,3.2vw,28px);
+    --safe-t:env(safe-area-inset-top,0px);
+    --safe-b:env(safe-area-inset-bottom,0px);
+    --safe-l:env(safe-area-inset-left,0px);
+    --safe-r:env(safe-area-inset-right,0px);
+    --ease:cubic-bezier(.34,1.3,.5,1);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body{
+    margin:0;
+    font-family:"PingFang HK","PingFang TC","Microsoft JhengHei","Noto Sans TC",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg); color:var(--ink);
+    font-size:18px; line-height:1.8;
+    -webkit-font-smoothing:antialiased; overscroll-behavior-y:none; touch-action:manipulation;
+  }
+  button{font-family:inherit;touch-action:manipulation}
+
+  .topbar{
+    position:sticky;top:0;z-index:40;
+    background:rgba(255,255,255,.94);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 2px 14px rgba(35,45,110,.06);
+    padding-top:var(--safe-t);
+  }
+  .topbar-in{
+    max-width:980px;margin:0 auto;
+    padding:8px max(var(--pad),var(--safe-r)) 8px max(var(--pad),var(--safe-l));
+    display:flex;align-items:center;gap:8px;min-height:58px;
+  }
+  .brand{font-weight:800;font-size:19px;display:flex;align-items:center;gap:10px;white-space:nowrap}
+  .brand .logo{
+    width:38px;height:38px;border-radius:12px;
+    background:linear-gradient(135deg,#dc2626,#f59e0b);
+    display:grid;place-items:center;font-size:19px;flex:0 0 auto;color:#fff;
+  }
+  .brand .txt{display:inline}
+  @media(max-width:560px){ .brand .txt{display:none} .iconbtn{width:46px;height:46px;font-size:19px} }
+  .spacer{flex:1}
+  .iconbtn{
+    width:50px;height:50px;border-radius:14px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);font-size:20px;cursor:pointer;
+    display:grid;place-items:center;transition:background .15s,transform .1s;flex:0 0 auto;
+  }
+  .iconbtn:active{transform:scale(.92);background:var(--indigo-soft)}
+  .iconbtn.off{opacity:.42}
+
+  .screen{
+    max-width:980px;margin:0 auto;display:none;
+    padding:22px max(var(--pad),var(--safe-r)) calc(112px + var(--safe-b)) max(var(--pad),var(--safe-l));
+  }
+  .screen.active{display:block;animation:fade .24s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  h1.title{
+    margin:0 0 8px;font-size:clamp(28px,4.6vw,40px);line-height:1.3;font-weight:900;
+    background:linear-gradient(100deg,#dc2626,#db2777 55%,#9333ea);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sub{color:var(--ink-soft);font-size:17px;margin:0 0 22px}
+
+  .card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:clamp(18px,2.8vw,26px);margin:14px 0;border:1px solid #eef0fa}
+  .card h2{margin:0 0 12px;font-size:21px;display:flex;align-items:center;gap:10px}
+
+  /* ---- home modes ---- */
+  .modes{display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:700px){.modes{grid-template-columns:1fr 1fr}}
+  .modecard{
+    position:relative;overflow:hidden;cursor:pointer;text-align:left;
+    background:#fff;border:2px solid var(--line);border-radius:20px;
+    padding:22px 24px;min-height:150px;transition:transform .15s,border-color .15s,box-shadow .15s;
+    display:flex;flex-direction:column;gap:6px;justify-content:center;
+  }
+  .modecard::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:var(--mc,var(--indigo))}
+  .modecard::after{
+    content:"";position:absolute;right:-50px;top:-50px;width:150px;height:150px;border-radius:50%;
+    background:var(--mc,var(--indigo));opacity:.08;pointer-events:none;
+  }
+  .modecard:hover{transform:translateY(-2px);border-color:var(--mc);box-shadow:var(--shadow)}
+  .modecard:active{transform:scale(.985)}
+  .modecard .mt{font-size:22px;font-weight:900;display:flex;align-items:center;gap:10px;line-height:1.3}
+  .modecard .md{font-size:16px;color:var(--ink-soft);line-height:1.65}
+  .modecard .mn{font-size:14px;font-weight:800;color:var(--mc);margin-top:4px}
+
+  /* ---- progress ---- */
+  .qprog{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .qprog .bar{flex:1;height:9px;background:#e9edfb;border-radius:99px;overflow:hidden}
+  .qprog .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--indigo),var(--pink));border-radius:99px;transition:width .35s var(--ease)}
+  .qprog .cnt{font-size:15px;font-weight:800;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+
+  .qbox{
+    background:#fff;border:1px solid var(--line);border-radius:var(--r);
+    padding:clamp(22px,3.4vw,30px) clamp(18px,3vw,26px);
+    box-shadow:var(--shadow);text-align:center;margin-bottom:16px;
+    min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:12px;
+  }
+  .qtag{
+    font-size:13.5px;font-weight:800;letter-spacing:1px;color:var(--indigo);
+    background:var(--indigo-soft);padding:5px 14px;border-radius:999px;align-self:center;
+  }
+  .qtext{font-size:clamp(20px,3.2vw,27px);font-weight:800;line-height:1.6}
+  .qtext small{display:block;font-size:.55em;font-weight:700;color:var(--ink-soft);margin-top:8px;line-height:1.6}
+
+  .choices{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:620px){.choices{grid-template-columns:1fr 1fr}}
+  .ch{
+    min-height:70px;border-radius:15px;border:2px solid var(--line);background:#fff;
+    color:var(--ink);font-size:clamp(17px,2.3vw,20px);font-weight:800;cursor:pointer;
+    padding:14px 18px;transition:.14s;display:flex;align-items:center;justify-content:flex-start;
+    text-align:left;line-height:1.45;
+  }
+  .ch:hover:not(:disabled){border-color:var(--indigo);background:var(--indigo-soft)}
+  .ch:active:not(:disabled){transform:scale(.98)}
+  .ch.right{border-color:var(--green);background:var(--green-soft);color:#0f7a3a}
+  .ch.wrong{border-color:var(--red);background:var(--red-soft);color:#b91c1c;animation:shake .3s}
+  .ch.dim{opacity:.36}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+  .diag{
+    margin-top:14px;border-radius:16px;padding:16px 19px;border:2px solid;
+    animation:fade .2s;
+  }
+  .diag.bad{border-color:#f6bcbc;background:var(--red-soft)}
+  .diag.good{border-color:#a7e8c0;background:var(--green-soft)}
+  .diag .dh{font-weight:900;font-size:18.5px;display:flex;align-items:center;gap:9px;margin-bottom:6px}
+  .diag.bad .dh{color:var(--red)}
+  .diag.good .dh{color:var(--green)}
+  .diag .db{font-size:16.5px;line-height:1.8;color:#2a3157}
+  .diag .db b{color:var(--indigo)}
+  .diag .dfix{
+    margin-top:9px;padding:11px 14px;border-radius:11px;background:rgba(255,255,255,.75);
+    font-size:16px;line-height:1.75;border-left:4px solid var(--indigo);
+  }
+
+  .nextbtn{
+    width:100%;margin-top:14px;min-height:64px;border-radius:16px;border:none;
+    background:linear-gradient(135deg,var(--indigo),var(--purple));
+    color:#fff;font-size:19px;font-weight:800;cursor:pointer;
+    box-shadow:0 8px 22px rgba(79,70,229,.32);transition:.15s;
+  }
+  .nextbtn:active{transform:scale(.98)}
+
+  /* ---- report ---- */
+  .verdict{
+    text-align:center;padding:26px 20px;border-radius:22px;margin-bottom:18px;
+    background:linear-gradient(160deg,#fff,#f7f8ff);border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .verdict .em{font-size:60px;line-height:1;display:block;margin-bottom:8px}
+  .verdict h2{margin:0 0 8px;font-size:26px}
+  .verdict p{margin:0;color:var(--ink-soft);font-size:17px}
+  .verdict .big{
+    font-size:56px;font-weight:900;line-height:1;margin:12px 0;
+    background:linear-gradient(100deg,var(--amber),var(--pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+
+  .weak{
+    background:#fff;border:1px solid var(--line);border-left:6px solid var(--red);
+    border-radius:16px;padding:18px 20px;margin-bottom:13px;box-shadow:var(--shadow);
+  }
+  .weak .wh{display:flex;align-items:center;gap:11px;margin-bottom:7px;flex-wrap:wrap}
+  .weak .wn{font-size:19px;font-weight:900}
+  .weak .spk-slot{margin-left:auto;display:inline-flex}
+  .weak .wc{
+    font-size:13px;font-weight:800;padding:3px 11px;border-radius:99px;
+    background:var(--red-soft);color:var(--red);
+  }
+  .weak .wd{font-size:16.5px;color:#2a3157;line-height:1.8;margin-bottom:9px}
+  .weak .wfix{font-size:16px;line-height:1.8;background:var(--indigo-soft);border-radius:11px;padding:12px 15px;margin-bottom:12px}
+  .weak .wfix b{color:var(--indigo)}
+  .weak .wbtn{
+    min-height:52px;padding:0 22px;border-radius:13px;border:none;
+    background:linear-gradient(135deg,var(--indigo),var(--purple));color:#fff;
+    font-size:16px;font-weight:800;cursor:pointer;transition:.15s;
+  }
+  .weak .wbtn:active{transform:scale(.97)}
+  .okbox{
+    text-align:center;padding:28px 20px;border-radius:18px;
+    background:var(--green-soft);border:2px solid #a7e8c0;margin-bottom:14px;
+  }
+  .okbox .e{font-size:46px;display:block;margin-bottom:6px}
+
+  .btn{
+    min-height:58px;border-radius:15px;border:1px solid var(--line);background:#fff;
+    color:var(--ink);font-size:17px;font-weight:800;cursor:pointer;padding:0 24px;
+    display:inline-flex;align-items:center;justify-content:center;transition:.15s;
+  }
+  .btn:hover{background:var(--indigo-soft)}
+  .btn:active{transform:scale(.97)}
+  .btn.primary{background:linear-gradient(135deg,var(--indigo),var(--purple));color:#fff;border:none;box-shadow:0 6px 18px rgba(79,70,229,.3)}
+  .btnrow{display:flex;gap:11px;flex-wrap:wrap;margin-top:16px}
+
+  /* ---- mock ---- */
+  .mocksetup label{display:block;font-size:16.5px;font-weight:800;margin:18px 0 8px}
+  .seg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .seg button{
+    min-height:60px;border-radius:14px;border:2px solid var(--line);background:#fff;
+    font-size:16.5px;font-weight:800;color:var(--ink);cursor:pointer;transition:.14s;
+  }
+  .seg button.on{border-color:var(--indigo);background:var(--indigo-soft);color:var(--indigo)}
+  .seg button:active{transform:scale(.98)}
+
+  .mhead{
+    display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;
+    background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;
+    box-shadow:var(--shadow);position:sticky;top:calc(58px + var(--safe-t));z-index:20;
+  }
+  .mhead .clock{
+    font-size:30px;font-weight:900;font-variant-numeric:tabular-nums;
+    color:var(--indigo);letter-spacing:1px;
+  }
+  .mhead .clock.warn{color:var(--red);animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.45}}
+  .mhead .msec{font-size:14px;color:var(--ink-soft);font-weight:700}
+  .mhead .sp{flex:1}
+
+  .paper{background:#fff;border:1px solid var(--line);border-radius:18px;padding:clamp(18px,3vw,30px);box-shadow:var(--shadow)}
+  .paper h3{
+    font-size:19px;margin:26px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--ink);
+    display:flex;justify-content:space-between;align-items:baseline;
+  }
+  .paper h3:first-child{margin-top:0}
+  .paper h3 .mk{font-size:14px;color:var(--ink-soft);font-weight:700}
+  .pq{padding:13px 0;border-bottom:1px dashed #eef0fa;font-size:17px;line-height:1.7}
+  .pq:last-child{border-bottom:none}
+  .pq .num{font-weight:900;color:var(--indigo);margin-right:8px}
+  .pq .work{
+    margin-top:9px;min-height:62px;border:1px dashed #d7dcf2;border-radius:10px;
+    background:#fbfcff;
+  }
+  .pq .opts{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px 22px;font-size:16.5px}
+  .pq .opts span{white-space:nowrap}
+  .pq .blank{display:inline-block;min-width:96px;border-bottom:2px solid #33395e;margin:0 4px}
+  .pq .mark{float:right;font-size:13px;color:#9aa0bd;font-weight:700}
+
+  /* ---- print ---- */
+  #printArea{display:none}
+  .sheet{font-family:"PingFang HK","Microsoft JhengHei",serif;color:#000;font-size:12pt;line-height:1.7}
+  .sheet h1{font-size:16pt;text-align:center;margin:0 0 3px}
+  .sheet .meta{text-align:center;font-size:10.5pt;color:#333;margin-bottom:4px}
+  .sheet .rule{border:none;border-top:1.5px solid #000;margin:8px 0 12px}
+  .sheet h2{font-size:13pt;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid #000}
+  .sheet ol{padding-left:24px;margin:0}
+  .sheet ol li{margin:0 0 13px;page-break-inside:avoid;line-height:1.75}
+  .sheet .ol{margin-left:6px}
+  .sheet .bl{display:inline-block;min-width:80px;border-bottom:1px solid #000}
+  .sheet .box{height:54px;border:1px dashed #999;border-radius:4px;margin-top:4px}
+  .pgbr{page-break-before:always;height:0;border:none;margin:0}
+  .keyrow{margin:0 0 7px;font-size:11pt}
+  .keyrow b{font-weight:700}
+
+  /* ---- tab bar ---- */
+  .tabbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:70;
+    padding:7px max(10px,var(--safe-r)) calc(7px + var(--safe-b)) max(10px,var(--safe-l));
+    background:rgba(255,255,255,.90);
+    -webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);
+    border-top:1px solid rgba(35,45,110,.08);
+    box-shadow:0 -6px 26px rgba(35,45,110,.10);
+  }
+  .tabbar-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+  .tabitem{
+    position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    min-height:54px;border-radius:14px;text-decoration:none;
+    color:#8b91b3;font-size:11.5px;font-weight:800;letter-spacing:.2px;
+    transition:color .16s,background .16s,transform .1s;-webkit-tap-highlight-color:transparent;
+  }
+  .tabitem .ti{font-size:20px;line-height:1;transition:transform .22s var(--ease);filter:grayscale(.55);opacity:.85}
+  .tabitem:active{transform:scale(.95);background:rgba(79,70,229,.07)}
+  .tabitem.on{color:var(--indigo);background:linear-gradient(180deg,rgba(79,70,229,.10),rgba(79,70,229,.03))}
+  .tabitem.on .ti{filter:none;opacity:1;transform:translateY(-1px) scale(1.1)}
+  .tabitem.on::after{
+    content:"";position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+    width:18px;height:3px;border-radius:99px;background:linear-gradient(90deg,var(--indigo),var(--pink));
+  }
+  .tabbadge{
+    position:absolute;top:3px;left:calc(50% + 7px);min-width:19px;height:19px;padding:0 5px;border-radius:99px;
+    background:linear-gradient(135deg,#ef4444,#db2777);color:#fff;font-size:11px;font-weight:800;line-height:19px;
+    box-shadow:0 2px 8px rgba(220,38,38,.45);display:grid;place-items:center;
+  }
+  .tabbadge[hidden]{display:none}
+
+  @media print{
+    body{background:#fff}
+    body.printing .topbar,
+    body.printing .screen,
+    body.printing .tabbar,
+    body.printing .wb-toggle{display:none !important}
+    body.printing #printArea{display:block !important}
+    @page{margin:14mm 13mm}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><span class="logo">🔬</span><span class="txt">錯題診斷</span></div>
+    <div class="spacer"></div>
+    <button class="iconbtn" id="narrBtn" aria-label="旁白開關" title="旁白開關">🗣️</button>
+    <button class="iconbtn" id="homeBtn" aria-label="返回" title="返回">🏠</button>
+  </div>
+</div>
+
+<!-- ================= HOME ================= -->
+<div class="screen active" id="scr-home">
+  <h1 class="title">找出真正嘅弱點</h1>
+  <p class="sub">唔係「邊題錯」，而係「點解錯」。做完診斷，你會知道自己嘅 2–3 個固定習慣。</p>
+
+  <div class="modes">
+    <div class="modecard" style="--mc:#dc2626" id="goDiag">
+      <div class="mt">🔬 錯題診斷</div>
+      <div class="md">15 條題，每條嘅錯誤選項都代表一種特定誤解。<br>做完會話你知你屬於邊種。</div>
+      <div class="mn">約 8 分鐘 →</div>
+    </div>
+    <div class="modecard" style="--mc:#0ea5e9" id="goMock">
+      <div class="mt">📄 模擬試卷</div>
+      <div class="md">跟真實考試格式：計算題、選擇題、填空題、應用題。<br>可列印，有評分標準。</div>
+      <div class="mn">60 分鐘 →</div>
+    </div>
+  </div>
+
+  <div class="card" id="lastReportCard" style="display:none">
+    <h2>📊 上次診斷結果</h2>
+    <div id="lastReport"></div>
+  </div>
+</div>
+
+<!-- ================= QUIZ ================= -->
+<div class="screen" id="scr-quiz">
+  <div class="qprog">
+    <span class="cnt" id="qCount">1 / 15</span>
+    <div class="bar"><i id="qBar" style="width:6%"></i></div>
+    <button class="iconbtn" id="quitBtn" aria-label="結束" style="width:42px;height:42px;font-size:17px">✕</button>
+  </div>
+
+  <div class="qbox">
+    <span class="qtag" id="qTag">診斷</span>
+    <div class="qtext" id="qText">…</div>
+  </div>
+
+  <div class="choices" id="choices"></div>
+  <div id="fb"></div>
+</div>
+
+<!-- ================= REPORT ================= -->
+<div class="screen" id="scr-report">
+  <div id="reportBody"></div>
+</div>
+
+<!-- ================= MOCK SETUP ================= -->
+<div class="screen" id="scr-mock-setup">
+  <div class="qprog">
+    <button class="iconbtn" id="backBtn" aria-label="返回" style="width:42px;height:42px">←</button>
+    <span style="font-size:18px;font-weight:900">模擬試卷設定</span>
+  </div>
+
+  <div class="card mocksetup">
+    <h2>📄 考試設定</h2>
+
+    <label>卷別</label>
+    <div class="seg" id="segLevel">
+      <button class="on" data-level="A">4上A<br><small style="font-weight:600;font-size:13px;color:#5b6285">乘法・四邊形・除法</small></button>
+      <button data-level="B">4上B<br><small style="font-weight:600;font-size:13px;color:#5b6285">方向・倍數和因數</small></button>
+    </div>
+
+    <label>時間</label>
+    <div class="seg" id="segTime">
+      <button class="on" data-time="60">60 分鐘<br><small style="font-weight:600;font-size:13px;color:#5b6285">正式</small></button>
+      <button data-time="40">40 分鐘<br><small style="font-weight:600;font-size:13px;color:#5b6285">短版</small></button>
+    </div>
+
+    <label>模式</label>
+    <div class="seg" id="segMode">
+      <button class="on" data-mode="screen">螢幕作答<br><small style="font-weight:600;font-size:13px;color:#5b6285">計時・自動批改</small></button>
+      <button data-mode="print">列印紙本<br><small style="font-weight:600;font-size:13px;color:#5b6285">連答案・評分標準</small></button>
+    </div>
+
+    <div class="btnrow">
+      <button class="btn primary" id="startMock">開始</button>
+    </div>
+
+    <p style="margin:16px 0 0;font-size:15px;color:var(--ink-soft);line-height:1.7">
+      💡 建議：先用「列印紙本」做一次真正的模擬，寫在紙上。真實考試係用筆寫嘅，手感唔同。
+    </p>
+  </div>
+</div>
+
+<!-- ================= MOCK EXAM ================= -->
+<div class="screen" id="scr-mock">
+  <div class="mhead">
+    <div>
+      <div class="msec" id="mockName">4上A 模擬試卷</div>
+      <div class="clock" id="clock">60:00</div>
+    </div>
+    <div class="sp"></div>
+    <button class="btn" id="submitMock" style="min-height:52px">交卷</button>
+  </div>
+  <div class="paper" id="paperBody"></div>
+</div>
+
+<!-- ================= MOCK RESULT ================= -->
+<div class="screen" id="scr-mock-result">
+  <div id="mockResultBody"></div>
+</div>
+
+<div id="printArea"></div>
+
+<nav class="tabbar" aria-label="頁面切換">
+  <div class="tabbar-in">
+    <a class="tabitem" href="revision.html"><span class="ti">📖</span><span>溫習</span></a>
+    <a class="tabitem" href="concepts.html"><span class="ti">🎬</span><span>動畫</span></a>
+    <a class="tabitem" href="practice.html"><span class="ti">✏️</span><span>練習</span>
+      <span class="tabbadge" id="tabBadge" hidden>0</span></a>
+    <a class="tabitem on" href="diagnose.html" aria-current="page"><span class="ti">🔬</span><span>診斷</span></a>
+    <a class="tabitem" href="games.html"><span class="ti">🎮</span><span>遊戲</span></a>
+  </div>
+</nav>
+
+<script src="assets/wb.js"></script>
+<script src="assets/narrate.js"></script>
+<script>
+(function(){
+'use strict';
+
+var $ = function(s){ return document.querySelector(s); };
+var rnd = function(n){ return Math.floor(Math.random()*n); };
+var pick = function(a){ return a[rnd(a.length)]; };
+var shuffle = function(a){
+  var b=a.slice();
+  for(var i=b.length-1;i>0;i--){ var j=rnd(i+1); var t=b[i]; b[i]=b[j]; b[j]=t; }
+  return b;
+};
+/* 轉義，用喺 HTML 屬性入面放長文字 */
+var esc = function(s){
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/"/g,'&quot;')
+    .replace(/</g,'&lt;').replace(/>/g,'&gt;');
+};
+
+/* ---------- 音效 ---------- */
+var actx=null, muted=false;
+function beep(f,d,t,v){
+  if(muted) return;
+  try{
+    if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)();
+    if(actx.state==='suspended') actx.resume();
+    var o=actx.createOscillator(), g=actx.createGain();
+    o.type=t||'sine'; o.frequency.value=f;
+    g.gain.setValueAtTime(v||.06, actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001, actx.currentTime+d);
+    o.connect(g); g.connect(actx.destination);
+    o.start(); o.stop(actx.currentTime+d);
+  }catch(e){}
+}
+var sndOk=function(){ beep(880,.1,'sine',.05); setTimeout(function(){beep(1320,.12,'sine',.045);},70); };
+var sndNo=function(){ beep(190,.24,'sawtooth',.05); };
+var sndDone=function(){ [523,659,784,1046].forEach(function(f,i){ setTimeout(function(){beep(f,.2,'sine',.05);}, i*110); }); };
+
+/* ---------- 儲存 ---------- */
+var store={
+  get:function(k,d){ try{ var v=localStorage.getItem('p4d_'+k); return v===null?d:JSON.parse(v); }catch(e){ return d; } },
+  set:function(k,v){ try{ localStorage.setItem('p4d_'+k, JSON.stringify(v)); }catch(e){} }
+};
+
+/* =========================================================
+   誤解（misconception）定義
+   ========================================================= */
+var MC = {
+  zero: {
+    name:'補零錯誤',
+    icon:'0️⃣',
+    what:'乘 10、乘 100，或者乘整十數嘅時候，補錯咗 0 嘅數目。',
+    why:'呢個唔係唔識，係太趕。乘 20 只補一個 0，因為 20 本身只有一個 0；乘 100 就補兩個 0。',
+    fix:'做之前先問自己：乘數尾有幾個 0？<br>41 × 50：50 有一個 0，先算 41 × 5 = 205，再補一個 0，就係 <b>2050</b>。',
+    say:'呢個叫補零錯誤。你唔係唔識，係太趕。記住：乘二十，只補一個零；乘一百，先補兩個零。例如四十一乘五十，先算四十一乘五等於二百零五，再補一個零，答案係二千零五十。'
+  },
+  carry: {
+    name:'進位遺漏',
+    icon:'🔢',
+    what:'直式乘法嘅時候，進咗位嘅數字冇加返落下一格。',
+    why:'心算同寫字唔同步：嘴裡講住「進二」，手就寫咗個位，個「二」就唔見咗。',
+    fix:'進位嘅數字<b>寫細細粒</b>喺下一格上面，然後大聲讀出嚟，先至寫落去。',
+    say:'呢個叫進位遺漏。你嘴巴講住進二，但手已經寫咗個位，個二就唔見咗。下次進位嘅數字，寫細細粒喺上面，大聲讀一次先至寫，就唔會漏。'
+  },
+  shift: {
+    name:'第二行冇縮格',
+    icon:'⬅️',
+    what:'兩位數乘兩位數嘅時候，第二行，即係乘十位得出嘅結果，冇向左移一位。',
+    why:'你唔記得：十位嗰個二，其實代表二十，所以佢乘出嚟嘅結果要乘十。',
+    fix:'第二行<b>最後一定要有個 0</b>。寫完之後睇一睇，如果冇 0，就即係錯咗。',
+    say:'呢個叫第二行冇縮格。十位嗰個數字，唔係代表幾多，係代表幾多十，所以要向左移一位。檢查方法好簡單：第二行最後一定要有個零，冇零就係錯。'
+  },
+  trial: {
+    name:'試商過大',
+    icon:'🎯',
+    what:'把除數約細咗嚟估商，例如把七十二約成七十，但真正乘返七十二嘅時候就超過咗被除數。',
+    why:'約數永遠偏細，所以估出嚟嘅商就會偏大。',
+    fix:'乘一乘檢查：<b>商乘除數，會唔會大過被除數？</b>會，就代表太大，商要減一。',
+    say:'呢個叫試商過大。約數永遠偏細，所以估出嚟嘅商會偏大。檢查方法：商乘除數，如果大過被除數，就係太大，商要減一。'
+  },
+  rem: {
+    name:'餘數冇減到底',
+    icon:'🍬',
+    what:'餘數大過或者等於除數。例如四十七除以五，寫成八餘七。',
+    why:'做完一次減法就停手，冇檢查餘數仲可唔可以再分一次。',
+    fix:'每次寫完餘數，問自己一句：<b>餘數細唔細過除數？</b>唔細就即係錯。',
+    say:'呢個叫餘數冇減到底。想想看：四十七粒糖，每五粒一包，剩七粒。但七粒仲可以再包一包喎！所以七冇可能係餘數。每次寫完餘數，問自己：餘數細唔細過除數？'
+  },
+  maxmin: {
+    name:'「最多」同「最少」搞亂',
+    icon:'📦',
+    what:'有餘數嘅應用題，兩種問法嘅答法係相反嘅。',
+    why:'兩個詞都係兩個字，讀得快就跳過咗。',
+    fix:'<b>最多：只要商，餘數唔要。</b><br><b>最少：有餘數，商加一。</b><br>做之前用筆圈起呢兩個字。',
+    say:'呢個叫最多同最少搞亂。最多，只要商，餘數唔要。最少，就要商加一，因為餘下嘅都要多一個箱。做題之前，用筆圈起最多或者最少呢兩個字。'
+  },
+  shape: {
+    name:'四邊形關係倒轉',
+    icon:'🔷',
+    what:'把大細講反，例如話「所有菱形都係正方形」。',
+    why:'你記住咗兩個名，但冇記住邊個包含邊個。',
+    fix:'<b>細嘅可以講成大的，大嘅唔可以講成細的。</b><br>正方形係菱形嘅一種，菱形又係平行四邊形嘅一種。',
+    say:'呢個叫四邊形關係倒轉。口訣：細嘅可以講成大的，大嘅唔可以講成細的。正方形係菱形嘅一種，但唔係所有菱形都係正方形。'
+  },
+  range: {
+    name:'「之間」同「以內」混淆',
+    icon:'📏',
+    what:'「之間」唔包括兩端，「以內」就包括。所以會數多一個或者數少一個。',
+    why:'睇漏咗「之間」呢兩個字。',
+    fix:'「三十和七十<b>之間</b>」，由三十一數到六十九。<br>「五十<b>以內</b>」，包括五十。',
+    say:'呢個叫之間同以內混淆。之間，唔包括兩端；以內，就包括。三十和七十之間，即係由三十一數到六十九。但五十以內，就包括五十。做題時用筆圈住呢兩個詞。'
+  },
+  multfact: {
+    name:'倍數同因數掉轉',
+    icon:'🔁',
+    what:'把「A 係 B 嘅因數」同「A 係 B 嘅倍數」講反。',
+    why:'兩個詞太相似，你未建立到「因數細、倍數大」嘅感覺。',
+    fix:'<b>見到因數，就想除。</b><br><b>見到倍數，就想乘。</b><br>因數通常細過原數，倍數通常大過原數。',
+    say:'呢個叫倍數同因數掉轉。記住一個感覺：因數係細嘅，倍數係大嘅。見到因數就想除，見到倍數就想乘。'
+  },
+  digit: {
+    name:'除法位數判斷錯',
+    icon:'🔢',
+    what:'估錯商係幾多位數。',
+    why:'冇睇清楚被除數嘅頭兩位夠唔夠除。',
+    fix:'睇被除數嘅<b>頭兩位</b>：如果比除數細，商就少一位。',
+    say:'呢個叫除法位數判斷錯。睇被除數嘅頭兩位：如果比除數細，即係唔夠除，商就少一位。例如一百一十八除以三十四，頭兩位十一比三十四細，所以商係一位數。'
+  }
+};
+
+/* =========================================================
+   診斷題目產生器
+   每題：{ topic, tag, q, opts:[{t, ok, mc?}], why }
+   ========================================================= */
+function opt(t, ok, mc){ return { t:String(t), ok:!!ok, mc:mc||null }; }
+
+/* 建立一組保證唔重複嘅選項。
+   correct 一定要出現；distractors 會逐個試，跳過重複或者等於正確答案嘅。
+   每個 distractor 係 { t, mc }。 */
+function buildOpts(correct, distractors, want){
+  want = want || 4;
+  var seen = {};
+  var out = [opt(correct, true)];
+  seen[String(correct)] = 1;
+
+  var queue = distractors.slice();
+  var guard = 0;
+  while (out.length < want && queue.length && guard++ < 200) {
+    var d = queue.shift();
+    var v = String(d.t);
+    if (seen[v]) continue;
+    // 負數或者明顯唔合理嘅值唔要（小四唔考負數）
+    if (typeof d.t === 'number' && d.t < 0) continue;
+    seen[v] = 1;
+    out.push(opt(d.t, false, d.mc || null));
+  }
+  return shuffle(out);
+}
+
+/* --- 補零 --- */
+function qZero(){
+  var mode = rnd(3);
+  if (mode === 0) {
+    var a = 12 + rnd(60);
+    var ans = a * 50;
+    return {
+      tag:'乘法', topic:'mul',
+      q: a + ' × 50 = ?',
+      opts: buildOpts(ans, [
+        { t: a * 5, mc:'zero' },
+        { t: ans * 10, mc:'zero' },
+        { t: ans + a },
+        { t: ans - a },
+        { t: ans + 100 }
+      ]),
+      why:'50 有一個 0 → 先算 ' + a + ' × 5 = ' + (a*5) + '，再補一個 0 → <b>' + ans + '</b>'
+    };
+  }
+  if (mode === 1) {
+    var b = 12 + rnd(80);
+    var ans2 = b * 10;
+    return {
+      tag:'乘法', topic:'mul',
+      q: b + ' × 10 = ?',
+      opts: buildOpts(ans2, [
+        { t: ans2 * 10, mc:'zero' },
+        { t: b + 10 },
+        { t: ans2 + 10 },
+        { t: b },
+        { t: ans2 / 10 }
+      ]),
+      why: b + ' 後面補<b>一個</b> 0 → <b>' + ans2 + '</b>'
+    };
+  }
+  var c = (3 + rnd(6)) * 10;
+  var d = (2 + rnd(5)) * 10;
+  var ans3 = c * d;
+  var core = (c/10)*(d/10);
+  return {
+    tag:'乘法', topic:'mul',
+    q: c + ' × ' + d + ' = ?',
+    opts: buildOpts(ans3, [
+      { t: core * 10, mc:'zero' },
+      { t: core, mc:'zero' },
+      { t: ans3 + 100 },
+      { t: core * 1000 },
+      { t: ans3 - 100 }
+    ]),
+    why: (c/10) + ' × ' + (d/10) + ' = ' + core + '，再補<b>兩個</b> 0 → <b>' + ans3 + '</b>'
+  };
+}
+
+/* --- 進位 --- */
+function qCarry(){
+  var a = 3 + rnd(6);
+  var b = 13 + rnd(76);
+  var ans = b * a;
+  var ones = b % 10, tens = Math.floor(b/10);
+  var prodOnes = ones * a;
+  var carried = Math.floor(prodOnes / 10);
+
+  // 典型錯誤：(tens × a) 冇加上進位
+  var forgotCarry = (tens * a + Math.floor(prodOnes/10) - carried) * 10 + (prodOnes % 10);
+  if (forgotCarry === ans) forgotCarry = ans - carried * 10;
+
+  return {
+    tag:'直式乘法', topic:'mul',
+    q: b + ' × ' + a + ' = ?',
+    opts: buildOpts(ans, [
+      { t: forgotCarry, mc:'carry' },
+      { t: ans - carried * 10, mc:'carry' },
+      { t: ans + 10 },
+      { t: ans - 10 },
+      { t: ans + carried },
+      { t: b + a }
+    ]),
+    why: b + ' × ' + a + '：先算 ' + ones + ' × ' + a + ' = ' + prodOnes +
+         '，寫 ' + (prodOnes % 10) + '，<b>進 ' + carried + '</b>。<br>再算 ' + tens + ' × ' + a +
+         ' = ' + (tens*a) + '，<b>加上進位 ' + carried + '</b> → ' + (tens*a+carried) + '。<br>答案 <b>' + ans + '</b>'
+  };
+}
+
+/* --- 第二行縮格 --- */
+function qShift(){
+  var a = 12 + rnd(30);
+  var b = 12 + rnd(30);
+  var ans = a * b;
+  var bTens = Math.floor(b/10), bOnes = b % 10;
+  var oneline = a * bOnes;              // 第一行（乘個位）
+  var tensLine = a * bTens * 10;        // 正確：已移位
+  var tensWrong = a * bTens;            // 錯誤：冇移位
+
+  // 真正嘅「冇移位」錯誤 = 第一行 + 未移位的十位行
+  var noShift = oneline + tensWrong;
+
+  // 如果咁啱撞正答案（例如 b 係 10 的倍數），換另一個常見錯誤：
+  // 只加錯行，例如把十位行加到百位
+  if (noShift === ans) {
+    noShift = oneline + a * bTens * 100;
+  }
+
+  return {
+    tag:'直式乘法', topic:'mul',
+    q: a + ' × ' + b + ' = ?',
+    opts: buildOpts(ans, [
+      { t: noShift, mc:'shift' },
+      { t: ans + a },
+      { t: ans - a },
+      { t: ans + tensLine },
+      { t: ans * 10, mc:'zero' },
+      { t: oneline + a * bTens * 100 }
+    ]),
+    why:'先算 ' + a + ' × ' + bOnes + ' = ' + oneline +
+         '<br>再算 ' + a + ' × ' + bTens + ' = ' + (a*bTens) + '，但佢代表 ×' + (bTens*10) +
+         '，所以要向左移一位寫成 <b>' + tensLine + '</b><br>' +
+         tensLine + ' + ' + oneline + ' = <b>' + ans + '</b>'
+  };
+}
+
+/* --- 試商 --- */
+function qTrial(){
+  for (var attempt = 0; attempt < 40; attempt++) {
+    var d = 21 + rnd(70);
+    var q = 4 + rnd(6);
+    var r = rnd(d);
+    var N = d * q + r;
+
+    // 想要嘅情況：用約數估商會偏大（即 (q+1) × d > N）
+    if ((q + 1) * d <= N) continue;
+
+    var tooBigR = r;
+    return {
+      tag:'除法試商', topic:'div',
+      q: N + ' ÷ ' + d + ' = ?',
+      opts: buildOpts(q + ' ... ' + r, [
+        { t: (q + 1) + ' ... ' + tooBigR, mc:'trial' },
+        { t: q + ' ... ' + (r + d), mc:'rem' },
+        { t: (q - 1) + ' ... ' + r, mc:'trial' },
+        { t: q + ' ... ' + (r + 1) },
+        { t: (q + 1) + ' ... ' + 0 }
+      ]),
+      why:'把 ' + d + ' 約成 ' + (Math.floor(d/10)*10) + '，估商會偏向大。<br>但 ' + d + ' × ' + (q+1) + ' = ' +
+           ((q+1)*d) + '，大過 ' + N + ' → <b>太大，改用 ' + q + '</b>。<br>' +
+           d + ' × ' + q + ' = ' + (d*q) + '，' + N + ' − ' + (d*q) + ' = ' + r + '。'
+    };
+  }
+  return qRem();
+}
+
+/* --- 餘數 --- */
+function qRem(){
+  var d = 3 + rnd(7);
+  var q = 3 + rnd(6);
+  var r = 1 + rnd(d - 1);
+  var N = d * q + r;
+  return {
+    tag:'除法餘數', topic:'div',
+    q: N + ' ÷ ' + d + ' = ?',
+    opts: buildOpts(q + ' ... ' + r, [
+      { t: (q - 1) + ' ... ' + (r + d), mc:'rem' },
+      { t: (q + 1) + ' ... ' + r, mc:'trial' },
+      { t: q + ' ... ' + (r + 1) },
+      { t: (q + 1) + ' ... ' + (r + 1) }
+    ]),
+    why: d + ' × ' + q + ' = ' + (d*q) + '，' + N + ' − ' + (d*q) + ' = ' + r +
+         '。<br>檢查：餘數 ' + r + ' <b>&lt;</b> 除數 ' + d + ' ✓'
+  };
+}
+
+/* --- 最多／最少 --- */
+function qMaxMin(){
+  var per = 6 + rnd(15);
+  var b = 4 + rnd(25);
+  var ex = 1 + rnd(per - 1);
+  var N = per * b + ex;
+  var askMax = rnd(2) === 0;
+  var right = askMax ? b : b + 1;
+  var other = askMax ? b + 1 : b;
+
+  // 用唔同嘅生活情境，令兩題睇落唔同
+  var scene = askMax
+    ? pick([
+        { item:'雞蛋', unit:'盒', verb:'裝滿' },
+        { item:'鉛筆', unit:'盒', verb:'裝滿' },
+        { item:'糖果', unit:'袋', verb:'裝滿' }
+      ])
+    : pick([
+        { item:'學生', unit:'組', verb:'分成' },
+        { item:'貨物', unit:'箱', verb:'裝' },
+        { item:'圖書', unit:'層', verb:'放' }
+      ]);
+
+  var question = askMax
+    ? '有 <b>' + N + '</b> ' + scene.item + '，每' + scene.unit + '最多' + scene.verb + ' <b>' + per + '</b> 個。最多可以' + scene.verb + '多少' + scene.unit + '？'
+    : '有 <b>' + N + '</b> ' + scene.item + '，每' + scene.unit + '最多' + scene.verb + ' <b>' + per + '</b> 個。最少需要多少' + scene.unit + '？';
+
+  return {
+    tag:'應用題', topic:'div',
+    q: question + '<small>睇清楚係「最多」定「最少」</small>',
+    opts: buildOpts(right, [
+      { t: other, mc:'maxmin' },
+      { t: b + 2 },
+      { t: N },
+      { t: per }
+    ]),
+    why: N + ' ÷ ' + per + ' = ' + b + ' ... ' + ex + '<br>' +
+         (askMax
+           ? '「<b>最多</b>」→ 餘數唔要 → <b>' + b + ' ' + scene.unit + '</b>'
+           : '「<b>最少</b>」→ 餘下 ' + ex + ' 個都要一個' + scene.unit + ' → ' + b + ' + 1 = <b>' + (b+1) + ' ' + scene.unit + '</b>')
+  };
+}
+
+/* --- 四邊形 --- */
+var SHAPE_QS = [
+  { q:'「所有菱形都是正方形」這句話對嗎？', ok:'錯', mc:'shape',
+    why:'菱形唔一定有直角。把正方形推斜就係菱形，但已經唔係正方形。<b>所以只有「正方形是菱形」對，反過來錯。</b>' },
+  { q:'「所有長方形都是正方形」這句話對嗎？', ok:'錯', mc:'shape',
+    why:'長方形唔一定要四邊相等。<b>正方形係長方形嘅一種，唔係反過來。</b>' },
+  { q:'「正方形是菱形」這句話對嗎？', ok:'對', mc:'shape',
+    why:'正方形四邊相等、對邊平行，完全符合菱形嘅條件。<b>所以對。</b>' },
+  { q:'「所有平行四邊形都是長方形」這句話對嗎？', ok:'錯', mc:'shape',
+    why:'平行四邊形唔一定有 4 個直角。<b>係長方形屬於平行四邊形，唔係反過來。</b>' },
+  { q:'「所有正方形都是平行四邊形」這句話對嗎？', ok:'對', mc:'shape',
+    why:'正方形對邊平行，所以係平行四邊形嘅一種。<b>對。</b>' },
+  { q:'「正方形、長方形和菱形都具備對邊平行」這句話對嗎？', ok:'對', mc:'shape',
+    why:'三者都係平行四邊形，所以對邊一定平行。<b>對。</b>' }
+];
+function qShape(){
+  var s = pick(SHAPE_QS);
+  return {
+    tag:'四邊形', topic:'shape', q: s.q,
+    opts: shuffle([ opt('對', s.ok==='對'), opt('錯', s.ok==='錯', s.mc) ]),
+    why: s.why
+  };
+}
+
+/* --- 之間 vs 以內 --- */
+function qRange(){
+  for (var attempt = 0; attempt < 60; attempt++) {
+    var n = 6 + rnd(9);
+    var lo = 20 + rnd(40);
+    var hi = lo + 24 + rnd(40);
+    var list = [];
+    for (var v = n; v < hi; v += n) if (v > lo) list.push(v);
+    if (list.length < 2 || list.length > 4) continue;
+
+    var ansStr = list.join('、');
+
+    // 干擾項：全部保持由小到大排列，睇落似真的答案
+    var fewer = list.slice(0, -1).join('、') || String(list[0]);
+    var more = list.concat([list[list.length-1] + n]).join('、');
+    var withLo = (lo % n === 0) ? [lo].concat(list).join('、') : [list[0] - n].concat(list).join('、');
+    var skipOne = list.length > 2 ? list.filter(function(x, i){ return i !== 1; }).join('、') : more;
+    var withHi = (hi % n === 0) ? list.concat([hi]).join('、') : list.concat([list[list.length-1] + n]).join('、');
+
+    var opts = buildOpts(ansStr, [
+      { t: fewer, mc:'range' },
+      { t: more, mc:'range' },
+      { t: withLo, mc:'range' },
+      { t: skipOne, mc:'range' },
+      { t: withHi, mc:'range' }
+    ]);
+
+    if (opts.length < 4) continue;
+
+    return {
+      tag:'倍數', topic:'num',
+      q: '<b>' + lo + '</b> 和 <b>' + hi + '</b> 之間，<b>' + n + '</b> 的倍數有哪些？',
+      opts: opts,
+      why:'「<b>之間</b>」<b>唔包括</b> ' + lo + ' 和 ' + hi + ' 本身。<br>' + n + ' 的倍數：' +
+           n + '、' + (n*2) + '、' + (n*3) + '…<br>落喺範圍入面嘅只有：<b>' + ansStr + '</b>'
+    };
+  }
+  return qMultFact();
+}
+
+/* --- 倍數／因數 --- */
+var MF_QS = [
+  { q:'7 是 28 的甚麼？', opts:['因數','倍數','都不是'], ok:'因數',
+    why:'28 ÷ 7 = 4，冇餘數 → 7 <b>整除</b> 28 → 7 係 28 的<b>因數</b>（因數細過原數）' },
+  { q:'28 是 7 的甚麼？', opts:['因數','倍數','都不是'], ok:'倍數',
+    why:'7 × 4 = 28 → 28 係 7 的<b>倍數</b>（倍數大過原數）' },
+  { q:'5 是 12 的甚麼？', opts:['因數','倍數','都不是'], ok:'都不是',
+    why:'12 ÷ 5 = 2 … 2，有餘數 → 5 唔係因數。<br>5 × ? = 12 冇整數解 → 5 亦都唔係倍數。<b>兩個都唔係。</b>' },
+  { q:'一個數最大的因數是 42，這個數是甚麼？', opts:['42','84','21','1'], ok:'42',
+    why:'<b>任何數最大的因數都係佢自己。</b>所以呢個數係 42。' },
+  { q:'6 的因數有幾個？', opts:['4 個','3 個','6 個','2 個'], ok:'4 個',
+    why:'6 = 1×6 = 2×3 → 因數係 1、2、3、6，共 <b>4 個</b>' }
+];
+function qMultFact(){
+  var s = pick(MF_QS);
+  return {
+    tag:'倍數和因數', topic:'num', q: s.q,
+    opts: shuffle(s.opts.map(function(o){
+      return opt(o, o === s.ok, o === s.ok ? null : 'multfact');
+    })),
+    why: s.why
+  };
+}
+
+/* --- 商幾位數 --- */
+function qDigits(){
+  var d = 11 + rnd(60);
+  var twoDigit = Math.random() < .5;
+  var q = twoDigit ? (11 + rnd(40)) : (2 + rnd(8));
+  var N = d * q + rnd(d);
+  var head = parseInt(String(N).slice(0,2), 10);
+  var isTwo = head >= d;
+  return {
+    tag:'除法', topic:'div',
+    q: '不計算，判斷 <b>' + N + ' ÷ ' + d + '</b> 的商是幾位數？',
+    opts: shuffle([
+      opt(isTwo ? '兩位數' : '一位數', true),
+      opt(isTwo ? '一位數' : '兩位數', false, 'digit'),
+      opt('三位數', false, 'digit')
+    ]),
+    why:'被除數頭兩位係 <b>' + head + '</b>。<br>' + head + (isTwo ? ' ≥ ' : ' < ') + d + ' → 商係<b>' + (isTwo ? '兩' : '一') + '位數</b>'
+  };
+}
+
+/* ---------- 診斷題池 ---------- */
+var DIAG_GENS = [qZero, qCarry, qShift, qTrial, qRem, qMaxMin, qShape, qRange, qMultFact, qDigits];
+var DIAG_TOPIC = { mul:'乘法', div:'除法', shape:'四邊形', num:'倍數和因數' };
+
+function buildDiag(n){
+  var out = [], seen = {}, seenQ = {}, guard = 0;
+  var countByGen = {};
+
+  function maxFor(name){
+    // 如果已經用咗好多題都未夠數，就放寬限制
+    return out.length < n - 3 ? 2 : 4;
+  }
+
+  while (out.length < n && guard++ < 3000) {
+    var g = pick(DIAG_GENS);
+    var name = g.name;
+    if ((countByGen[name] || 0) >= maxFor(name)) continue;
+
+    var q = g();
+    var key = name + '|' + q.q;
+    if (seen[key]) continue;
+
+    // 避免同樣嘅問法（例如連續兩題都係「最少需要多少個箱」）
+    var shape = q.q.replace(/[0-9]+/g, '#');
+    var shapeCap = out.length < n - 3 ? 2 : 4;
+    if ((seenQ[shape] || 0) >= shapeCap) continue;
+
+    seen[key] = 1;
+    seenQ[shape] = (seenQ[shape] || 0) + 1;
+    countByGen[name] = (countByGen[name] || 0) + 1;
+    q.genName = name;
+    out.push(q);
+  }
+  return out;
+}
+
+/* =========================================================
+   診斷流程
+   ========================================================= */
+var D = {
+  qs: [], i: 0, results: []
+};
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  $('#'+id).classList.add('active');
+  window.scrollTo({ top:0, behavior:'instant' });
+}
+
+function startDiag(){
+  D.qs = buildDiag(15);
+  D.i = 0;
+  D.results = [];
+  $('#qCount').textContent = '1 / ' + D.qs.length;
+  $('#qBar').style.width = '6%';
+  show('scr-quiz');
+  renderQ();
+}
+
+function renderQ(){
+  var q = D.qs[D.i];
+  $('#qCount').textContent = (D.i+1) + ' / ' + D.qs.length;
+  $('#qBar').style.width = Math.round((D.i / D.qs.length) * 100) + '%';
+  $('#qTag').textContent = q.tag;
+  $('#qText').innerHTML = q.q;
+  $('#fb').innerHTML = '';
+
+  var wrap = $('#choices');
+  wrap.innerHTML = '';
+  q.opts.forEach(function(o){
+    var b = document.createElement('button');
+    b.className = 'ch';
+    b.textContent = o.t;
+    b.addEventListener('click', function(){ answerQ(o, b, wrap); });
+    wrap.appendChild(b);
+  });
+}
+
+function answerQ(o, btn, wrap){
+  var q = D.qs[D.i];
+  if (wrap.dataset.done) return;
+  wrap.dataset.done = '1';
+
+  wrap.querySelectorAll('.ch').forEach(function(b){
+    b.disabled = true;
+    var txt = b.textContent;
+    var match = q.opts.filter(function(x){ return x.t === txt; })[0];
+    if (match && match.ok) b.classList.add('right');
+    else if (b !== btn) b.classList.add('dim');
+  });
+  if (!o.ok) btn.classList.add('wrong');
+
+  D.results.push({ q:q, ok:o.ok, mc:o.ok ? null : (o.mc || 'unknown') });
+
+  var box = document.createElement('div');
+  box.className = 'diag ' + (o.ok ? 'good' : 'bad');
+
+  var speakText;
+  if (o.ok) {
+    box.innerHTML = '<div class="dh">✅ 答對</div><div class="db">' + q.why + '</div>';
+    speakText = '答對喇！' + q.why;
+    sndOk();
+  } else {
+    var m = MC[o.mc];
+    box.innerHTML =
+      '<div class="dh">' + (m ? m.icon : '❌') + ' 呢個係「' + (m ? m.name : '計算錯誤') + '」</div>'
+      + '<div class="db">' + q.why + '</div>'
+      + (m ? '<div class="dfix"><b>✏️ 記住：</b><br>' + m.fix + '</div>' : '');
+    // 錯嘅時候讀「誤解解釋 + 點改」
+    speakText = m
+      ? '呢一題係' + m.name + '。' + m.what + ' ' + m.say
+      : '呢一題答錯咗。' + q.why;
+    sndNo();
+  }
+
+  // 加一個朗讀按鈕
+  var spk = Narrate.makeButton(function(){ return speakText; }, '朗讀解釋');
+  box.querySelector('.dh').appendChild(spk);
+
+  $('#fb').innerHTML = '';
+  $('#fb').appendChild(box);
+
+  // 自動讀出解釋
+  if (Narrate.on) setTimeout(function(){ Narrate.say(speakText); }, 260);
+
+  var nb = document.createElement('button');
+  nb.className = 'nextbtn';
+  nb.textContent = (D.i >= D.qs.length - 1) ? '睇診斷報告 →' : '下一題 →';
+  nb.addEventListener('click', function(){
+    if (D.i >= D.qs.length - 1) { finishDiag(); return; }
+    D.i++;
+    renderQ();
+  });
+  $('#fb').appendChild(nb);
+  box.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function finishDiag(){
+  var tally = {};
+  D.results.forEach(function(r){
+    if (r.ok) return;
+    if (!tally[r.mc]) tally[r.mc] = { n:0, topic:r.q.topic };
+    tally[r.mc].n++;
+  });
+
+  var list = Object.keys(tally).map(function(k){
+    return { id:k, n:tally[k].n, topic:tally[k].topic };
+  }).sort(function(a,b){ return b.n - a.n; });
+
+  store.set('lastDiag', {
+    when: Date.now(),
+    total: D.results.length,
+    right: D.results.filter(function(r){ return r.ok; }).length,
+    weak: list.map(function(x){ return { id:x.id, n:x.n }; })
+  });
+
+  renderReport(list);
+  show('scr-report');
+}
+
+function renderReport(list){
+  var total = D.results.length;
+  var right = D.results.filter(function(r){ return r.ok; }).length;
+  var pct = Math.round(right / total * 100);
+
+  var emoji = '🌱', title = '仲有進步空間', msg = '唔緊要，知道弱點就係進步嘅開始。';
+  if (pct >= 90) { emoji='👑'; title='非常穩！'; msg='基礎好扎實，重點係保持唔好大意。'; }
+  else if (pct >= 75) { emoji='🏆'; title='幾好！'; msg='大部分都識，集中練下面嘅弱點就得。'; }
+  else if (pct >= 55) { emoji='💪'; title='一半半'; msg='有幾個固定習慣要改，改完就會跳好多。'; }
+
+  var html = '';
+  html += '<div class="verdict">'
+    + '<span class="em">' + emoji + '</span>'
+    + '<h2>' + title + '</h2>'
+    + '<div class="big">' + pct + '%</div>'
+    + '<p>答對 ' + right + ' / ' + total + ' 題　·　' + msg + '</p>'
+    + '<div class="spk-slot" data-say="' + esc(
+        '你答對咗 ' + right + ' 題，一共 ' + total + ' 題，即係百分之 ' + pct + '。' +
+        (list.length
+          ? '我發現你有 ' + list.length + ' 個習慣要改。最嚴重嘅係' + MC[list[0].id].name + '。' + MC[list[0].id].say
+          : '冇發現固定嘅錯誤習慣，做得好好！')
+      ) + '" style="justify-content:center;margin-top:12px"></div>'
+    + '</div>';
+
+  if (!list.length) {
+    html += '<div class="okbox"><span class="e">🎉</span><b>冇發現固定嘅錯誤習慣。</b><br>'
+      + '<span style="color:var(--ink-soft)">繼續保持，去玩「終極混合挑戰」測試速度。</span></div>';
+  } else {
+    html += '<div class="card"><h2>🎯 你嘅弱點（按嚴重程度）</h2>';
+    list.forEach(function(x, idx){
+      var m = MC[x.id];
+      if (!m) {
+        html += '<div class="weak">'
+          + '<div class="wh"><span class="wn">其他計算錯誤</span><span class="wc">' + x.n + ' 次</span></div>'
+          + '<div class="wd">有幾題唔屬於固定模式，可能係太趕或者睇漏題目。</div>'
+          + '<div class="wfix"><b>建議：</b>做題時慢一半，每題做完覆核一次。</div>'
+          + '</div>';
+        return;
+      }
+      html += '<div class="weak">'
+        + '<div class="wh"><span class="wn">' + m.icon + ' ' + m.name + '</span>'
+        + '<span class="wc">錯咗 ' + x.n + ' 次</span>'
+        + '<span class="spk-slot" data-say="' + esc(m.name + '。' + m.what + ' ' + m.say) + '"></span>'
+        + '</div>'
+        + '<div class="wd">' + m.what + '<br><span style="color:var(--ink-soft)">' + m.why + '</span></div>'
+        + '<div class="wfix"><b>✏️ 點改：</b><br>' + m.fix + '</div>'
+        + '<button class="wbtn" data-mc="' + x.id + '">練呢個弱點（8 題）→</button>'
+        + '</div>';
+    });
+    html += '</div>';
+  }
+
+  html += '<div class="btnrow" style="justify-content:center">'
+    + '<button class="btn primary" id="againDiag">再做一次診斷</button>'
+    + '<a class="btn" href="practice.html" style="text-decoration:none">去練習</a>'
+    + '<a class="btn" href="index.html" style="display:none"></a>'
+    + '</div>';
+
+  $('#reportBody').innerHTML = html;
+
+  // 為每個弱點加朗讀按鈕
+  if (window.Narrate) {
+    $('#reportBody').querySelectorAll('.spk-slot').forEach(function (slot) {
+      var txt = slot.getAttribute('data-say') || '';
+      slot.appendChild(Narrate.makeButton(function () { return txt; }, '朗讀'));
+    });
+  }
+
+  $('#reportBody').querySelectorAll('.wbtn').forEach(function(b){
+    b.addEventListener('click', function(){ startDrill(b.dataset.mc); });
+  });
+  var ag = document.getElementById('againDiag');
+  if (ag) ag.addEventListener('click', startDiag);
+}
+
+/* =========================================================
+   針對性練習
+   ========================================================= */
+var DR = { mc:null, qs:[], i:0, right:0 };
+
+var MC_GEN = {
+  zero: qZero, carry: qCarry, shift: qShift, trial: qTrial,
+  rem: qRem, maxmin: qMaxMin, shape: qShape, range: qRange,
+  multfact: qMultFact, digit: qDigits
+};
+
+function startDrill(mc){
+  var g = MC_GEN[mc];
+  if (!g) return;
+  DR.mc = mc; DR.i = 0; DR.right = 0;
+  DR.qs = [];
+  var guard = 0;
+  while (DR.qs.length < 8 && guard++ < 200) {
+    var q = g();
+    if (DR.qs.some(function(x){ return x.q === q.q; })) continue;
+    DR.qs.push(q);
+  }
+  D.qs = DR.qs;
+  D.i = 0;
+  D.results = [];
+  D.drill = true;
+
+  $('#qCount').textContent = '1 / ' + DR.qs.length;
+  $('#qBar').style.width = '6%';
+  show('scr-quiz');
+  renderQ();
+}
+
+/* =========================================================
+   模擬試卷
+   ========================================================= */
+var MK = { level:'A', minutes:60, mode:'screen', qs:[], marks:0, timer:null, left:0 };
+
+var MOCK = {
+  A: [
+    { sec:'甲、計算題', each:2, items:[
+      { k:'mul', a:[2,3] }, { k:'mul', a:[2,3] }, { k:'mul', a:[2,2] },
+      { k:'mulT' }, { k:'mulT' },
+      { k:'mulS' },
+      { k:'div' }, { k:'div' }, { k:'div' },
+      { k:'check' }, { k:'check' }
+    ]},
+    { sec:'乙、選擇題', each:3, items:[
+      { k:'mcShape' }, { k:'mcShape' }, { k:'mcDivDigit' },
+      { k:'mcRule' }, { k:'mcMul' }, { k:'mcUni' }
+    ]},
+    { sec:'丙、填空題', each:3, items:[
+      { k:'fillRule' }, { k:'fillRule' }, { k:'fillRule' },
+      { k:'fillFactor' }, { k:'fillFactor' }, { k:'fillFactor' },
+      { k:'fillMultiple' }, { k:'fillMultiple' },
+      { k:'fillRule' }, { k:'fillMultiple' }
+    ]},
+    { sec:'丁、應用題', each:6, items:[
+      { k:'wMul' }, { k:'wMax' }, { k:'wMin' }, { k:'wDiv' }, { k:'wModel' }
+    ]}
+  ],
+  B: [
+    { sec:'甲、計算題', each:2, items:[
+      { k:'mul', a:[2,3] }, { k:'mul', a:[2,3] }, { k:'mul', a:[2,2] },
+      { k:'mulT' }, { k:'mulT' }, { k:'mulS' },
+      { k:'div' }, { k:'div' }, { k:'div' },
+      { k:'check' }, { k:'check' }
+    ]},
+    { sec:'乙、方向題', each:3, items:[
+      { k:'mcDirTurn' }, { k:'mcDirTurn' }, { k:'mcDirOpp' }, { k:'mcDirRel' }
+    ]},
+    { sec:'丙、填空題', each:3, items:[
+      { k:'fillDir' }, { k:'fillDir' }, { k:'fillDir' }, { k:'fillDir' },
+      { k:'fillRule' }, { k:'fillRule' },
+      { k:'fillFactor' }, { k:'fillFactor' },
+      { k:'fillMultiple' }, { k:'fillMultiple' },
+      { k:'fillDir' }, { k:'fillDir' }
+    ]},
+    { sec:'丁、應用題', each:6, items:[
+      { k:'wMul' }, { k:'wMax' }, { k:'wFactor' }, { k:'wDir' }, { k:'wDiv' }
+    ]}
+  ]
+};
+
+/* ---------- 模擬卷題目產生 ---------- */
+function mm(a,b){ return a + rnd(b - a + 1); }
+
+function mkMul(level){
+  return function(){
+    var a = level === '3x2' ? mm(105, 985) : mm(12, 96);
+    var b = level === '2x1' ? mm(3, 9) : mm(12, 98);
+    return { type:'work', q: a + ' × ' + b + ' =', ans: String(a*b),
+             explain: a + ' × ' + b + ' = ' + (a*b) };
+  };
+}
+function mkMulT(){
+  return function(){
+    var a = mm(12, 96);
+    var k = mm(2, 9) * 10;
+    return { type:'work', q: a + ' × ' + k + ' =', ans: String(a*k),
+             explain: a + ' × ' + (k/10) + ' = ' + (a*k/10) + '，補一個 0 → ' + (a*k) };
+  };
+}
+function mkMulS(){
+  return function(){
+    var conf = pick([[25,4],[50,2],[20,5],[125,8]]);
+    var k = mm(3, 29);
+    var ans = conf[0]*conf[1]*k;
+    return { type:'work', q: conf[0] + ' × ' + k + ' × ' + conf[1] + ' =',
+             ans: String(ans),
+             explain: conf[0] + ' × ' + conf[1] + ' = ' + (conf[0]*conf[1]) + '，再 × ' + k + ' = ' + ans };
+  };
+}
+function mkDiv(){
+  return function(){
+    var d = mm(11, 88), q = mm(3, 40), r = rnd(d);
+    var N = d*q + r;
+    var ans = r === 0 ? String(q) : q + ' … ' + r;
+    return { type:'div', q: N + ' ÷ ' + d + ' =', ans: ans, qv:String(q), rv:String(r),
+             explain: d + '×' + q + '=' + (d*q) + '，' + N + '−' + (d*q) + '=' + r };
+  };
+}
+function mkCheck(){
+  return function(){
+    var d = mm(11, 80), q = mm(3, 30), r = rnd(d);
+    var N = d*q + r;
+    if (rnd(2)) {
+      return { type:'fill', q: '某數 ÷ ' + d + ' = ' + q + ' … ' + r + '，某數是', ans:String(N),
+               explain: q+'×'+d+'+'+r+'='+N };
+    }
+    return { type:'fill', q: N + ' ÷ ' + d + ' = ' + q + ' … ', ans:String(r), suffix:'（餘數）',
+             explain: N+'−'+d+'×'+q+'='+r };
+  };
+}
+
+/* ---------- 選擇題 ---------- */
+function mkMCShape(){
+  return function(){
+    var s = pick(SHAPE_QS);
+    var opts = (s.ok === '對') ? ['對','錯'] : ['錯','對'];
+    var letters = ['A','B','C','D'];
+    return {
+      type:'mcq', q: s.q + '（對／錯）',
+      opts: ['A. ' + opts[0], 'B. ' + opts[1]],
+      ans: 'A',
+      explain: s.why
+    };
+  };
+}
+function mkMCDivDigit(){
+  return function(){
+    var d = mm(11, 60);
+    var two = Math.random() < .5;
+    var q = two ? mm(11, 40) : mm(2, 8);
+    var N = d*q + rnd(d);
+    var head = parseInt(String(N).slice(0,2), 10);
+    var isTwo = head >= d;
+    return {
+      type:'mcq', q: N + ' ÷ ' + d + ' 的商是幾位數？',
+      opts: ['A. 一位數', 'B. 兩位數', 'C. 三位數'],
+      ans: isTwo ? 'B' : 'A',
+      explain: '頭兩位 ' + head + (isTwo?' ≥ ':' < ') + d + ' → ' + (isTwo?'兩':'一') + '位數'
+    };
+  };
+}
+function mkMCRule(){
+  return function(){
+    var n = mm(40, 999);
+    var rule = pick([2,3,5,10]);
+    function ok(){
+      if (rule===2) return n%2===0;
+      if (rule===5) return n%5===0;
+      if (rule===10) return n%10===0;
+      return String(n).split('').reduce(function(s,c){return s+(+c);},0)%3===0;
+    }
+    return {
+      type:'mcq', q: n + ' 可以被 ' + rule + ' 整除嗎？',
+      opts: ['A. 可以', 'B. 不可以'],
+      ans: ok() ? 'A' : 'B',
+      explain: rule===3
+        ? '各位數字和 = ' + String(n).split('').reduce(function(s,c){return s+(+c);},0)
+        : '個位數字是 ' + (n%10)
+    };
+  };
+}
+function mkMCMul(){
+  return function(){
+    var a = mm(12, 96), b = mm(12, 96);
+    var ans = a*b;
+    var opts = shuffle([ans, ans + a, Math.round(ans/10)*10, a + b]);
+    var labels = opts.map(function(v,i){ return String.fromCharCode(65+i) + '. ' + v; });
+    return {
+      type:'mcq', q: a + ' × ' + b + ' 的積最接近以下哪一個？',
+      opts: labels,
+      ans: String.fromCharCode(65 + opts.indexOf(ans)),
+      explain: '先估：' + (Math.round(a/10)*10) + ' × ' + (Math.round(b/10)*10) + ' ≈ ' + (Math.round(a/10)*10*Math.round(b/10)*10) + '，實際 = ' + ans
+    };
+  };
+}
+function mkMCUni(){
+  return function(){
+    var conf = pick([['1 米 = ? 厘米','100 厘米'],['1 米 = ? 毫米','1000 毫米'],['1 公斤 = ? 克','1000 克'],['1 升 = ? 毫升','1000 毫升']]);
+    var wrong = { '100 厘米':'10 厘米','1000 毫米':'100 毫米','1000 克':'100 克','1000 毫升':'100 毫升' };
+    var opts = shuffle([conf[1], wrong[conf[1]], '10 000']);
+    var labels = opts.map(function(v,i){ return String.fromCharCode(65+i) + '. ' + v; });
+    return {
+      type:'mcq', q: conf[0],
+      opts: labels,
+      ans: String.fromCharCode(65 + opts.indexOf(conf[1])),
+      explain: conf[0].replace('?', conf[1])
+    };
+  };
+}
+
+/* ---------- 方向題 ---------- */
+var DIRS = ['北','東北','東','東南','南','西南','西','西北'];
+function mkMCDirTurn(){
+  return function(){
+    var i = rnd(8), n = mm(1,3), right = Math.random() < .5;
+    var to = right ? DIRS[(i+n)%8] : DIRS[(i-n+8)%8];
+    var opts = shuffle([to, DIRS[(i+n+1)%8], DIRS[(i-n+8)%8], DIRS[(i+4)%8]]);
+    return {
+      type:'mcq', q: '面向' + DIRS[i] + '方，向' + (right?'右':'左') + '轉 ' + n + ' 個直角後，面向哪一方？',
+      opts: opts.map(function(v,k){ return String.fromCharCode(65+k) + '. ' + v; }),
+      ans: String.fromCharCode(65 + opts.indexOf(to)),
+      explain: (right?'順時針':'逆時針') + '轉 ' + n + ' 次：' + DIRS[i] + ' → ' + to
+    };
+  };
+}
+function mkMCDirOpp(){
+  return function(){
+    var i = rnd(8), opp = DIRS[(i+4)%8];
+    var opts = shuffle([opp, DIRS[(i+1)%8], DIRS[(i+2)%8], DIRS[(i+6)%8]]);
+    return {
+      type:'mcq', q: DIRS[i] + '方的相反方向是甚麼？',
+      opts: opts.map(function(v,k){ return String.fromCharCode(65+k) + '. ' + v; }),
+      ans: String.fromCharCode(65 + opts.indexOf(opp)),
+      explain: DIRS[i] + ' 的相反是 ' + opp
+    };
+  };
+}
+function mkMCDirRel(){
+  return function(){
+    var p = shuffle(['學校','公園','圖書館','商場','車站','球場','醫院']).slice(0,2);
+    var i = rnd(8), opp = DIRS[(i+4)%8];
+    var opts = shuffle([opp, DIRS[(i+1)%8], DIRS[(i+2)%8], DIRS[(i+6)%8]]);
+    return {
+      type:'mcq', q: p[0] + '在' + p[1] + '的' + DIRS[i] + '方，' + p[1] + '在' + p[0] + '的哪一方？',
+      opts: opts.map(function(v,k){ return String.fromCharCode(65+k) + '. ' + v; }),
+      ans: String.fromCharCode(65 + opts.indexOf(opp)),
+      explain: '相反方向：' + opp
+    };
+  };
+}
+
+/* ---------- 填空題 ---------- */
+function mkFillRule(){
+  return function(){
+    var hr = mm(10, 89);
+    var rule = pick([2,3,5,10]);
+    var base = hr*100;
+    var okd = [];
+    for (var d=0; d<=9; d++) {
+      var yes;
+      if (rule===2) yes = (base+d)%2===0;
+      else if (rule===5) yes = (base+d)%5===0;
+      else if (rule===10) yes = (base+d)%10===0;
+      else yes = (d + Math.floor(hr/10) + hr%10)%3===0;
+      if (yes) okd.push(d);
+    }
+    return {
+      type:'fill', q: '三位數「' + hr + '★」可以被 ' + rule + ' 整除。★ 可能是',
+      ans: okd.join('、'), suffix:'（列出所有可能）',
+      explain: '★ 可以是 ' + okd.join('、')
+    };
+  };
+}
+function factorsOf(n){
+  var o=[];
+  for(var i=1;i*i<=n;i++){ if(n%i===0){ o.push(i); if(i!==n/i) o.push(n/i); } }
+  return o.sort(function(a,b){return a-b;});
+}
+function mkFillFactor(){
+  return function(){
+    var n = pick([12,16,18,20,24,28,30,36,40,42,45,48,54,60,72]);
+    var f = factorsOf(n);
+    return {
+      type:'fill', q: n + ' 的所有因數是',
+      ans: f.join('、'),
+      explain: n + ' 的因數：' + f.join('、') + '（共 ' + f.length + ' 個）'
+    };
+  };
+}
+function mkFillMultiple(){
+  return function(){
+    var n = mm(3, 12);
+    var cnt = mm(4, 6);
+    var list = [];
+    for (var i=1;i<=cnt;i++) list.push(n*i);
+    return {
+      type:'fill', q: n + ' 的最初 ' + cnt + ' 個倍數是',
+      ans: list.join('、'),
+      explain: list.join('、')
+    };
+  };
+}
+function mkFillDir(){
+  return function(){
+    var i = rnd(8), n = mm(1,3);
+    var right = Math.random() < .5;
+    var to = right ? DIRS[(i+n)%8] : DIRS[(i-n+8)%8];
+    return {
+      type:'fill', q: '面向' + DIRS[i] + '方，' + (right?'右':'左') + '轉 ' + n + ' 個直角後，面向',
+      ans: to, suffix:'方',
+      explain: DIRS[i] + ' → ' + to
+    };
+  };
+}
+
+/* ---------- 應用題 ---------- */
+function mkW(q, ans, explain, marks){
+  return { type:'word', q:q, ans:String(ans), explain:explain };
+}
+function mkWrapMul(){
+  return function(){
+    var p = mm(25, 320), n = mm(3, 24);
+    return mkW('每個書包售 ' + p + ' 元。買 ' + n + ' 個共需付多少元？', p*n,
+      p + ' × ' + n + ' = ' + (p*n) + '（元）\n答：共需付 ' + (p*n) + ' 元。');
+  };
+}
+function mkWrapMax(){
+  return function(){
+    var per = mm(6, 18), b = mm(4, 30), ex = mm(1, per-1);
+    var N = per*b + ex;
+    return mkW('有 ' + N + ' 個蘋果，每盒最多裝 ' + per + ' 個。最多可裝滿多少盒？', b,
+      N + ' ÷ ' + per + ' = ' + b + ' … ' + ex + '\n餘下的 ' + ex + ' 個不夠一盒\n答：最多可裝滿 ' + b + ' 盒。');
+  };
+}
+function mkWrapMin(){
+  return function(){
+    var per = mm(8, 30), b = mm(3, 25), ex = mm(1, per-1);
+    var N = per*b + ex;
+    return mkW(N + ' 名學生，每 ' + per + ' 人分成一組。最少需要分多少組？', b+1,
+      N + ' ÷ ' + per + ' = ' + b + ' … ' + ex + '\n餘下的 ' + ex + ' 人也要自成一组\n答：最少需要 ' + (b+1) + ' 組。');
+  };
+}
+function mkWrapDiv(){
+  return function(){
+    var d = mm(11, 60), q = mm(4, 30), r = rnd(d);
+    var N = d*q + r;
+    return mkW(N + ' 元平均分給 ' + d + ' 人，每人可得多少元？還餘多少元？', q + ' 元，餘 ' + r + ' 元',
+      N + ' ÷ ' + d + ' = ' + q + ' … ' + r + '\n答：每人可得 ' + q + ' 元，還餘 ' + r + ' 元。');
+  };
+}
+function mkWrapModel(){
+  return function(){
+    var p = mm(35, 260), n = mm(4, 16);
+    return mkW('每部 A 牌風扇售 ' + p + ' 元。B 牌的售價是 A 牌的 ' + n + ' 倍。B 牌每部售多少元？', p*n,
+      p + ' × ' + n + ' = ' + (p*n) + '（元）\n答：B 牌每部售 ' + (p*n) + ' 元。');
+  };
+}
+function mkWrapDir(){
+  return function(){
+    var p = shuffle(['學校','公園','圖書館','商場','車站']).slice(0,2);
+    var i = rnd(8);
+    return mkW(p[0] + '在' + p[1] + '的' + DIRS[i] + '方。那麼' + p[1] + '在' + p[0] + '的哪一方？', DIRS[(i+4)%8],
+      DIRS[i] + ' 的相反方向是 ' + DIRS[(i+4)%8] + '\n答：' + p[1] + '在' + p[0] + '的' + DIRS[(i+4)%8] + '方。');
+  };
+}
+function mkWrapFactor(){
+  return function(){
+    var n = pick([24, 36, 40, 48, 60]);
+    var f = factorsOf(n);
+    return mkW('寫出 ' + n + ' 的所有因數。', f.join('、'),
+      n + ' = 1×' + n + ' = ... \n因數：' + f.join('、'));
+  };
+}
+
+var MKGEN = {
+  // mul: 用 a=[2,3] 代表「兩位數 × 三位數」，a=[2,2] 代表兩位 × 兩位
+  mul: function(it){
+    var spec = it && it.a ? it.a : [2, 2];
+    if (spec[0] === 2 && spec[1] === 3) return mkMul('3x2');
+    return mkMul('2x2');
+  },
+  mulT: mkMulT, mulS: mkMulS,
+  div: mkDiv, check: mkCheck,
+  mcShape: mkMCShape, mcDivDigit: mkMCDivDigit, mcRule: mkMCRule, mcMul: mkMCMul, mcUni: mkMCUni,
+  fillRule: mkFillRule, fillFactor: mkFillFactor, fillMultiple: mkFillMultiple, fillDir: mkFillDir,
+  wMul: mkWrapMul, wMax: mkWrapMax, wMin: mkWrapMin, wDiv: mkWrapDiv,
+  wModel: mkWrapModel, wDir: mkWrapDir, wFactor: mkWrapFactor,
+  mcDirTurn: mkMCDirTurn, mcDirOpp: mkMCDirOpp, mcDirRel: mkMCDirRel
+};
+
+function buildMock(level){
+  var sections = MOCK[level];
+  var out = [];
+  sections.forEach(function(sec){
+    var items = sec.items.map(function(it){
+      var g = MKGEN[it.k];
+      var factory = g ? g(it) : null;
+      // 所有 mkX() 都係回傳一個 factory，要再叫一次才拿到題目
+      var q = (typeof factory === 'function') ? factory() : factory;
+      if (!q) q = { type:'work', q:'（題目產生失敗）', ans:'-', explain:'' };
+      q.marks = sec.each;
+      q.section = sec.sec;
+      return q;
+    });
+    out.push({ sec: sec.sec, each: sec.each, items: items });
+  });
+  return out;
+}
+
+/* ---------- 設定互動 ---------- */
+function segPick(sel, attr, cb){
+  var box = $(sel);
+  box.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click', function(){
+      box.querySelectorAll('button').forEach(function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      cb(b.dataset[attr]);
+    });
+  });
+}
+segPick('#segLevel', 'level', function(v){ MK.level = v; });
+segPick('#segTime', 'time', function(v){ MK.minutes = Number(v); });
+segPick('#segMode', 'mode', function(v){ MK.mode = v; });
+
+$('#startMock').addEventListener('click', function(){
+  MK.sections = buildMock(MK.level);
+  if (MK.mode === 'print') { printMock(); return; }
+  startScreenMock();
+});
+
+/* ---------- 螢幕作答 ---------- */
+function startScreenMock(){
+  MK.answers = {};
+  MK.left = MK.minutes * 60;
+  $('#mockName').textContent = (MK.level === 'A' ? '4上A' : '4上B') + ' 模擬試卷';
+  renderPaper();
+  show('scr-mock');
+  tickClock();
+}
+
+function tickClock(){
+  clearInterval(MK.timer);
+  MK.timer = setInterval(function(){
+    MK.left--;
+    if (MK.left <= 0) { clearInterval(MK.timer); submitMock(); return; }
+    var m = Math.floor(MK.left / 60), s = MK.left % 60;
+    var el = $('#clock');
+    el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    el.classList.toggle('warn', MK.left <= 300);
+  }, 1000);
+  var m = Math.floor(MK.left/60), s = MK.left%60;
+  $('#clock').textContent = m + ':' + (s<10?'0':'') + s;
+  $('#clock').classList.remove('warn');
+}
+
+function renderPaper(){
+  var html = '';
+  var n = 0;
+  MK.sections.forEach(function(sec){
+    html += '<h3>' + sec.sec + '<span class="mk">每題 ' + sec.each + ' 分，共 ' + (sec.items.length * sec.each) + ' 分</span></h3>';
+    sec.items.forEach(function(q){
+      n++;
+      html += '<div class="pq"><span class="mark">' + q.marks + '分</span>';
+      html += '<span class="num">' + n + '.</span>';
+      html += q.q;
+      if (q.type === 'mcq') {
+        html += '<div class="opts">' + q.opts.map(function(o){ return '<span>' + o + '</span>'; }).join('') + '</div>';
+        html += '<div class="work" style="min-height:38px"></div>';
+      } else if (q.type === 'fill') {
+        html += ' <span class="blank"></span>' + (q.suffix || '');
+        html += '<div class="work" style="min-height:46px"></div>';
+      } else {
+        html += '<div class="work"></div>';
+      }
+      html += '</div>';
+    });
+  });
+  $('#paperBody').innerHTML = html;
+}
+
+function submitMock(){
+  clearInterval(MK.timer);
+  var score = 0, total = 0, rows = [];
+  var n = 0;
+  MK.sections.forEach(function(sec){
+    sec.items.forEach(function(q){
+      n++; total += q.marks;
+      rows.push({ n:n, q:q, marks:q.marks });
+    });
+  });
+  renderMockResult(rows, total);
+  show('scr-mock-result');
+  sndDone();
+}
+
+function renderMockResult(rows, total){
+  var html = '<div class="verdict">'
+    + '<span class="em">📄</span><h2>試卷完成</h2>'
+    + '<p>核對答案，計一計自己幾分。應用題要逐步計分。</p>'
+    + '</div>';
+
+  html += '<div class="card"><h2>✅ 答案與評分標準</h2>';
+  rows.forEach(function(r){
+    var q = r.q;
+    var sayTxt = '第 ' + r.n + ' 題，' + r.marks + ' 分。' + q.q + '。答案係 ' + q.ans + '。' + (q.explain || '');
+    html += '<div style="padding:12px 0;border-bottom:1px dashed #eef0fa">'
+      + '<div style="font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:8px">'
+      + '第 ' + r.n + ' 題（' + r.marks + ' 分）'
+      + '<span class="spk-slot" data-say="' + esc(sayTxt) + '" style="margin-left:auto"></span>'
+      + '</div>'
+      + '<div style="color:var(--ink-soft);font-size:15.5px;margin-bottom:5px">' + q.q + '</div>'
+      + '<div style="font-size:16.5px"><b style="color:var(--green)">答案：' + q.ans + '</b></div>'
+      + '<div style="font-size:15.5px;color:var(--ink-soft);white-space:pre-line;margin-top:4px">'
+      + (q.explain || '') + '</div>';
+    if (q.type === 'word') {
+      html += '<div style="font-size:14.5px;background:var(--indigo-soft);border-radius:9px;padding:9px 12px;margin-top:6px">'
+        + '<b>評分：</b>正確列式 2 分 + 正確答案 1 分 + 答句及單位 1 分</div>';
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="card"><h2>📊 計分</h2>'
+    + '<p style="color:var(--ink-soft);font-size:16px">全卷 ' + total + ' 分。'
+    + '把答對嘅分數加起來，填落下面。</p>'
+    + '<div style="display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap">'
+    + '<input id="scoreIn" type="number" inputmode="numeric" min="0" max="' + total + '" '
+    + 'placeholder="0" style="font-size:24px;font-weight:800;width:130px;padding:12px 16px;'
+    + 'border:2px solid var(--line);border-radius:13px;text-align:center;font-family:inherit">'
+    + '<span style="font-size:20px;font-weight:800;color:var(--ink-soft)">/ ' + total + '</span>'
+    + '<button class="btn primary" id="calcScore" style="margin-left:auto">計分</button>'
+    + '</div>'
+    + '<div id="scoreOut" style="margin-top:16px"></div>'
+    + '</div>';
+
+  html += '<div class="btnrow" style="justify-content:center">'
+    + '<button class="btn primary" id="mockAgain">再做一份</button>'
+    + '<a class="btn" href="diagnose.html" style="text-decoration:none">返去診斷</a>'
+    + '</div>';
+
+  $('#mockResultBody').innerHTML = html;
+
+  // 每題答案都可以朗讀
+  if (window.Narrate) {
+    $('#mockResultBody').querySelectorAll('.spk-slot').forEach(function (slot) {
+      var txt = slot.getAttribute('data-say') || '';
+      slot.appendChild(Narrate.makeButton(function () { return txt; }, '朗讀'));
+    });
+  }
+
+  var cb = document.getElementById('calcScore');
+  if (cb) cb.addEventListener('click', function(){
+    var v = Number(document.getElementById('scoreIn').value || 0);
+    var pct = Math.round(v / total * 100);
+    var g = '🌱', t = '繼續努力', m = '重點係睇返錯咗嘅題目。';
+    if (pct >= 90) { g='👑'; t='好叻！'; m='呢個分數已經係班裡面最好嘅水平。'; }
+    else if (pct >= 75) { g='🏆'; t='不錯！'; m='再改善一兩個弱點就可以再高。'; }
+    else if (pct >= 60) { g='💪'; t='合格以上'; m='搵出失分最多嘅一節，集中練。'; }
+    document.getElementById('scoreOut').innerHTML =
+      '<div style="text-align:center;padding:18px;background:var(--indigo-soft);border-radius:14px">'
+      + '<div style="font-size:44px">' + g + '</div>'
+      + '<div style="font-size:22px;font-weight:900;color:var(--indigo)">' + pct + '%　' + t + '</div>'
+      + '<div style="color:var(--ink-soft);font-size:16px;margin-top:4px">' + m + '</div></div>';
+  });
+
+  var ma = document.getElementById('mockAgain');
+  if (ma) ma.addEventListener('click', function(){ show('scr-mock-setup'); });
+}
+
+/* ---------- 列印 ---------- */
+function printMock(){
+  var level = MK.level;
+  var name = (level === 'A' ? '四年級上學期 A 卷' : '四年級上學期 B 卷') + '　數學模擬試卷';
+  var html = '<div class="sheet">'
+    + '<h1>' + name + '</h1>'
+    + '<div class="meta">姓名：______________　　班別：__________　　日期：______________</div>'
+    + '<div class="meta">時限：' + MK.minutes + ' 分鐘　　總分：______ / 100</div>'
+    + '<hr class="rule">';
+
+  var n = 0;
+  MK.sections.forEach(function(sec){
+    html += '<h2>' + sec.sec + '（每題 ' + sec.each + ' 分）</h2><ol>';
+    sec.items.forEach(function(q){
+      n++;
+      html += '<li>' + q.q;
+      if (q.type === 'mcq') {
+        html += '<div class="ol">' + q.opts.map(function(o){ return '<span style="margin-right:18px">' + o + '</span>'; }).join('') + '</div>';
+        html += '<div class="box" style="height:26px"></div>';
+      } else if (q.type === 'fill') {
+        html += ' <span class="bl"></span>' + (q.suffix || '');
+        html += '<div class="box" style="height:32px"></div>';
+      } else if (q.type === 'word') {
+        html += '<div class="box" style="height:70px"></div>';
+      } else {
+        html += '<div class="box"></div>';
+      }
+      html += '</li>';
+    });
+    html += '</ol>';
+  });
+
+  html += '</div>';
+
+  // 答案頁
+  html += '<hr class="pgbr">';
+  html += '<div class="sheet"><h1>答案及評分標準</h1><hr class="rule">';
+  n = 0;
+  MK.sections.forEach(function(sec){
+    html += '<h2>' + sec.sec + '</h2>';
+    sec.items.forEach(function(q){
+      n++;
+      html += '<div class="keyrow"><b>' + n + '.</b> ' + q.ans
+        + (q.type === 'word' ? '　<span style="font-size:10pt;color:#555">（列式2＋答案1＋答句及單位1）</span>' : '')
+        + '</div>';
+    });
+  });
+  html += '<h2>應用題完整解法</h2>';
+  n = 0;
+  MK.sections.forEach(function(sec){
+    sec.items.forEach(function(q){
+      n++;
+      if (q.type === 'word') {
+        html += '<div class="keyrow" style="white-space:pre-line;margin-bottom:12px"><b>' + n + '.</b> '
+          + q.explain.replace(/</g,'&lt;') + '</div>';
+      }
+    });
+  });
+  html += '</div>';
+
+  $('#printArea').innerHTML = html;
+  document.body.classList.add('printing');
+  setTimeout(function(){
+    window.print();
+    document.body.classList.remove('printing');
+    show('scr-mock-setup');
+  }, 80);
+}
+
+/* ---------- 事件 ---------- */
+$('#goDiag').addEventListener('click', startDiag);
+$('#goMock').addEventListener('click', function(){ show('scr-mock-setup'); });
+$('#homeBtn').addEventListener('click', function(){ clearInterval(MK.timer); show('scr-home'); renderLast(); });
+$('#backBtn').addEventListener('click', function(){ show('scr-home'); renderLast(); });
+$('#quitBtn').addEventListener('click', function(){
+  if (D.results && D.results.length) { finishDiag(); }
+  else show('scr-home');
+});
+$('#submitMock').addEventListener('click', function(){
+  if (confirm('確定交卷？')) submitMock();
+});
+
+/* ---------- 上次結果 ---------- */
+function renderLast(){
+  var last = store.get('lastDiag', null);
+  var card = $('#lastReportCard');
+  var box = $('#lastReport');
+  if (!last) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+
+  var pct = Math.round(last.right / last.total * 100);
+  var names = last.weak.map(function(w){
+    var m = MC[w.id];
+    return (m ? m.icon + ' ' + m.name : '其他') + '（' + w.n + '）';
+  }).join('　');
+
+  box.innerHTML = '<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">'
+    + '<div style="font-size:34px;font-weight:900;color:var(--indigo)">' + pct + '%</div>'
+    + '<div style="flex:1;min-width:200px">'
+    + '<div style="font-size:16px;color:var(--ink-soft)">答對 ' + last.right + ' / ' + last.total + '</div>'
+    + (names ? '<div style="font-size:15.5px;margin-top:3px">' + names + '</div>' : '')
+    + '</div>'
+    + '<button class="btn" id="viewLast">睇報告</button>'
+    + '</div>';
+
+  var vb = document.getElementById('viewLast');
+  if (vb) vb.addEventListener('click', function(){
+    var list = last.weak.slice().sort(function(a,b){ return b.n - a.n; });
+    D.results = [];
+    for (var i=0;i<last.right;i++) D.results.push({ ok:true, q:{topic:'mul'} });
+    list.forEach(function(w){
+      for (var k=0;k<w.n;k++) D.results.push({ ok:false, mc:w.id, q:{topic:'mul'} });
+    });
+    renderReport(list);
+    show('scr-report');
+  });
+}
+
+/* ---------- 初始化 ---------- */
+if (window.Narrate) {
+  Narrate.toggleButton(document.getElementById('narrBtn'));
+}
+
+try {
+  var raw = localStorage.getItem('p4p_mistakes');
+  var ms = raw ? JSON.parse(raw) : [];
+  var b = document.getElementById('tabBadge');
+  if (b && ms && ms.length) { b.textContent = ms.length > 99 ? '99+' : ms.length; b.hidden = false; }
+} catch(e) {}
+
+renderLast();
+})();
+</script>
+</body>
+</html>

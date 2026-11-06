@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>人文科 4上 · 遊戲挑戰 | 溫習基地</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+<style>
+  .arcade-hero{
+    margin:1.4rem 0;padding:2rem 1.7rem;border-radius:30px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#2b2b6b 0%,#4a3a8a 40%,#7b3fa0 100%);
+    color:#fff;box-shadow:0 10px 40px rgba(70,40,140,.35);border:3px solid rgba(255,255,255,.2);
+  }
+  .arcade-hero h1{
+    margin:0 0 .4rem;font-size:clamp(1.9rem,4.6vw,2.7rem);letter-spacing:2px;
+    text-shadow:0 0 18px rgba(255,200,80,.6),0 4px 0 rgba(0,0,0,.25);
+  }
+  .arcade-hero p{margin:.25rem 0 0;opacity:.92;font-size:1.05rem;color:#e8ddff}
+  .starfield{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .star{position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;opacity:.8;
+    animation:twinkle 2.4s infinite}
+  @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.7)}50%{opacity:1;transform:scale(1.4)}}
+  .coin-row{font-size:2.2rem;letter-spacing:.55rem;margin-top:.9rem;line-height:1.3}
+  .coin-row span{display:inline-block;animation:coinSpin 2.4s ease-in-out infinite}
+  .coin-row span:nth-child(2){animation-delay:.3s}
+  .coin-row span:nth-child(3){animation-delay:.6s}
+  .coin-row span:nth-child(4){animation-delay:.9s}
+  @keyframes coinSpin{0%,100%{transform:rotateY(0) translateY(0)}50%{transform:rotateY(180deg) translateY(-10px)}}
+
+  /* 遊戲選擇：iPad 上是 2×2 大卡 */
+  .game-pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.1rem;margin:1.6rem 0}
+  .pick{
+    border-radius:26px;padding:1.5rem 1.4rem;color:#fff;cursor:pointer;border:none;text-align:left;
+    font-family:inherit;position:relative;overflow:hidden;transition:.25s;
+    box-shadow:0 8px 0 rgba(0,0,0,.18),0 14px 30px rgba(0,0,0,.16);
+    min-height:11.5rem;
+  }
+  .pick:hover{transform:translateY(-6px);box-shadow:0 14px 0 rgba(0,0,0,.18),0 20px 40px rgba(0,0,0,.2)}
+  .pick:active{transform:translateY(3px);box-shadow:0 4px 0 rgba(0,0,0,.18)}
+  .pick .em{font-size:3rem;display:block;line-height:1;margin-bottom:.4rem}
+  .pick h3{margin:0 0 .3rem;font-size:1.45rem;letter-spacing:1px}
+  .pick p{margin:0;font-size:1.02rem;opacity:.95;line-height:1.65}
+  .pick .tagline{
+    display:inline-block;margin-top:.7rem;background:rgba(255,255,255,.28);
+    padding:.25rem .85rem;border-radius:999px;font-size:.9rem;font-weight:900;
+  }
+  .pick.g1{background:linear-gradient(150deg,#ff9a8d,#e8503f)}
+  .pick.g2{background:linear-gradient(150deg,#63c4ef,#1f6fb8)}
+  .pick.g3{background:linear-gradient(150deg,#ffd75e,#d99000);color:#4a3200}
+  .pick.g4{background:linear-gradient(150deg,#9b8ce0,#5a3fc0)}
+  .pick.g4 p,.pick.g4 .tagline{color:#fff}
+  .pick.g3 .tagline{background:rgba(255,255,255,.55)}
+
+  /* 遊戲面板 */
+  .panel{display:none;margin-top:1.5rem}
+  .panel.on{display:block;animation:pop .4s}
+  .game-shell{
+    background:#fff;border-radius:26px;box-shadow:var(--shadow);overflow:hidden;border:2px solid #fff;
+  }
+  .game-bar{
+    display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;padding:.9rem 1.2rem;
+    background:linear-gradient(90deg,#eef8ff,#f8fcff);border-bottom:2px dashed var(--line);
+  }
+  .game-bar h3{margin:0;font-size:1.3rem;flex:1;min-width:10rem}
+  .stat{
+    background:#fff;border:2px solid var(--line);border-radius:14px;padding:.35rem .8rem;
+    font-weight:900;font-size:.98rem;color:var(--ink-2);white-space:nowrap;
+  }
+  .stat b{color:var(--coral-d);font-size:1.2rem}
+  .stat.ok b{color:var(--grass-d)}
+  .game-body{padding:1.4rem 1.2rem 1.6rem}
+
+  /* 通用按鈕列 */
+  .row{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:1.2rem}
+
+  /* ============ 遊戲1: 快問快答 ============ */
+  .quiz-q{
+    font-size:1.3rem;font-weight:900;line-height:1.65;margin:0 0 1.1rem;padding:1.1rem 1.2rem;
+    background:linear-gradient(135deg,#eaf7ff,#fff8e1);border-radius:20px;border-left:8px solid var(--sun);
+  }
+  .quiz-opts{display:grid;gap:.7rem}
+  .opt{
+    font-family:inherit;font-size:1.12rem;font-weight:700;text-align:left;
+    padding:1rem 1.1rem 1rem 3.6rem;border-radius:16px;border:2.5px solid var(--line);background:#fff;
+    cursor:pointer;transition:.15s;color:var(--ink);position:relative;
+    min-height:var(--tap);line-height:1.6;
+  }
+  .opt::before{
+    content:attr(data-k);position:absolute;left:1rem;top:50%;transform:translateY(-50%);
+    width:1.8rem;height:1.8rem;border-radius:50%;background:var(--sky-l);color:var(--sky-d);
+    display:grid;place-items:center;font-size:.95rem;font-weight:900;
+  }
+  .opt:hover:not(.locked){border-color:var(--sky);background:#f4fbff;transform:translateX(5px)}
+  .opt.correct{border-color:var(--grass-d);background:#e8f9ec;color:var(--grass-d)}
+  .opt.correct::before{background:var(--grass-d);color:#fff}
+  .opt.wrong{border-color:var(--coral-d);background:#ffefed;color:var(--coral-d)}
+  .opt.wrong::before{background:var(--coral-d);color:#fff}
+  .opt.locked{cursor:default}
+  .opt.dim{opacity:.45}
+
+  .feedback{
+    margin-top:1rem;padding:1rem 1.1rem;border-radius:16px;font-weight:800;
+    font-size:1.04rem;display:none;line-height:1.7;
+  }
+  .feedback.on{display:block;animation:pop .3s}
+  .feedback.good{background:#e8f9ec;color:#1f7a34;border-left:6px solid var(--grass-d)}
+  .feedback.bad{background:#ffefed;color:#a8352a;border-left:6px solid var(--coral-d)}
+
+  /* 進度點 */
+  .dots{display:flex;gap:.4rem;justify-content:center;margin:1.1rem 0 0;flex-wrap:wrap}
+  .dots i{width:.75rem;height:.75rem;border-radius:50%;background:#dbe8f0;display:block;transition:.25s}
+  .dots i.on{background:var(--sky);transform:scale(1.25)}
+  .dots i.ok{background:var(--grass-d)}
+  .dots i.no{background:var(--coral-d)}
+
+  /* ============ 遊戲2: 分類大挑戰 ============ */
+  .sort-area{display:grid;gap:1.2rem}
+  .sort-pool{
+    min-height:6rem;display:flex;flex-wrap:wrap;gap:.65rem;justify-content:center;align-items:center;
+    background:#f7fcff;border:3px dashed #bfe3f7;border-radius:20px;padding:1rem;
+  }
+  .chip{
+    font-family:inherit;font-weight:900;font-size:1.05rem;
+    padding:.8rem 1.2rem;border-radius:999px;min-height:var(--tap);
+    border:2px solid #bfe3f7;cursor:pointer;
+    background:linear-gradient(180deg,#fff,#eef8ff);
+    box-shadow:0 4px 0 rgba(31,127,184,.22),0 6px 14px rgba(31,127,184,.12);
+    color:var(--sky-d);transition:.15s;user-select:none;line-height:1.5;
+  }
+  .chip:hover{transform:translateY(-3px)}
+  .chip.sel{
+    background:linear-gradient(180deg,#ffd75e,#f0a500);color:#4a3200;
+    box-shadow:0 4px 0 rgba(190,130,0,.4);transform:translateY(-4px) scale(1.05);border-color:#f0a500;
+  }
+  .chip.done{opacity:.3;pointer-events:none;transform:none}
+  .bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(10.5rem,1fr));gap:.8rem}
+  .bin{
+    border-radius:20px;padding:1rem .8rem;min-height:8.5rem;
+    border:3px solid var(--line);background:#fff;transition:.2s;text-align:center;
+    cursor:pointer;
+  }
+  .bin h4{margin:0 0 .6rem;font-size:1.08rem;letter-spacing:1px;line-height:1.4}
+  .bin .bem{font-size:2rem;display:block;margin-bottom:.25rem}
+  .bin .items{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center}
+  .bin .items span{
+    font-size:.88rem;font-weight:800;background:var(--sky-l);color:var(--sky-d);
+    padding:.25rem .65rem;border-radius:999px;animation:pop .3s;line-height:1.6;
+  }
+  .bin.active{border-color:var(--sun);background:#fffdf3;transform:scale(1.03);box-shadow:var(--shadow-sm)}
+  .bin.shake{animation:shake .45s;border-color:var(--coral-d)}
+  .bin.win{border-color:var(--grass-d);background:#f2fdf4}
+
+  /* ============ 遊戲3: 記憶翻牌 ============ */
+  .mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;max-width:38rem;margin:0 auto}
+  .mem-card{
+    aspect-ratio:1;border-radius:18px;border:none;cursor:pointer;position:relative;
+    perspective:800px;background:transparent;padding:0;font-family:inherit;
+  }
+  .mem-inner{
+    position:absolute;inset:0;transform-style:preserve-3d;
+    transition:transform .45s cubic-bezier(.3,.9,.3,1);border-radius:18px;
+  }
+  .mem-card.flip .mem-inner,.mem-card.matched .mem-inner{transform:rotateY(180deg)}
+  .mem-face{
+    position:absolute;inset:0;border-radius:18px;display:grid;place-items:center;
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    font-weight:900;text-align:center;padding:.4rem;
+  }
+  .mem-back{
+    background:linear-gradient(150deg,#63c4ef,#1f6fb8);color:#fff;font-size:1.9rem;
+    box-shadow:inset 0 -6px 0 rgba(0,0,0,.12);
+  }
+  .mem-front{
+    background:#fff;border:3px solid var(--sky);color:var(--ink);
+    font-size:.98rem;transform:rotateY(180deg);line-height:1.4;padding:.4rem;
+  }
+  .mem-card.matched .mem-front{background:#e8f9ec;border-color:var(--grass-d);color:var(--grass-d)}
+  .mem-card:not(.matched):hover .mem-back{filter:brightness(1.1)}
+
+  /* ============ 遊戲4: 拖放配對 ============ */
+  .match-wrap{display:grid;gap:1rem}
+  .match-col-title{font-weight:900;font-size:1.06rem;color:var(--sky-d);text-align:center;margin:0 0 .5rem}
+  .match-cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .match-list{display:grid;gap:.6rem}
+  .mitem{
+    font-family:inherit;font-weight:800;font-size:1.04rem;
+    padding:.85rem .9rem;border-radius:16px;min-height:var(--tap);
+    border:2.5px solid var(--line);background:#fff;cursor:pointer;transition:.15s;
+    text-align:left;color:var(--ink);line-height:1.55;
+  }
+  .mitem:hover:not(.done){border-color:var(--sky);background:#f4fbff;transform:translateX(4px)}
+  .mitem.sel{border-color:var(--sun);background:#fff8e1;transform:translateX(6px);box-shadow:0 0 0 3px rgba(255,201,60,.3)}
+  .mitem.done{border-color:var(--grass-d);background:#e8f9ec;color:var(--grass-d);cursor:default;opacity:.75}
+  .mitem.err{animation:shake .45s;border-color:var(--coral-d);background:#ffefed}
+
+  /* 結果畫面 */
+  .result{
+    display:none;text-align:center;padding:2.2rem 1.2rem;border-radius:26px;
+    background:linear-gradient(135deg,#eaf7ff,#fff8e1);border:3px dashed var(--sun);
+  }
+  .result.on{display:block;animation:pop .5s}
+  .result .big-em{font-size:4.4rem;line-height:1;animation:bob 1.6s ease-in-out infinite}
+  .result h3{margin:.5rem 0;font-size:1.75rem;color:var(--sky-d)}
+  .result .score-line{font-size:1.22rem;font-weight:900;margin:.5rem 0}
+  .result .stars{font-size:2.3rem;letter-spacing:.35rem;margin:.4rem 0}
+  .result p{color:var(--ink-2);font-size:1.05rem;line-height:1.7}
+
+  @keyframes confettiFall{
+    0%{transform:translateY(-20px) rotate(0);opacity:1}
+    100%{transform:translateY(120vh) rotate(720deg);opacity:0}
+  }
+  .confetti{position:fixed;top:0;width:11px;height:16px;z-index:200;pointer-events:none;border-radius:2px;
+    animation:confettiFall linear forwards}
+
+  /* 小提示 */
+  .hint{font-size:1rem;color:var(--ink-2);text-align:center;margin:.8rem 0 0;font-weight:700;line-height:1.7}
+
+  /* ---------- 手機 ---------- */
+  @media (max-width:640px){
+    .arcade-hero{padding:1.4rem 1.1rem;border-radius:22px}
+    .game-pick{grid-template-columns:1fr;gap:.8rem}
+    .pick{padding:1.15rem;min-height:auto}
+    .pick .em{font-size:2.4rem}
+    .pick h3{font-size:1.28rem}
+    .game-body{padding:1rem .85rem 1.3rem}
+    .game-bar{padding:.7rem .85rem;gap:.5rem}
+    .game-bar h3{font-size:1.12rem;min-width:100%}
+    .mem-grid{grid-template-columns:repeat(3,1fr);gap:.5rem}
+    .mem-front{font-size:.82rem;padding:.25rem}
+    .match-cols{grid-template-columns:1fr;gap:.8rem}
+    .quiz-q{font-size:1.15rem;padding:.9rem .9rem}
+    .opt{font-size:1.02rem;padding:.85rem .8rem .85rem 3.2rem}
+    .opt::before{left:.8rem;width:1.6rem;height:1.6rem;font-size:.85rem}
+    .bins{grid-template-columns:repeat(2,1fr)}
+    .bin{min-height:7rem;padding:.8rem .5rem}
+    .bin h4{font-size:.98rem}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap"><div class="progress-bar"></div></div>
+<div class="bg-deco"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span>人文科 4上 · 溫習基地</div>
+    <button class="speak" id="soundToggle" data-nosfx title="音效：開">🔊</button>
+    <nav class="nav">
+      <a href="revision.html">📘 重點筆記</a>
+      <a href="games.html" class="active">🎮 遊戲</a>
+      <a href="practice.html">📝 練習</a>
+      </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="arcade-hero">
+    <div class="starfield" id="starfield"></div>
+    <h1>🎮 遊戲挑戰</h1>
+    <p>邊玩邊記，把重點牢牢記入腦袋！</p>
+    <div class="coin-row"><span>🪙</span><span>⭐</span><span>🏆</span><span>💎</span></div>
+  </div>
+
+  <!-- 選遊戲 -->
+  <div class="game-pick" id="picker">
+    <button class="pick g1" data-game="quiz">
+      <span class="em">⚡</span>
+      <h3>快問快答</h3>
+      <p>10 條選擇題，考你反應和記憶！</p>
+      <span class="tagline">⏱️ 有計時・有連勝</span>
+    </button>
+    <button class="pick g2" data-game="sort">
+      <span class="em">🗂️</span>
+      <h3>分類大挑戰</h3>
+      <p>把答案卡放入正確的分類箱。</p>
+      <span class="tagline">🎯 四季・3R・地形</span>
+    </button>
+    <button class="pick g3" data-game="mem">
+      <span class="em">🃏</span>
+      <h3>記憶翻牌</h3>
+      <p>翻開卡片，配對「問題」和「答案」。</p>
+      <span class="tagline">🧠 考記憶力</span>
+    </button>
+    <button class="pick g4" data-game="match">
+      <span class="em">🔗</span>
+      <h3>連連配對</h3>
+      <p>左邊點一下、右邊點一下，配對正確組合。</p>
+      <span class="tagline">✨ 考理解</span>
+    </button>
+  </div>
+
+  <!-- ================= 遊戲1 快問快答 ================= -->
+  <div class="panel" id="panel-quiz">
+    <div class="game-shell">
+      <div class="game-bar">
+        <h3>⚡ 快問快答</h3>
+        <div class="stat">第 <b id="q-idx">1</b> / <span id="q-total">10</span> 題</div>
+        <div class="stat ok">✅ <b id="q-score">0</b></div>
+        <div class="stat">🔥 連勝 <b id="q-streak">0</b></div>
+        <button class="btn ghost" style="padding:.5rem 1rem;font-size:.95rem" id="q-back">← 返回</button>
+      </div>
+      <div class="game-body">
+        <div class="quiz-q" id="q-text">載入中…</div>
+        <div class="quiz-opts" id="q-opts"></div>
+        <div class="feedback" id="q-fb"></div>
+        <div class="dots" id="q-dots"></div>
+        <div class="row"><button class="btn" id="q-next" style="display:none">下一題 →</button></div>
+      </div>
+    </div>
+    <div class="result" id="q-result"></div>
+  </div>
+
+  <!-- ================= 遊戲2 分類 ================= -->
+  <div class="panel" id="panel-sort">
+    <div class="game-shell">
+      <div class="game-bar">
+        <h3>🗂️ 分類大挑戰</h3>
+        <div class="stat ok">正確 <b id="s-ok">0</b></div>
+        <div class="stat">錯誤 <b id="s-bad">0</b></div>
+        <button class="btn ghost" style="padding:.5rem 1rem;font-size:.95rem" id="s-back">← 返回</button>
+      </div>
+      <div class="game-body">
+        <div class="sort-area">
+          <div>
+            <h4 class="match-col-title" id="s-title">把卡片放入正確的箱</h4>
+            <div class="sort-pool" id="s-pool"></div>
+          </div>
+          <div class="bins" id="s-bins"></div>
+        </div>
+        <p class="hint">👆 先點一張卡，再點一個箱</p>
+        <div class="row"><button class="btn sun" id="s-restart" style="display:none">🔄 再玩一次</button>
+          <button class="btn ghost" id="s-menu">🏠 返回選單</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 遊戲3 翻牌 ================= -->
+  <div class="panel" id="panel-mem">
+    <div class="game-shell">
+      <div class="game-bar">
+        <h3>🃏 記憶翻牌</h3>
+        <div class="stat">翻牌 <b id="m-flips">0</b></div>
+        <div class="stat ok">配對 <b id="m-pairs">0</b> / <span id="m-total">6</span></div>
+        <button class="btn ghost" style="padding:.5rem 1rem;font-size:.95rem" id="m-back">← 返回</button>
+      </div>
+      <div class="game-body">
+        <div class="mem-grid" id="m-grid"></div>
+        <p class="hint">🃏 找出「問題」和「答案」的配對！</p>
+        <div class="row"><button class="btn sun" id="m-restart">🔄 重新洗牌</button></div>
+      </div>
+    </div>
+    <div class="result" id="m-result"></div>
+  </div>
+
+  <!-- ================= 遊戲4 連連配對 ================= -->
+  <div class="panel" id="panel-match">
+    <div class="game-shell">
+      <div class="game-bar">
+        <h3>🔗 連連配對</h3>
+        <div class="stat ok">已配對 <b id="t-done">0</b> / <span id="t-total">6</span></div>
+        <div class="stat">錯誤 <b id="t-bad">0</b></div>
+        <button class="btn ghost" style="padding:.5rem 1rem;font-size:.95rem" id="t-back">← 返回</button>
+      </div>
+      <div class="game-body">
+        <div class="match-wrap">
+          <div class="match-cols">
+            <div>
+              <p class="match-col-title">📌 題目</p>
+              <div class="match-list" id="t-left"></div>
+            </div>
+            <div>
+              <p class="match-col-title">💡 答案</p>
+              <div class="match-list" id="t-right"></div>
+            </div>
+          </div>
+        </div>
+        <p class="hint">👆 左邊點一個，右邊點一個，配對成功會變綠色</p>
+        <div class="row"><button class="btn sun" id="t-restart">🔄 重新開始</button></div>
+      </div>
+    </div>
+    <div class="result" id="t-result"></div>
+  </div>
+
+  <div class="footer">
+    <p>📚 今日人文 4上 · 溫習基地</p>
+    <p><a href="revision.html">重點筆記</a> ｜ <a href="games.html">遊戲</a> ｜ <a href="practice.html">練習</a></p>
+  </div>
+</div>
+
+<button class="fab" id="toTop" title="回到頂部">⬆️</button>
+
+<script src="assets/app.js"></script>
+<script src="assets/wb.js"></script>
+<script>
+(function () {
+  "use strict";
+  var S = function (n) { if (window.HUMS) window.HUMS.play(n); };
+
+  /* ---------- 星空 ---------- */
+  (function () {
+    var sf = document.getElementById("starfield");
+    if (!sf) return;
+    for (var i = 0; i < 46; i++) {
+      var s = document.createElement("i");
+      s.className = "star";
+      s.style.left = Math.random() * 100 + "%";
+      s.style.top = Math.random() * 100 + "%";
+      s.style.animationDelay = (Math.random() * 2.4) + "s";
+      s.style.width = s.style.height = (2 + Math.random() * 3) + "px";
+      sf.appendChild(s);
+    }
+  })();
+
+  /* ---------- 彩紙 ---------- */
+  function confetti(n) {
+    var cols = ["#ff7a6b", "#ffc93c", "#5cc46a", "#3aa7e0", "#9b6bdf", "#ff9ecb"];
+    for (var i = 0; i < n; i++) {
+      (function (i) {
+        var c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.background = cols[Math.floor(Math.random() * cols.length)];
+        c.style.animationDuration = (1.6 + Math.random() * 1.6) + "s";
+        c.style.animationDelay = (Math.random() * 0.5) + "s";
+        document.body.appendChild(c);
+        setTimeout(function () { c.remove(); }, 3600);
+      })(i);
+    }
+  }
+
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  /* ---------- 面板切換 ---------- */
+  var panels = ["quiz", "sort", "mem", "match"];
+  function show(id) {
+    panels.forEach(function (p) {
+      document.getElementById("panel-" + p).classList.toggle("on", p === id);
+    });
+    document.getElementById("picker").style.display = id ? "none" : "grid";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (!id) return;
+    if (id === "quiz") startQuiz();
+    if (id === "sort") startSort();
+    if (id === "mem") startMem();
+    if (id === "match") startMatch();
+  }
+
+  window.__toMenu = function () { show(null); };
+  document.getElementById("s-menu").addEventListener("click", function () { show(null); });
+
+  document.querySelectorAll(".pick").forEach(function (b) {
+    b.addEventListener("click", function () {
+      show(b.dataset.game);
+      S("swoosh");
+    });
+  });
+  ["quiz", "sort", "mem", "match"].forEach(function (k) {
+    var id = { quiz: "q-back", sort: "s-back", mem: "m-back", match: "t-back" }[k];
+    var el = document.getElementById(id);
+    if (el) el.addEventListener("click", function () { show(null); S("click"); });
+  });
+
+  /* =====================================================
+     遊戲 1：快問快答
+     ===================================================== */
+  var QUIZ = [
+    { q: "香港位於中國哪一個省以南／東南？", o: ["廣東省", "廣西省", "福建省", "海南省"], a: 0,
+      e: "香港位於廣東省東南沿岸，珠江口東面。" },
+    { q: "香港的氣候屬於哪一種類型？", o: ["溫帶季風氣候", "熱帶雨林氣候", "亞熱帶季風氣候", "沙漠氣候"], a: 2,
+      e: "香港屬亞熱帶季風氣候，四季分明、夏季多雨。" },
+    { q: "香港最高的山峯是哪一座？", o: ["鳳凰山（934 米）", "大帽山（957 米）", "獅子山（495 米）", "飛鵝山（602 米）"], a: 1,
+      e: "大帽山高 957 米，是全港最高；第二位是鳳凰山 934 米。" },
+    { q: "香港一共分成多少個行政區？", o: ["15 區", "16 區", "18 區", "21 區"], a: 2,
+      e: "共 18 區：香港島 4 區、九龍 5 區、新界 9 區。" },
+    { q: "地球自轉一周大約需要多少時間？", o: ["12 小時", "24 小時", "30 日", "365 日"], a: 1,
+      e: "自轉 24 小時 → 晝夜交替；公轉 365.25 日 → 四季。" },
+    { q: "地球表面大約有多少被水覆蓋？", o: ["29%", "50%", "61%", "71%"], a: 3,
+      e: "約 71% 是海洋，29% 是陸地，所以地球叫「藍色星球」。" },
+    { q: "七大洲之中，面積最大的是哪一個？", o: ["非洲", "亞洲", "北美洲", "南極洲"], a: 1,
+      e: "亞洲最大，大洋洲最小。香港就在亞洲。" },
+    { q: "四大洋之中，面積最大的是哪一個？", o: ["大西洋", "印度洋", "太平洋", "北冰洋"], a: 2,
+      e: "太平洋最大；北冰洋最小。香港南面是南海（屬太平洋）。" },
+    { q: "以下哪一項<b>不是</b> 3R 之一？", o: ["Reduce 減少", "Reuse 重用", "Recycle 回收", "Repair 修理"], a: 3,
+      e: "3R 是 Reduce、Reuse、Recycle。「Repair 修理」雖然環保，但不屬 3R。" },
+    { q: "夏季影響香港的季風主要來自哪個方向？", o: ["西北季風", "東北季風", "西南季風", "東南季風"], a: 2,
+      e: "夏季吹西南季風（來自海洋，潮濕多雨）；冬季吹東北季風（來自內陸，寒冷乾燥）。" },
+    { q: "暴雨警告信號由輕到重，正確次序是？", o: ["紅 → 黃 → 黑", "黃 → 紅 → 黑", "黑 → 紅 → 黃", "黃 → 黑 → 紅"], a: 1,
+      e: "黃 → 紅 → 黑，黑色暴雨最嚴重。" },
+    { q: "以下哪一種氣體是<b>主要</b>的溫室氣體？", o: ["氧氣 O₂", "氮氣 N₂", "二氧化碳 CO₂", "氫氣 H₂"], a: 2,
+      e: "二氧化碳（CO₂）是主要溫室氣體，主要來自燃燒煤、石油和天然氣。" },
+    { q: "「回南天」通常出現在哪個季節？", o: ["春季", "夏季", "秋季", "冬季"], a: 0,
+      e: "春季溫暖潮濕，牆壁地板出水、衣物難乾，稱為「回南天」。" },
+    { q: "香港哪一個季節最適合戶外考察？", o: ["春季（多霧）", "夏季（酷熱多雨）", "秋季（涼爽乾燥）", "冬季（寒冷乾燥）"], a: 2,
+      e: "秋季天晴少雨、氣溫適中，最適合行山和戶外活動。" },
+    { q: "香港的土地利用中，面積比例最大的是？", o: ["住宅用地", "郊野公園及林地", "商業用地", "工業用地"], a: 1,
+      e: "香港約四成土地是郊野公園和自然保育地帶，是重要的自然資源。" },
+    { q: "地球公轉一周大約需要多少時間？", o: ["24 小時", "一個月", "365.25 日", "十年"], a: 2,
+      e: "公轉一周約 365.25 日，形成四季變化。" }
+  ];
+
+  var qState = { deck: [], i: 0, score: 0, streak: 0, best: 0, locked: false };
+
+  function startQuiz() {
+    document.querySelector("#panel-quiz .game-shell").style.display = "";
+    qState.deck = shuffle(QUIZ).slice(0, 10);
+    qState.i = 0; qState.score = 0; qState.streak = 0; qState.best = 0;
+    document.getElementById("q-total").textContent = qState.deck.length;
+    document.getElementById("q-result").classList.remove("on");
+    document.getElementById("q-result").innerHTML = "";
+    renderDots();
+    renderQ();
+  }
+
+  function renderDots() {
+    var d = document.getElementById("q-dots");
+    d.innerHTML = "";
+    qState.deck.forEach(function (_, i) {
+      var el = document.createElement("i");
+      if (i < qState.i) el.className = "ok";
+      else if (i === qState.i) el.className = "on";
+      d.appendChild(el);
+    });
+  }
+
+  function renderQ() {
+    var q = qState.deck[qState.i];
+    qState.locked = false;
+    document.getElementById("q-idx").textContent = qState.i + 1;
+    document.getElementById("q-score").textContent = qState.score;
+    document.getElementById("q-streak").textContent = qState.streak;
+    document.getElementById("q-text").innerHTML = q.q;
+    var box = document.getElementById("q-opts");
+    box.innerHTML = "";
+    var keys = ["A", "B", "C", "D"];
+    // 打亂選項但保留正確答案
+    var pairs = q.o.map(function (t, idx) { return { t: t, ok: idx === q.a }; });
+    pairs = shuffle(pairs);
+    pairs.forEach(function (p, k) {
+      var b = document.createElement("button");
+      b.className = "opt";
+      b.dataset.k = keys[k];
+      b.innerHTML = p.t;
+      b.addEventListener("click", function () { answerQ(b, p.ok, q); });
+      box.appendChild(b);
+    });
+    var fb = document.getElementById("q-fb");
+    fb.className = "feedback";
+    fb.innerHTML = "";
+    document.getElementById("q-next").style.display = "none";
+    renderDots();
+  }
+
+  function answerQ(btn, ok, q) {
+    if (qState.locked) return;
+    qState.locked = true;
+    var opts = document.querySelectorAll("#q-opts .opt");
+    opts.forEach(function (o) { o.classList.add("locked"); });
+    var fb = document.getElementById("q-fb");
+
+    if (ok) {
+      btn.classList.add("correct");
+      qState.score++;
+      qState.streak++;
+      if (qState.streak > qState.best) qState.best = qState.streak;
+      S("correct");
+      fb.className = "feedback good on";
+      fb.innerHTML = "✅ <b>答對了！</b>" + (qState.streak >= 3 ? " 🔥 連勝 " + qState.streak + " 題！" : "") + "<br>💡 " + q.e;
+      document.querySelectorAll("#q-dots i")[qState.i].className = "ok";
+    } else {
+      btn.classList.add("wrong");
+      opts.forEach(function (o) {
+        if (o.innerHTML === q.o[q.a]) o.classList.add("correct");
+      });
+      qState.streak = 0;
+      S("wrong");
+      fb.className = "feedback bad on";
+      fb.innerHTML = "❌ <b>答錯了</b>，正確答案已標綠色。<br>💡 " + q.e;
+      document.querySelectorAll("#q-dots i")[qState.i].className = "no";
+    }
+    document.getElementById("q-score").textContent = qState.score;
+    document.getElementById("q-streak").textContent = qState.streak;
+    document.getElementById("q-next").style.display = "inline-flex";
+    document.getElementById("q-next").textContent = (qState.i === qState.deck.length - 1) ? "看成績 🏆" : "下一題 →";
+  }
+
+  document.getElementById("q-next").addEventListener("click", function () {
+    qState.i++;
+    if (qState.i >= qState.deck.length) { endQuiz(); return; }
+    renderQ();
+  });
+
+  function endQuiz() {
+    var n = qState.deck.length;
+    var pct = Math.round(qState.score / n * 100);
+    var stars = pct >= 90 ? "⭐⭐⭐" : pct >= 70 ? "⭐⭐" : pct >= 50 ? "⭐" : "☆";
+    var em = pct >= 90 ? "🏆" : pct >= 70 ? "🎉" : pct >= 50 ? "💪" : "📖";
+    var msg = pct >= 90 ? "太厲害了！你已經掌握得很好！" :
+              pct >= 70 ? "很好！再溫習一下錯的題目就完美了。" :
+              pct >= 50 ? "不錯，但還有些地方要再溫習。" :
+                         "不要緊，先回去看重點筆記吧！";
+    var r = document.getElementById("q-result");
+    r.className = "result on";
+    r.innerHTML =
+      '<div class="big-em">' + em + '</div>' +
+      '<h3>' + (pct >= 70 ? "挑戰成功！" : "挑戰完成") + '</h3>' +
+      '<div class="stars">' + stars + '</div>' +
+      '<div class="score-line">得分：' + qState.score + " / " + n + "（" + pct + "%）</div>" +
+      '<div class="score-line" style="color:#c96a1e">🔥 最長連勝：' + qState.best + ' 題</div>' +
+      '<p>' + msg + '</p>' +
+      '<div class="row">' +
+      '<button class="btn sun" onclick="window.__restartQuiz()">🔄 再挑戰</button>' +
+      '<button class="btn ghost" onclick="window.__toMenu()">🏠 返回選單</button>' +
+      '<a class="btn grass" href="revision.html">📘 看重點筆記</a>' +
+      '</div>';
+    document.querySelector("#panel-quiz .game-shell").style.display = "none";
+    if (pct >= 70) { S("win"); confetti(60); } else { S("lose"); }
+  }
+
+  window.__restartQuiz = function () {
+    document.querySelector("#panel-quiz .game-shell").style.display = "";
+    startQuiz();
+  };
+
+  /* =====================================================
+     遊戲 2：分類大挑戰
+     ===================================================== */
+  var SORTS = [
+    {
+      title: "把「天氣卡」放入正確的季節箱",
+      bins: [
+        { id: "spring", em: "🌸", name: "春季", color: "#5cc46a" },
+        { id: "summer", em: "☀️", name: "夏季", color: "#f07b2a" },
+        { id: "autumn", em: "🍂", name: "秋季", color: "#c96a1e" },
+        { id: "winter", em: "❄️", name: "冬季", color: "#3a86b8" }
+      ],
+      items: [
+        { t: "溫暖潮濕、有霧", b: "spring" },
+        { t: "牆壁出水（回南天）", b: "spring" },
+        { t: "杜鵑花開花", b: "spring" },
+        { t: "炎熱，可達 33℃ 以上", b: "summer" },
+        { t: "颱風季節、多雷暴", b: "summer" },
+        { t: "雨量全年最多", b: "summer" },
+        { t: "涼爽乾燥、天晴少雨", b: "autumn" },
+        { t: "最適合行山郊遊", b: "autumn" },
+        { t: "寒冷乾燥、吹東北風", b: "winter" },
+        { t: "高山偶爾結霜", b: "winter" },
+        { t: "雨量全年最少", b: "winter" }
+      ]
+    },
+    {
+      title: "把「行動卡」放入正確的 R 箱",
+      bins: [
+        { id: "reduce", em: "📉", name: "Reduce 減少", color: "#1f7fb8" },
+        { id: "reuse", em: "🔁", name: "Reuse 重用", color: "#2f9e44" },
+        { id: "recycle", em: "♻️", name: "Recycle 回收", color: "#d99000" }
+      ],
+      items: [
+        { t: "少用即棄膠袋", b: "reduce" },
+        { t: "不浪費食物", b: "reduce" },
+        { t: "不買不需要的東西", b: "reduce" },
+        { t: "自備水樽和購物袋", b: "reuse" },
+        { t: "舊衣物轉贈他人", b: "reuse" },
+        { t: "膠樽改做筆筒", b: "reuse" },
+        { t: "廢紙放入回收箱", b: "recycle" },
+        { t: "鋁罐分類回收", b: "recycle" },
+        { t: "把垃圾分類後再造", b: "recycle" }
+      ]
+    },
+    {
+      title: "把「地方卡」放入正確的分類箱",
+      bins: [
+        { id: "mountain", em: "⛰️", name: "山峯", color: "#2f9e44" },
+        { id: "sea", em: "🌊", name: "海洋", color: "#1f7fb8" },
+        { id: "region", em: "🏙️", name: "香港地域", color: "#e07b1e" }
+      ],
+      items: [
+        { t: "大帽山 957 米", b: "mountain" },
+        { t: "鳳凰山 934 米", b: "mountain" },
+        { t: "獅子山 495 米", b: "mountain" },
+        { t: "太平洋", b: "sea" },
+        { t: "大西洋", b: "sea" },
+        { t: "印度洋", b: "sea" },
+        { t: "北冰洋", b: "sea" },
+        { t: "新界", b: "region" },
+        { t: "九龍", b: "region" },
+        { t: "香港島", b: "region" }
+      ]
+    },
+    {
+      title: "把「概念卡」放入正確的箱",
+      bins: [
+        { id: "nature", em: "🌿", name: "自然環境", color: "#2f9e44" },
+        { id: "human", em: "🏭", name: "人為問題", color: "#e8503f" }
+      ],
+      items: [
+        { t: "熱帶雨林", b: "nature" },
+        { t: "沙漠", b: "nature" },
+        { t: "溫帶草原", b: "nature" },
+        { t: "極地（兩極）", b: "nature" },
+        { t: "燒煤發電排 CO₂", b: "human" },
+        { t: "汽車廢氣", b: "human" },
+        { t: "濫伐森林", b: "human" },
+        { t: "亂拋垃圾", b: "human" },
+        { t: "工廠排放污水", b: "human" }
+      ]
+    }
+  ];
+
+  var sState = { round: 0, ok: 0, bad: 0, sel: null, left: 0, total: 0 };
+
+  function startSort() {
+    sState.round = 0; sState.ok = 0; sState.bad = 0;
+    document.getElementById("s-restart").style.display = "none";
+    document.getElementById("s-ok").textContent = "0";
+    document.getElementById("s-bad").textContent = "0";
+    renderSort(SORTS[0]);
+  }
+
+  function renderSort(cfg) {
+    sState.sel = null;
+    document.getElementById("s-title").textContent = "🎯 " + cfg.title;
+    var pool = document.getElementById("s-pool");
+    pool.innerHTML = "";
+    var items = shuffle(cfg.items);
+    sState.total = items.length;
+    sState.left = items.length;
+    items.forEach(function (it) {
+      var b = document.createElement("button");
+      b.className = "chip";
+      b.textContent = it.t;
+      b.dataset.bin = it.b;
+      b.addEventListener("click", function () {
+        if (b.classList.contains("done")) return;
+        document.querySelectorAll(".chip.sel").forEach(function (c) { c.classList.remove("sel"); });
+        b.classList.add("sel");
+        sState.sel = b;
+        S("pop");
+      });
+      pool.appendChild(b);
+    });
+
+    var bins = document.getElementById("s-bins");
+    bins.innerHTML = "";
+    bins.style.gridTemplateColumns = "repeat(auto-fit,minmax(" + (cfg.bins.length > 3 ? 150 : 190) + "px,1fr))";
+    cfg.bins.forEach(function (bn) {
+      var d = document.createElement("div");
+      d.className = "bin";
+      d.style.borderColor = bn.color + "55";
+      d.innerHTML = '<span class="bem">' + bn.em + '</span><h4 style="color:' + bn.color + '">' + bn.name + '</h4><div class="items"></div>';
+      d.addEventListener("click", function () { dropSort(d, bn, cfg); });
+      bins.appendChild(d);
+    });
+  }
+
+  function dropSort(binEl, bn, cfg) {
+    var chip = sState.sel;
+    if (!chip) {
+      binEl.classList.add("active");
+      setTimeout(function () { binEl.classList.remove("active"); }, 500);
+      S("tick");
+      return;
+    }
+    if (chip.dataset.bin === bn.id) {
+      chip.classList.add("done");
+      chip.classList.remove("sel");
+      binEl.querySelector(".items").insertAdjacentHTML("beforeend", "<span>" + chip.textContent + "</span>");
+      binEl.classList.add("win");
+      setTimeout(function () { binEl.classList.remove("win"); }, 700);
+      sState.ok++;
+      sState.left--;
+      document.getElementById("s-ok").textContent = sState.ok;
+      S("correct");
+      sState.sel = null;
+      if (sState.left === 0) finishSort(cfg);
+    } else {
+      binEl.classList.add("shake");
+      setTimeout(function () { binEl.classList.remove("shake"); }, 480);
+      chip.classList.add("shake");
+      setTimeout(function () { chip.classList.remove("shake"); }, 480);
+      sState.bad++;
+      document.getElementById("s-bad").textContent = sState.bad;
+      S("wrong");
+    }
+  }
+
+  function finishSort(cfg) {
+    sState.round++;
+    if (sState.round < SORTS.length) {
+      S("levelup");
+      confetti(25);
+      var pool = document.getElementById("s-pool");
+      pool.innerHTML = '<div style="font-weight:900;color:#2f9e44;font-size:1.12rem;width:100%;text-align:center">🎉 完成！準備下一回合…</div>';
+      setTimeout(function () { renderSort(SORTS[sState.round]); }, 1300);
+    } else {
+      S("win"); confetti(90);
+      document.getElementById("s-title").textContent = "🏆 全部完成！";
+      document.getElementById("s-pool").innerHTML =
+        '<div style="font-weight:900;color:#2f9e44;font-size:1.2rem;width:100%;text-align:center;line-height:1.8">' +
+        '🎉 太棒了！你完成了所有分類回合！<br>' +
+        '<span style="font-size:1rem;color:#4a5c6b">正確 ' + sState.ok + ' 張・錯誤 ' + sState.bad + ' 次</span></div>';
+      document.getElementById("s-bins").innerHTML = "";
+      document.getElementById("s-restart").style.display = "inline-flex";
+    }
+  }
+
+  document.getElementById("s-restart").addEventListener("click", function () { startSort(); });
+
+  /* =====================================================
+     遊戲 3：記憶翻牌
+     ===================================================== */
+  var MEM_PAIRS = [
+    { q: "香港最高山峯？", a: "大帽山 957 米" },
+    { q: "香港氣候類型？", a: "亞熱帶季風氣候" },
+    { q: "地球自轉一周？", a: "約 24 小時" },
+    { q: "地球公轉一周？", a: "約 365.25 日" },
+    { q: "最大洲／最小洲？", a: "亞洲／大洋洲" },
+    { q: "3R 是甚麼？", a: "減少、重用、回收" },
+    { q: "夏季吹甚麼風？", a: "西南季風" },
+    { q: "香港 18 區怎分？", a: "4 + 5 + 9" }
+  ];
+
+  var mState = { first: null, lock: false, flips: 0, pairs: 0, total: 6 };
+
+  function startMem() {
+    document.querySelector("#panel-mem .game-shell").style.display = "";
+    var pick = shuffle(MEM_PAIRS).slice(0, 6);
+    mState.first = null; mState.lock = false; mState.flips = 0; mState.pairs = 0;
+    mState.total = pick.length;
+    document.getElementById("m-flips").textContent = "0";
+    document.getElementById("m-pairs").textContent = "0";
+    document.getElementById("m-total").textContent = pick.length;
+    document.getElementById("m-result").classList.remove("on");
+    document.getElementById("m-result").innerHTML = "";
+
+    var cards = [];
+    pick.forEach(function (p, i) {
+      cards.push({ id: i, text: p.q, side: "q" });
+      cards.push({ id: i, text: p.a, side: "a" });
+    });
+    cards = shuffle(cards);
+
+    var g = document.getElementById("m-grid");
+    g.innerHTML = "";
+    cards.forEach(function (c) {
+      var b = document.createElement("button");
+      b.className = "mem-card";
+      b.dataset.id = c.id;
+      b.innerHTML =
+        '<div class="mem-inner">' +
+        '<div class="mem-face mem-back">🌏</div>' +
+        '<div class="mem-face mem-front">' + c.text + '</div>' +
+        "</div>";
+      b.addEventListener("click", function () { flipMem(b); });
+      g.appendChild(b);
+    });
+  }
+
+  function flipMem(card) {
+    if (mState.lock) return;
+    if (card.classList.contains("flip") || card.classList.contains("matched")) return;
+    card.classList.add("flip");
+    S("flip");
+    mState.flips++;
+    document.getElementById("m-flips").textContent = mState.flips;
+
+    if (!mState.first) { mState.first = card; return; }
+
+    var a = mState.first, b = card;
+    mState.first = null;
+    mState.lock = true;
+
+    if (a.dataset.id === b.dataset.id) {
+      setTimeout(function () {
+        a.classList.add("matched"); b.classList.add("matched");
+        mState.pairs++;
+        document.getElementById("m-pairs").textContent = mState.pairs;
+        S("correct");
+        mState.lock = false;
+        if (mState.pairs === mState.total) finishMem();
+      }, 420);
+    } else {
+      setTimeout(function () {
+        a.classList.remove("flip"); b.classList.remove("flip");
+        S("wrong");
+        mState.lock = false;
+      }, 950);
+    }
+  }
+
+  function finishMem() {
+    var flips = mState.flips;
+    var perfect = mState.total * 2;
+    var stars = flips <= perfect * 1.3 ? "⭐⭐⭐" : flips <= perfect * 1.8 ? "⭐⭐" : "⭐";
+    document.getElementById("m-result").className = "result on";
+    document.getElementById("m-result").innerHTML =
+      '<div class="big-em">🎉</div><h3>全部配對成功！</h3>' +
+      '<div class="stars">' + stars + '</div>' +
+      '<div class="score-line">總共翻了 ' + flips + ' 次牌</div>' +
+      '<p>' + (flips <= perfect * 1.3 ? "記憶力超強！連大人都未必做到！" : "做得很好！再試一次看看能否翻更少次。") + '</p>' +
+      '<div class="row"><button class="btn sun" onclick="window.__restartMem()">🔄 再玩一次</button>' +
+      '<button class="btn ghost" onclick="window.__toMenu()">🏠 返回選單</button></div>';
+    document.querySelector("#panel-mem .game-shell").style.display = "none";
+    S("win"); confetti(60);
+  }
+
+  window.__restartMem = function () {
+    document.querySelector("#panel-mem .game-shell").style.display = "";
+    startMem();
+  };
+
+  document.getElementById("m-restart").addEventListener("click", startMem);
+
+  /* =====================================================
+     遊戲 4：連連配對
+     ===================================================== */
+  var MATCH_SETS = [
+    [
+      { l: "香港的氣候類型", r: "亞熱帶季風氣候" },
+      { l: "香港最高山峯", r: "大帽山（957 米）" },
+      { l: "劃分南北半球", r: "赤道（0° 緯線）" },
+      { l: "劃分東西半球", r: "本初子午線（0° 經線）" },
+      { l: "自轉造成的現象", r: "晝夜交替" },
+      { l: "公轉造成的現象", r: "四季變化" }
+    ],
+    [
+      { l: "夏季季風", r: "西南季風（潮濕多雨）" },
+      { l: "冬季季風", r: "東北季風（寒冷乾燥）" },
+      { l: "主要溫室氣體", r: "二氧化碳 CO₂" },
+      { l: "3R 的 R 代表", r: "Reduce、Reuse、Recycle" },
+      { l: "香港三大地域", r: "新界、九龍、香港島" },
+      { l: "香港 18 區分佈", r: "香港島 4、九龍 5、新界 9" }
+    ]
+  ];
+
+  var tState = { done: 0, bad: 0, total: 6, sel: null, set: 0 };
+
+  function startMatch() {
+    var set = MATCH_SETS[tState.set % MATCH_SETS.length];
+    tState.done = 0; tState.bad = 0; tState.sel = null;
+    tState.total = set.length;
+    document.getElementById("t-done").textContent = "0";
+    document.getElementById("t-bad").textContent = "0";
+    document.getElementById("t-total").textContent = set.length;
+    document.getElementById("t-result").classList.remove("on");
+    document.getElementById("t-result").innerHTML = "";
+    document.querySelector("#panel-match .game-shell").style.display = "";
+
+    var left = document.getElementById("t-left");
+    var right = document.getElementById("t-right");
+    left.innerHTML = ""; right.innerHTML = "";
+
+    set.forEach(function (p, i) {
+      var b = document.createElement("button");
+      b.className = "mitem";
+      b.textContent = p.l;
+      b.dataset.id = i;
+      b.dataset.side = "l";
+      b.addEventListener("click", function () { pickMatch(b); });
+      left.appendChild(b);
+    });
+
+    shuffle(set.map(function (p, i) { return { r: p.r, i: i }; })).forEach(function (o) {
+      var b = document.createElement("button");
+      b.className = "mitem";
+      b.textContent = o.r;
+      b.dataset.id = o.i;
+      b.dataset.side = "r";
+      b.addEventListener("click", function () { pickMatch(b); });
+      right.appendChild(b);
+    });
+  }
+
+  function pickMatch(el) {
+    if (el.classList.contains("done")) return;
+    var side = el.dataset.side;
+
+    if (!tState.sel) {
+      document.querySelectorAll(".mitem.sel").forEach(function (x) { x.classList.remove("sel"); });
+      el.classList.add("sel");
+      tState.sel = el;
+      S("pop");
+      return;
+    }
+    if (tState.sel === el) {
+      el.classList.remove("sel");
+      tState.sel = null;
+      S("click");
+      return;
+    }
+    if (tState.sel.dataset.side === side) {
+      // 同一邊 → 改選
+      tState.sel.classList.remove("sel");
+      el.classList.add("sel");
+      tState.sel = el;
+      S("pop");
+      return;
+    }
+
+    var a = tState.sel, b = el;
+    tState.sel = null;
+    a.classList.remove("sel");
+
+    if (a.dataset.id === b.dataset.id) {
+      a.classList.add("done"); b.classList.add("done");
+      tState.done++;
+      document.getElementById("t-done").textContent = tState.done;
+      S("correct");
+      if (tState.done === tState.total) finishMatch();
+    } else {
+      a.classList.add("err"); b.classList.add("err");
+      tState.bad++;
+      document.getElementById("t-bad").textContent = tState.bad;
+      S("wrong");
+      setTimeout(function () {
+        a.classList.remove("err"); b.classList.remove("err");
+      }, 550);
+    }
+  }
+
+  function finishMatch() {
+    var stars = tState.bad === 0 ? "⭐⭐⭐" : tState.bad <= 2 ? "⭐⭐" : "⭐";
+    document.getElementById("t-result").className = "result on";
+    document.getElementById("t-result").innerHTML =
+      '<div class="big-em">🔗</div><h3>全部配對完成！</h3>' +
+      '<div class="stars">' + stars + '</div>' +
+      '<div class="score-line">錯誤次數：' + tState.bad + ' 次</div>' +
+      '<p>' + (tState.bad === 0 ? "零錯誤！你完全掌握了！" : "做得好！再挑戰一次，目標是零錯誤！") + '</p>' +
+      '<div class="row">' +
+      '<button class="btn sun" onclick="window.__nextMatch()">➡️ 換一組題目</button>' +
+      '<button class="btn ghost" onclick="window.__nextMatch(true)">🔄 同一組再玩</button>' +
+      '<button class="btn ghost" onclick="window.__toMenu()">🏠 返回選單</button>' +
+      '</div>';
+    document.querySelector("#panel-match .game-shell").style.display = "none";
+    S("win"); confetti(70);
+  }
+
+  window.__nextMatch = function (same) {
+    if (!same) tState.set++;
+    document.querySelector("#panel-match .game-shell").style.display = "";
+    startMatch();
+  };
+
+  document.getElementById("t-restart").addEventListener("click", function () { startMatch(); });
+
+  /* 鍵盤：按 Esc 返回 */
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") show(null);
+  });
+
+  show(null);
+})();
+</script>
+</body>
+</html>

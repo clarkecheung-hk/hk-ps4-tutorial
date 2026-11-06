@@ -1,0 +1,28 @@
+_preview/
+scope/
+_shots/
+_tools/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# local temp / logs
+*.log
+*.tmp
+.cache/
+tmp/
+temp/
+
+# dependency folders (common for local tooling)
+**/node_modules/
+
+# local preview/debug artifacts
+*.bak
+*.orig
+_*.*

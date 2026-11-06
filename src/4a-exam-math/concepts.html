@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="動畫圖解">
+<meta name="theme-color" content="#4f46e5">
+<meta name="format-detection" content="telephone=no">
+<title>P4 數學　動畫圖解</title>
+<style>
+  :root{
+    --bg:#f4f6ff; --card:#fff; --ink:#1b2140; --ink-soft:#5b6285; --line:#e3e7f5;
+    --indigo:#4f46e5; --indigo-soft:#eef0ff;
+    --amber:#f59e0b; --amber-soft:#fff5e0;
+    --green:#16a34a; --green-soft:#e8f8ee;
+    --red:#dc2626; --red-soft:#fdeaea;
+    --sky:#0ea5e9; --sky-soft:#e6f6fe;
+    --purple:#9333ea; --pink:#db2777;
+    --shadow:0 6px 24px rgba(35,45,110,.08);
+    --shadow-lg:0 14px 40px rgba(35,45,110,.13);
+    --r:20px; --pad:clamp(16px,3.2vw,28px);
+    --safe-t:env(safe-area-inset-top,0px);
+    --safe-b:env(safe-area-inset-bottom,0px);
+    --safe-l:env(safe-area-inset-left,0px);
+    --safe-r:env(safe-area-inset-right,0px);
+    --ease:cubic-bezier(.34,1.3,.5,1);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body{
+    margin:0;
+    font-family:"PingFang HK","PingFang TC","Microsoft JhengHei","Noto Sans TC",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg); color:var(--ink);
+    font-size:18px; line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+    overscroll-behavior-y:none;
+    touch-action:manipulation;
+  }
+  button{font-family:inherit;touch-action:manipulation}
+  .topbar{
+    position:sticky;top:0;z-index:40;
+    background:rgba(255,255,255,.94);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 2px 14px rgba(35,45,110,.06);
+    padding-top:var(--safe-t);
+  }
+  .topbar-in{
+    max-width:980px;margin:0 auto;
+    padding:8px max(var(--pad),var(--safe-r)) 8px max(var(--pad),var(--safe-l));
+    display:flex;align-items:center;gap:8px;min-height:58px;
+  }
+  .brand{font-weight:800;font-size:19px;display:flex;align-items:center;gap:10px;white-space:nowrap}
+  .brand .txt{display:inline}
+  @media(max-width:560px){
+    .brand .txt{display:none}
+    .topbar-in{gap:6px}
+    .iconbtn{width:46px;height:46px;font-size:19px}
+  }
+  .brand .logo{
+    width:38px;height:38px;border-radius:12px;
+    background:linear-gradient(135deg,#7c3aed,#db2777);
+    display:grid;place-items:center;font-size:19px;flex:0 0 auto;color:#fff;
+  }
+  .spacer{flex:1}
+  .iconbtn{
+    width:50px;height:50px;border-radius:14px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);font-size:20px;cursor:pointer;
+    display:grid;place-items:center;transition:background .15s,transform .1s;flex:0 0 auto;
+  }
+  .iconbtn:active{transform:scale(.92);background:var(--indigo-soft)}
+  .iconbtn.off{opacity:.42}
+  .iconbtn.on{
+    background:linear-gradient(135deg,var(--indigo),var(--purple));
+    color:#fff;border-color:transparent;
+    box-shadow:0 4px 14px rgba(79,70,229,.34);
+  }
+
+  .screen{
+    max-width:980px;margin:0 auto;display:none;
+    padding:22px max(var(--pad),var(--safe-r)) calc(112px + var(--safe-b)) max(var(--pad),var(--safe-l));
+  }
+  .screen.active{display:block;animation:fade .24s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  h1.title{
+    margin:0 0 8px;font-size:clamp(28px,4.6vw,40px);line-height:1.3;font-weight:900;
+    background:linear-gradient(100deg,#4f46e5,#9333ea 50%,#db2777);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sub{color:var(--ink-soft);font-size:17px;margin:0 0 22px}
+
+  /* ---- hub cards ---- */
+  .grid{display:grid;grid-template-columns:1fr;gap:13px}
+  @media(min-width:680px){.grid{grid-template-columns:1fr 1fr}}
+  .ccard{
+    position:relative;overflow:hidden;cursor:pointer;text-align:left;
+    background:#fff;border:2px solid var(--line);border-radius:18px;
+    padding:17px 20px;min-height:112px;transition:transform .15s,border-color .15s,box-shadow .15s;
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .ccard::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:var(--cc,#4f46e5)}
+  .ccard::after{
+    content:"";position:absolute;right:-46px;top:-46px;width:140px;height:140px;border-radius:50%;
+    background:var(--cc,#4f46e5);opacity:.09;pointer-events:none;
+  }
+  .ccard:hover{transform:translateY(-2px);border-color:var(--cc);box-shadow:var(--shadow)}
+  .ccard:active{transform:scale(.985)}
+  .ccard .ct{font-size:18.5px;font-weight:800;display:flex;align-items:center;gap:10px;line-height:1.35}
+  .ccard .ci{font-size:24px;line-height:1}
+  .ccard .cd{font-size:15.5px;color:var(--ink-soft);line-height:1.6}
+  .ccard .cn{font-size:13.5px;font-weight:800;color:var(--cc);margin-top:2px}
+
+  /* ---- player ---- */
+  .pbar{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .pbar .pt{font-size:20px;font-weight:800;line-height:1.35}
+  .pbar .ps{font-size:14px;color:var(--ink-soft);font-weight:400}
+
+  .stagewrap{
+    position:relative;background:#fff;border:1px solid var(--line);
+    border-radius:22px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px;
+  }
+  .stage{
+    position:relative;width:100%;aspect-ratio:16/9;
+    background:radial-gradient(circle at 50% 22%,#fbfcff,#f2f5ff 65%,#e9edff);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .stage.tall{aspect-ratio:4/3}
+  @media(max-width:560px){ .stage{aspect-ratio:4/3} }
+
+  /* generic animated bits */
+  .fx{transition:all .55s var(--ease)}
+  .fx-slow{transition:all .85s var(--ease)}
+  .dim{opacity:.16 !important;filter:grayscale(1)}
+  .glow{filter:drop-shadow(0 0 14px rgba(79,70,229,.55))}
+
+  /* ---- vertical multiplication ---- */
+  .vmult{display:grid;grid-template-columns:repeat(5,1fr);gap:3px 0;
+         font-family:"SF Mono",ui-monospace,"Consolas",monospace;
+         font-size:clamp(22px,4.6vw,34px);font-weight:800;color:#242a52;
+         place-items:center;padding:10px 18px;min-width:min(340px,72vw)}
+  .vmult span{display:block;text-align:center;transition:all .45s var(--ease)}
+  .vmult .hid{opacity:0;transform:translateY(-16px) scale(.8)}
+  .vmult .op{color:#8b91b3}
+  .vmult .hl{color:var(--red);transform:scale(1.22)}
+  .vmult .res{color:var(--green)}
+  .vline{grid-column:1/-1;height:3px;background:#242a52;border-radius:2px;margin:2px 0;
+         transform:scaleX(0);transition:transform .5s var(--ease);transform-origin:right}
+  .vline.on{transform:scaleX(1)}
+  .ghost0{color:#b9bfd8 !important;font-style:italic}
+
+  .tagbox{
+    position:absolute;left:50%;transform:translate(-50%,10px);bottom:14px;
+    background:#fff;border:2px solid var(--indigo);color:var(--indigo);
+    padding:7px 18px;border-radius:999px;font-size:clamp(14px,2.4vw,17px);font-weight:800;
+    opacity:0;transition:all .45s var(--ease);pointer-events:none;white-space:nowrap;
+    box-shadow:0 6px 18px rgba(79,70,229,.22);max-width:92%;
+  }
+  .tagbox.on{opacity:1;transform:translate(-50%,0)}
+
+  /* ---- tokens (tiles) ---- */
+  .tokrow{position:relative;width:100%;height:100%}
+  .tok{
+    position:absolute;top:50%;
+    display:flex;align-items:center;justify-content:center;
+    min-width:clamp(58px,11vw,84px);height:clamp(58px,11vw,84px);
+    border-radius:18px;font-size:clamp(20px,3.6vw,28px);font-weight:900;
+    background:#fff;border:3px solid #c7ccf7;color:#2a3157;
+    transform:translate(-50%,-50%);transition:all .6s var(--ease);
+    box-shadow:0 6px 18px rgba(35,45,110,.10);
+  }
+  .tok.pair{border-color:var(--green);background:var(--green-soft);color:#0f7a3a;
+            box-shadow:0 0 0 6px rgba(22,163,74,.16),0 8px 22px rgba(22,163,74,.22)}
+  .tok.op2{border:none;background:transparent;box-shadow:none;color:#8b91b3;min-width:0;font-size:26px}
+  .tok.big{background:linear-gradient(135deg,#16a34a,#0f9b52);color:#fff;border:none;
+           box-shadow:0 10px 26px rgba(22,163,74,.35)}
+
+  /* ---- axis for trial quotient ---- */
+  .axis{position:relative;width:86%;height:150px}
+  .axisline{position:absolute;left:0;right:0;top:96px;height:4px;background:#c7ccf7;border-radius:2px}
+  .tick{position:absolute;top:88px;width:2px;height:20px;background:#a9b0d6;transform:translateX(-1px)}
+  .tlabel{position:absolute;top:112px;transform:translateX(-50%);font-size:13.5px;
+          font-weight:800;color:#6b7299;white-space:nowrap}
+  .mlabel{position:absolute;top:22px;transform:translateX(-50%);font-size:15px;
+          font-weight:900;color:#2a3157;white-space:nowrap;opacity:0;transition:all .5s var(--ease)}
+  .mlabel.on{opacity:1}
+  .pins{position:absolute;top:70px;width:6px;height:56px;border-radius:3px;transform:translateX(-3px);
+        background:#c7ccf7;transition:all .5s var(--ease)}
+  .pins.on{height:80px;top:58px}
+  .pins.good{background:var(--green);box-shadow:0 0 0 4px rgba(22,163,74,.18)}
+  .pins.bad{background:var(--red);box-shadow:0 0 0 4px rgba(220,38,38,.18);animation:shake .45s}
+  @keyframes shake{0%,100%{transform:translateX(-3px)}25%{transform:translateX(-11px)}75%{transform:translateX(5px)}}
+
+  /* ---- dots ---- */
+  .dots{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;align-content:center;
+        width:88%;max-width:520px}
+  .dot{
+    width:clamp(15px,2.6vw,21px);height:clamp(15px,2.6vw,21px);border-radius:50%;
+    background:#c7ccf7;transition:all .4s var(--ease);
+  }
+  .dot.g1{background:#a5b4fc;box-shadow:0 0 0 3px rgba(99,102,241,.20)}
+  .dot.g2{background:#6ee7b7;box-shadow:0 0 0 3px rgba(16,185,129,.22)}
+  .dot.left{background:var(--amber);box-shadow:0 0 0 4px rgba(245,158,11,.25);transform:scale(1.15)}
+  .dot.fade{opacity:.18;filter:grayscale(1);transform:scale(.7)}
+  .dot.extra{background:#f472b6;box-shadow:0 0 0 4px rgba(219,39,119,.25);animation:popdot .45s}
+  @keyframes popdot{0%{transform:scale(.4)}60%{transform:scale(1.35)}100%{transform:scale(1.15)}}
+
+  /* ---- shapes ---- */
+  .shapewrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+  svg{max-width:100%;max-height:100%;display:block;overflow:visible}
+
+  /* ---- number digits ---- */
+  .bignum{display:flex;gap:clamp(4px,1.2vw,12px);font-family:"SF Mono",ui-monospace,"Consolas",monospace;
+          font-size:clamp(46px,9vw,76px);font-weight:900;color:#2a3157;line-height:1}
+  .bignum .dg{transition:all .5s var(--ease)}
+  .bignum .dg.up{transform:translateY(-22px) scale(1.18);color:var(--amber)}
+  .bignum .dg.sep{opacity:.15}
+  .sumline{display:flex;align-items:center;gap:12px;font-size:clamp(24px,4.4vw,34px);
+           font-weight:900;color:#2a3157;margin-top:6px;opacity:0;transition:all .5s var(--ease)}
+  .sumline.on{opacity:1}
+
+  /* ---- compass ---- */
+  .compass{position:relative;width:min(300px,74vw);aspect-ratio:1}
+  .needle{transform-origin:50% 50%;transition:transform .85s cubic-bezier(.34,1.32,.5,1)}
+  .arc{fill:none;stroke:var(--indigo);stroke-width:7;stroke-linecap:round;
+       stroke-dasharray:200;stroke-dashoffset:200;transition:stroke-dashoffset .8s ease}
+  .arc.on{stroke-dashoffset:0}
+
+  /* ---- boxes ---- */
+  .boxes{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;width:88%;max-width:520px}
+  .box{
+    width:clamp(26px,5vw,36px);height:clamp(26px,5vw,36px);border-radius:7px;
+    border:2.5px dashed #b9bfd8;transition:all .45s var(--ease);position:relative;
+  }
+  .box.full{border-style:solid;border-color:var(--indigo);background:var(--indigo-soft)}
+  .box.new{border-color:var(--pink);background:#fdecf5;animation:popdot .5s}
+
+  /* ---- caption + controls ---- */
+  .cap{
+    background:#fff;border:1px solid var(--line);border-radius:18px;
+    padding:16px 20px;box-shadow:var(--shadow);margin-bottom:14px;min-height:112px;
+  }
+  .cap .ch{display:flex;align-items:center;gap:10px;font-size:18.5px;font-weight:800;margin-bottom:6px}
+  .cap .cn2{width:30px;height:30px;border-radius:10px;background:var(--indigo-soft);color:var(--indigo);
+            display:grid;place-items:center;font-size:15px;font-weight:900;flex:0 0 auto}
+  .cap .cb{font-size:17px;color:#2a3157;line-height:1.85}
+  .cap .cb b{color:var(--indigo)}
+  .cap .cb .r{color:var(--red);font-weight:800}
+  .cap .cb .g{color:var(--green);font-weight:800}
+
+  /* ---- Cantonese narration ---- */
+  .narr{
+    display:flex;align-items:flex-start;gap:10px;
+    margin-top:12px;padding:12px 15px;border-radius:14px;
+    background:linear-gradient(120deg,#f5f3ff,#fdf2f8);
+    border:1px dashed #d8cffb;
+    font-size:16.5px;line-height:1.8;color:#3a3160;
+    transition:opacity .25s;
+  }
+  .narr .nic{flex:0 0 auto;font-size:17px;line-height:1.5}
+  .narr .ntx{flex:1;min-width:0}
+  .narr .nk{
+    display:block;font-size:12px;font-weight:800;letter-spacing:1.2px;
+    color:#8b5cf6;margin-bottom:2px;
+  }
+  .narr.speaking{
+    background:linear-gradient(120deg,#ede9fe,#fce7f3);
+    border-style:solid;border-color:#c4b5fd;
+    box-shadow:0 0 0 3px rgba(139,92,246,.10);
+  }
+  .narr.hidden{display:none}
+
+  @keyframes nbar{
+    0%{transform:scaleY(.35)}
+    50%{transform:scaleY(1)}
+    100%{transform:scaleY(.35)}
+  }
+  .nbar{display:inline-flex;gap:2px;align-items:center;height:14px;margin-left:4px;vertical-align:-2px}
+  .nbar i{
+    display:block;width:3px;height:100%;border-radius:2px;background:#8b5cf6;
+    transform-origin:bottom;animation:nbar .9s ease-in-out infinite;
+  }
+  .nbar i:nth-child(2){animation-delay:.15s}
+  .nbar i:nth-child(3){animation-delay:.3s}
+  .nbar i:nth-child(4){animation-delay:.45s}
+  .narr:not(.speaking) .nbar{display:none}
+
+  .iconbtn.talking{
+    background:linear-gradient(135deg,#8b5cf6,#db2777);color:#fff;border-color:transparent;
+    animation:nbarpulse 1.1s ease-in-out infinite;
+  }
+  @keyframes nbarpulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.45)}
+    60%{box-shadow:0 0 0 9px rgba(139,92,246,0)}
+  }
+
+  .dots-row{display:flex;gap:7px;justify-content:center;margin:0 0 14px}
+  .pd{width:9px;height:9px;border-radius:50%;background:#d7dcf2;transition:all .3s var(--ease)}
+  .pd.on{background:var(--indigo);width:26px;border-radius:99px}
+  .pd.done{background:#a5b4fc}
+
+  .controls{display:grid;grid-template-columns:auto 1fr auto auto;gap:9px}
+  .cbtn{
+    min-height:60px;border-radius:16px;border:1px solid var(--line);background:#fff;
+    color:var(--ink);font-size:17px;font-weight:800;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:7px;padding:0 18px;
+    transition:.15s;
+  }
+  .cbtn:active{transform:scale(.96)}
+  .cbtn:hover{background:var(--indigo-soft);border-color:#c7ccf7}
+  .cbtn:disabled{opacity:.36;cursor:default}
+  .cbtn.play{
+    background:linear-gradient(135deg,var(--indigo),var(--purple));color:#fff;border:none;
+    box-shadow:0 8px 22px rgba(79,70,229,.32);font-size:18px;
+  }
+  .cbtn.play:hover{filter:brightness(1.08)}
+
+  /* ---- tab bar ---- */
+  .tabbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:70;
+    padding:7px max(10px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));
+    background:rgba(255,255,255,.90);
+    -webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);
+    border-top:1px solid rgba(35,45,110,.08);
+    box-shadow:0 -6px 26px rgba(35,45,110,.10);
+  }
+  .tabbar-in{max-width:660px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+  .tabitem{
+    position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    min-height:54px;border-radius:15px;text-decoration:none;
+    color:#8b91b3;font-size:11.5px;font-weight:800;letter-spacing:.1px;
+    transition:color .16s,background .16s,transform .1s;-webkit-tap-highlight-color:transparent;
+  }
+  .tabitem .ti{font-size:21px;line-height:1;transition:transform .22s var(--ease);filter:grayscale(.55);opacity:.85}
+  .tabitem:active{transform:scale(.95);background:rgba(79,70,229,.07)}
+  .tabitem.on{color:var(--indigo);background:linear-gradient(180deg,rgba(79,70,229,.10),rgba(79,70,229,.03))}
+  .tabitem.on .ti{filter:none;opacity:1;transform:translateY(-1px) scale(1.1)}
+  .tabitem.on::after{
+    content:"";position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+    width:20px;height:3px;border-radius:99px;background:linear-gradient(90deg,var(--indigo),var(--pink));
+  }
+  .tabbadge{
+    position:absolute;top:3px;left:calc(50% + 8px);min-width:19px;height:19px;padding:0 5px;border-radius:99px;
+    background:linear-gradient(135deg,#ef4444,#db2777);color:#fff;font-size:11px;font-weight:800;line-height:19px;
+    box-shadow:0 2px 8px rgba(220,38,38,.45);display:grid;place-items:center;
+  }
+  .tabbadge[hidden]{display:none}
+
+  @media (prefers-reduced-motion:reduce){
+    .fx,.fx-slow,.tok,.dot,.box,.needle,.vmult span{transition-duration:.15s !important}
+  }
+
+  @media print{
+    .wbpane,.wb-scrim{ display:none !important; }
+    body.wb-open .layout{ grid-template-columns:1fr; padding-right:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><span class="logo">🎬</span><span class="txt">動畫圖解</span></div>
+    <div class="spacer"></div>
+    <button class="iconbtn" id="voiceBtn" aria-label="旁白開關" title="旁白開關">🗣️</button>
+    <button class="iconbtn" id="soundBtn" aria-label="音效開關">🔊</button>
+    <button class="iconbtn" id="homeBtn" aria-label="返回">🏠</button>
+  </div>
+</div>
+
+
+<!-- ============ HUB ============ -->
+<div class="screen active" id="scr-hub">
+  <h1 class="title">看一遍就懂</h1>
+  <p class="sub">揀一個概念，逐步播放。每一步都有文字解釋。</p>
+  <div class="grid" id="hubGrid"></div>
+</div>
+
+<!-- ============ PLAYER ============ -->
+<div class="screen" id="scr-play">
+  <div class="pbar">
+    <button class="iconbtn" id="backBtn" aria-label="返回">←</button>
+    <div>
+      <div class="pt" id="pT"></div>
+      <div class="ps" id="pS"></div>
+    </div>
+  </div>
+
+  <div class="stagewrap">
+    <div class="stage" id="stage"></div>
+  </div>
+
+  <div class="dots-row" id="stepsDots"></div>
+
+  <div class="cap">
+    <div class="ch"><span class="cn2" id="capN">1</span><span id="capT">…</span></div>
+    <div class="cb" id="capB"></div>
+    <div class="narr" id="narrBox">
+      <span class="nic" aria-hidden="true">🗣️</span>
+      <span class="ntx"><span class="nk">廣東話旁白</span><span id="narrTx">…</span><span class="nbar" aria-hidden="true"><i></i><i></i><i></i><i></i></span></span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="cbtn" id="prevBtn" aria-label="上一步">←</button>
+    <button class="cbtn play" id="playBtn">▶ 播放</button>
+    <button class="cbtn" id="nextBtn" aria-label="下一步">→</button>
+    <button class="cbtn" id="resetBtn" aria-label="重播">↺</button>
+  </div>
+</div>
+
+<nav class="tabbar" aria-label="頁面切換">
+  <div class="tabbar-in">
+    <a class="tabitem" href="revision.html"><span class="ti">📖</span><span>溫習</span></a>
+    <a class="tabitem on" href="concepts.html" aria-current="page"><span class="ti">🎬</span><span>動畫</span></a>
+    <a class="tabitem" href="practice.html"><span class="ti">✏️</span><span>練習</span>
+      <span class="tabbadge" id="tabBadge" hidden>0</span></a>
+    <a class="tabitem" href="diagnose.html"><span class="ti" aria-hidden="true">🔬</span><span>診斷</span></a>
+    <a class="tabitem" href="games.html"><span class="ti">🎮</span><span>遊戲</span></a>
+  </div>
+</nav>
+
+<script src="./assets/wb.js"></script>
+<script>
+(function(){
+'use strict';
+
+var $ = function(s){ return document.querySelector(s); };
+var clamp = function(v,a,b){ return Math.max(a, Math.min(b,v)); };
+
+/* =========================================================
+   音效引擎（全部即時合成，無外部檔案）
+   ========================================================= */
+var actx = null, muted = false, noiseBuf = null;
+
+function ac(){
+  if (!actx) {
+    var C = window.AudioContext || window.webkitAudioContext;
+    if (!C) return null;
+    actx = new C();
+  }
+  if (actx.state === 'suspended') actx.resume();
+  return actx;
+}
+function noise(){
+  var a = ac(); if (!a) return null;
+  if (!noiseBuf) {
+    noiseBuf = a.createBuffer(1, a.sampleRate * 0.4, a.sampleRate);
+    var d = noiseBuf.getChannelData(0);
+    for (var i=0;i<d.length;i++) d[i] = Math.random()*2-1;
+  }
+  var s = a.createBufferSource(); s.buffer = noiseBuf; return s;
+}
+
+/* 一個音 */
+function tone(o){
+  if (muted) return;
+  var a = ac(); if (!a) return;
+  var f0 = o.f, f1 = (o.to === undefined ? o.f : o.to);
+  var t0 = a.currentTime + (o.delay || 0);
+  var dur = o.dur || .16;
+  var osc = a.createOscillator(), g = a.createGain();
+  osc.type = o.type || 'sine';
+  osc.frequency.setValueAtTime(f0, t0);
+  if (o.to !== undefined) {
+    osc.frequency.exponentialRampToValueAtTime(Math.max(30, f1), t0 + dur);
+  }
+  var vol = (o.vol === undefined ? .10 : o.vol);
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(vol, t0 + (o.atk || .008));
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  osc.connect(g); g.connect(a.destination);
+  osc.start(t0); osc.stop(t0 + dur + .02);
+}
+
+var sfx = {
+  /* 元素出現：溫暖的馬林巴 */
+  pop: function(i){
+    var base = 523.25;
+    var steps = [0,2,4,7,9,12];
+    var semi = steps[(i||0) % steps.length];
+    var f = base * Math.pow(2, semi/12);
+    tone({ f:f, dur:.22, type:'sine', vol:.085 });
+    tone({ f:f*2, dur:.10, type:'sine', vol:.028, delay:.01 });
+  },
+  /* 數字跳出來 */
+  blip: function(i){
+    tone({ f: 880 * Math.pow(2, ((i||0)%6)*2/12), dur:.11, type:'triangle', vol:.055 });
+  },
+  /* 正確 / 對齊 */
+  good: function(){
+    tone({ f:659.25, dur:.13, vol:.075 });
+    tone({ f:987.77, dur:.20, vol:.07, delay:.09 });
+  },
+  /* 成功完成 */
+  chime: function(){
+    [523.25, 659.25, 783.99, 1046.5].forEach(function(f,i){
+      tone({ f:f, dur:.42, type:'sine', vol:.075, delay:i*.085 });
+    });
+  },
+  /* 錯誤 / 太大 */
+  buzz: function(){
+    tone({ f:190, to:120, dur:.26, type:'sawtooth', vol:.055 });
+    tone({ f:196, to:124, dur:.26, type:'square', vol:.022 });
+  },
+  /* 掃過去 */
+  whoosh: function(){
+    if (muted) return;
+    var a = ac(); if (!a) return;
+    var s = noise(); if (!s) return;
+    var f = a.createBiquadFilter();
+    f.type = 'bandpass';
+    f.frequency.setValueAtTime(420, a.currentTime);
+    f.frequency.exponentialRampToValueAtTime(2600, a.currentTime + .34);
+    f.Q.value = 1.1;
+    var g = a.createGain();
+    g.gain.setValueAtTime(.0001, a.currentTime);
+    g.gain.exponentialRampToValueAtTime(.055, a.currentTime + .05);
+    g.gain.exponentialRampToValueAtTime(.0001, a.currentTime + .36);
+    s.connect(f); f.connect(g); g.connect(a.destination);
+    s.start(); s.stop(a.currentTime + .4);
+  },
+  /* 轉一下 */
+  tick: function(){
+    tone({ f:1400, dur:.05, type:'square', vol:.035 });
+  },
+  /* 彈一下 */
+  boing: function(){
+    tone({ f:420, to:820, dur:.16, type:'sine', vol:.075 });
+  },
+  /* 吞掉 / 消失 */
+  swoosh: function(){
+    tone({ f:900, to:300, dur:.24, type:'sine', vol:.05 });
+  }
+};
+
+/* =========================================================
+   共用小工具
+   ========================================================= */
+function el(tag, cls, html){
+  var n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (html !== undefined) n.innerHTML = html;
+  return n;
+}
+function stagger(nodes, cls, gap){
+  nodes.forEach(function(n,i){
+    setTimeout(function(){ n.classList.add(cls); sfx.blip(i); }, i * (gap||70));
+  });
+}
+
+/* =========================================================
+   場景 1：直式乘法 —— 第二行為何要縮一格
+   ========================================================= */
+var SC1 = {
+  id:'mulcol', icon:'✖️', color:'#4f46e5',
+  title:'直式乘法：第二行為何要縮一格',
+  desc:'19 × 24 逐步拆解，看清那個「隱形的 0」',
+  steps:[
+    { t:'看清楚題目', c:'我們要計算 <b>19 × 24</b>。先寫成直式。', d:1800 },
+    { t:'先乘個位：19 × 4', c:'24 的個位是 <b>4</b>，先用它乘 19：<b class="g">19 × 4 = 76</b>。', d:2400 },
+    { t:'再乘十位：那個 2 其實是 20', c:'24 的十位是 <b>2</b>，但它站在十位，真正的值是 <b class="r">20</b>，不是 2。', d:2600 },
+    { t:'19 × 20 = 380', c:'所以第二行要算 <b class="g">19 × 20 = 380</b>。注意那個 <b>0</b> ——它要寫在個位。', d:2600 },
+    { t:'兩行相加', c:'<b>380 + 76 = 456</b>。所以 <b class="g">19 × 24 = 456</b>。', d:2400 },
+    { t:'記住這個口訣', c:'第二行要向左縮一格。<br>不是死記——是因為它代表「<b>× 幾十</b>」，所以最後一定有 0。', d:2600 }
+  ],
+  mount: function(stage){
+    var rows = [
+      ['','','1','9'],
+      ['×','','2','4'],
+      [null,'3','8','0'],
+      ['','','7','6'],
+      [null,'4','5','6']
+    ];
+    var wrap = el('div','vmult');
+    var cells = {};
+    rows.forEach(function(r,ri){
+      if (ri === 2 || ri === 4) {
+        var ln = el('div','vline');
+        wrap.appendChild(ln);
+        cells['line'+ri] = ln;
+      }
+      r.forEach(function(ch,ci){
+        var s = el('span', null, ch === null ? '' : ch);
+        if (ci === 0 && (ri === 1)) s.className = 'op';
+        if (ri === 2 || ri === 4) s.classList.add('res');
+        wrap.appendChild(s);
+        cells['r'+ri+'c'+ci] = s;
+      });
+    });
+    stage.appendChild(wrap);
+    var tag = el('div','tagbox');
+    stage.appendChild(tag);
+    return { cells: cells, tag: tag };
+  },
+  render: function(ref, i){
+    var c = ref.cells;
+    function show(k, on){ if (c[k]) c[k].classList.toggle('hid', !on); }
+    function hl(k, on){ if (c[k]) c[k].classList.toggle('hl', !!on); }
+
+    // 基本顯示
+    show('r0c2',true); show('r0c3',true); show('r1c0',true); show('r1c2',true); show('r1c3',true);
+    contract(ref.tag, '');
+
+    // 各行
+    show('r3c2', i>=1); show('r3c3', i>=1);
+    show('r2c1', i>=3); show('r2c2', i>=3); show('r2c3', i>=3);
+    show('r4c1', i>=4); show('r4c2', i>=4); show('r4c3', i>=4);
+
+    c.line2.classList.toggle('on', i>=3);
+    c.line4.classList.toggle('on', i>=4);
+
+    // 高亮
+    hl('r1c3', i===1);
+    hl('r1c2', i===2);
+
+    // 隱形 0
+    if (c.r2c3) c.r2c3.classList.toggle('ghost0', i===5);
+
+    var txt = '';
+    if (i===1) txt = '19 × 4 = 76';
+    if (i===2) txt = '十位的 2 代表 20';
+    if (i===3) txt = '19 × 20 = 380';
+    if (i===4) txt = '380 + 76 = 456';
+    if (i===5) txt = '這個 0 是「× 幾十」的證明';
+    contract(ref.tag, txt);
+  }
+};
+function contract(node, txt){
+  node.textContent = txt;
+  node.classList.toggle('on', !!txt);
+}
+
+/* =========================================================
+   場景 2：乘法巧算 —— 25 × 4 = 100
+   ========================================================= */
+var SC2 = {
+  id:'smartmul', icon:'⚡', color:'#f59e0b',
+  title:'乘法巧算：湊成 100',
+  desc:'25 × 17 × 4 —— 換個次序，答案自己跳出來',
+  steps:[
+    { t:'直接算好麻煩', c:'<b>25 × 17 × 4</b>。由左至右算：25 × 17 = 425，再 × 4 = 1700。好慢。', d:2400 },
+    { t:'先看看有沒有好朋友', c:'<b>25</b> 和 <b>4</b> 是一對好拍檔：<b class="g">25 × 4 = 100</b>。', d:2200 },
+    { t:'交換位置', c:'乘法可以交換次序。把 <b>17</b> 和 <b>25</b> 調位：<b>17 × 25 × 4</b>。', d:2400 },
+    { t:'先算那一對', c:'把 <b>25 × 4</b> 先算 → 變成 <b class="g">100</b>。', d:2200 },
+    { t:'答案自動出現', c:'<b>17 × 100 = 1700</b>。<br>心算 3 秒，比直式快得多。', d:2600 },
+    { t:'記住這幾個組合', c:'25 × 4 = 100<br>50 × 2 = 100<br>20 × 5 = 100<br>125 × 8 = <b>1000</b><br>看到就馬上抓住它們！', d:3400 }
+  ],
+  mount: function(stage){
+    var row = el('div','tokrow');
+    var a = el('div','tok', '25');
+    var o1 = el('div','tok op2', '×');
+    var b = el('div','tok', '17');
+    var o2 = el('div','tok op2', '×');
+    var cc = el('div','tok', '4');
+    // 初始位置（百分比）
+    a.style.left = '14%'; a.style.top = '42%';
+    o1.style.left = '30%'; o1.style.top = '42%';
+    b.style.left = '46%'; b.style.top = '42%';
+    o2.style.left = '62%'; o2.style.top = '42%';
+    cc.style.left = '78%'; cc.style.top = '42%';
+    [a,o1,b,o2,cc].forEach(function(n){ row.appendChild(n); });
+    stage.appendChild(row);
+    var tag = el('div','tagbox');
+    stage.appendChild(tag);
+    return { a:a, b:b, c:cc, o1:o1, o2:o2, tag:tag, row:row };
+  },
+  render: function(r, i){
+    // 重設
+    r.a.textContent = '25';
+    r.a.classList.remove('pair');
+    r.a.style.opacity = '1';
+    r.a.style.left = '14%';
+    r.b.style.left = '46%';
+    r.c.style.left = '78%';
+    r.c.style.opacity = '1';
+    r.o1.style.left = '30%';
+    r.o2.style.opacity = '1';
+    r.o2.style.left = '62%';
+
+    if (i >= 1) { r.a.classList.add('pair'); r.c.classList.add('pair'); }
+    if (i >= 2) { r.b.style.left = '14%'; r.a.style.left = '46%'; }
+    if (i >= 3) {
+      r.o1.style.opacity = '0';
+      r.o2.style.opacity = '0';
+      r.b.style.left = '20%';
+      r.a.style.left = '58%';
+      r.c.style.left = '76%';
+      r.a.textContent = '25 × 4';
+      r.a.style.minWidth = 'clamp(96px,18vw,132px)';
+      r.a.style.padding = '0 14px';
+      if (i >= 4) { r.a.textContent = '100'; r.a.classList.add('big'); }
+      else { r.a.classList.remove('big'); }
+      if (i >= 4) { r.b.style.left = '16%'; r.a.style.left = '56%'; r.c.style.opacity = '0'; }
+    } else {
+      r.a.style.minWidth = ''; r.a.style.padding = '';
+      r.a.classList.remove('big');
+    }
+    var txt = '';
+    if (i===1) txt = '25 × 4 = 100　它們是一對！';
+    if (i===2) txt = '交換次序：17 × 25 × 4';
+    if (i===3) txt = '先算 25 × 4';
+    if (i===4) txt = '17 × 100 = 1700';
+    contract(r.tag, txt);
+  }
+};
+
+/* =========================================================
+   場景 3：除法試商 —— 商太大要減 1
+   ========================================================= */
+var SC3 = {
+  id:'trialq', icon:'➗', color:'#0ea5e9',
+  title:'試商：為甚麼有時要減 1',
+  desc:'427 ÷ 72 —— 試 6 太大，改用 5',
+  steps:[
+    { t:'題目', c:'要算 <b>427 ÷ 72</b>。除數是兩位數，先用「試商法」。', d:2000 },
+    { t:'把除數約到整十', c:'<b>72</b> 大約是 <b>70</b>。用 70 來估商會比較容易。', d:2400 },
+    { t:'用 70 估一估', c:'70 × 6 = 420，很接近 427。<br>所以先<b>試 6</b>。', d:2400 },
+    { t:'但除數不是 70，是 72！', c:'真正要乘的是 72：<b class="r">72 × 6 = 432</b>。<br>432 <b class="r">超過</b> 427 了 —— 不夠減！', d:3000 },
+    { t:'太大就要減 1', c:'商太大了，<b>改用 5</b>。這就是試商法的關鍵一步。', d:2400 },
+    { t:'再乘一次', c:'<b class="g">72 × 5 = 360</b>，<b>427 − 360 = 67</b>。', d:2400 },
+    { t:'檢查餘數', c:'餘數 <b>67</b> 比除數 <b>72</b> 小 ✓<br>所以 <b class="g">427 ÷ 72 = 5 … 67</b>。', d:2800 }
+  ],
+  mount: function(stage){
+    var axis = el('div','axis');
+    var line = el('div','axisline');
+    axis.appendChild(line);
+    var lo = 300, hi = 460;
+    function pct(v){ return ((v-lo)/(hi-lo))*100; }
+    [360, 420, 427, 432].forEach(function(v){
+      var t = el('div','tick'); t.style.left = pct(v)+'%'; axis.appendChild(t);
+      var l = el('div','tlabel', String(v)); l.style.left = pct(v)+'%'; axis.appendChild(l);
+    });
+    var p420 = el('div','pins'); p420.style.left = pct(420)+'%';
+    var p360 = el('div','pins'); p360.style.left = pct(360)+'%';
+    var p432 = el('div','pins bad'); p432.style.left = pct(432)+'%';
+    axis.appendChild(p360); axis.appendChild(p420); axis.appendChild(p432);
+
+    var l420 = el('div','mlabel','試 6　70 × 6 = 420'); l420.style.left = pct(420)+'%'; axis.appendChild(l420);
+    var l432 = el('div','mlabel','72 × 6 = 432　太大！'); l432.style.left = pct(432)+'%'; axis.appendChild(l432);
+    var l360 = el('div','mlabel','72 × 5 = 360'); l360.style.left = pct(360)+'%'; axis.appendChild(l360);
+
+    stage.appendChild(axis);
+    var tag = el('div','tagbox'); stage.appendChild(tag);
+    return { p420:p420, p432:p432, p360:p360, l420:l420, l432:l432, l360:l360, tag:tag };
+  },
+  render: function(r, i){
+    r.p420.classList.toggle('on', i>=2 && i<4);
+    r.p420.classList.toggle('good', i===2);
+    r.p432.classList.toggle('on', i>=3 && i<5);
+    r.p360.classList.toggle('on', i>=5);
+    r.p360.classList.toggle('good', i>=5);
+    r.l420.classList.toggle('on', i===2);
+    r.l432.classList.toggle('on', i>=3 && i<5);
+    r.l360.classList.toggle('on', i>=5);
+    var txt = '';
+    if (i===1) txt = '72 ≈ 70';
+    if (i===2) txt = '70 × 6 = 420 ≤ 427 → 試 6';
+    if (i===3) txt = '72 × 6 = 432 > 427 → 太大';
+    if (i===4) txt = '商減 1 → 改用 5';
+    if (i===5) txt = '72 × 5 = 360';
+    if (i===6) txt = '餘數 67 < 72 ✓';
+    contract(r.tag, txt);
+  }
+};
+
+/* =========================================================
+   場景 4：餘數必須小於除數
+   ========================================================= */
+var SC4 = {
+  id:'remainder', icon:'🍬', color:'#db2777',
+  title:'餘數一定要小於除數',
+  desc:'47 粒糖分每 5 粒一包，看看 9 … 7 為甚麼是錯',
+  steps:[
+    { t:'47 粒糖', c:'要把 <b>47</b> 粒糖，每 <b>5</b> 粒裝一包。', d:2000 },
+    { t:'開始分包', c:'每 5 粒圈成一組，一直分下去。', d:2400 },
+    { t:'分完了', c:'裝滿了 <b>9</b> 包，剩下 <b>2</b> 粒。<br><b class="g">47 ÷ 5 = 9 … 2</b>', d:2600 },
+    { t:'如果有人寫成 9 … 7 呢？', c:'假設剩 7 粒。但每包只要 5 粒 —— 7 粒<b class="r">還夠再裝一包</b>！', d:3000 },
+    { t:'看，它們自己組成一包了', c:'剩下的 7 粒裡面，<b>5 粒</b>又可以裝成新的一包。<br>所以 7 根本不可能是餘數。', d:3000 },
+    { t:'結論', c:'<b>餘數一定小於除數。</b><br>算完除法，第一件事就是檢查：<b class="g">餘數 < 除數</b> 嗎？', d:3000 }
+  ],
+  mount: function(stage){
+    var wrap = el('div','dots');
+    var dots = [];
+    for (var k=0;k<47;k++){
+      var d = el('div','dot');
+      wrap.appendChild(d); dots.push(d);
+    }
+    stage.appendChild(wrap);
+    var tag = el('div','tagbox'); stage.appendChild(tag);
+    return { dots: dots, tag: tag };
+  },
+  render: function(r, i){
+    r.dots.forEach(function(d, idx){
+      d.className = 'dot';
+      var group = Math.floor(idx/5);
+      if (i >= 1 && idx < 45) d.classList.add(group%2 ? 'g2' : 'g1');
+      if (idx >= 45) {
+        if (i >= 2 && i < 3) d.classList.add('left');
+        if (i === 3) d.classList.add('left');
+        if (i >= 4) d.classList.add('extra');
+      }
+    });
+    var txt = '';
+    if (i===0) txt = '47 粒，每 5 粒一包';
+    if (i===1) txt = '每 5 粒一組';
+    if (i===2) txt = '9 包，剩 2 粒';
+    if (i===3) txt = '剩 7 粒？7 比 5 大！';
+    if (i===4) txt = '7 粒還能再裝一包 → 7 不是餘數';
+    if (i===5) txt = '餘數一定小於除數';
+    contract(r.tag, txt);
+  }
+};
+
+/* =========================================================
+   場景 5：正方形是菱形
+   ========================================================= */
+var SQ  = [60,60, 240,60, 240,220, 60,220];
+var RH  = [60,60, 240,60, 320,208, 140,208];
+var SC5 = {
+  id:'rhombus', icon:'🔷', color:'#9333ea',
+  title:'正方形是菱形嗎？',
+  desc:'把正方形推一推，就明白溫氏圖',
+  steps:[
+    { t:'先看一個正方形', c:'四條邊一樣長，四個角都是直角。', d:2200 },
+    { t:'輕輕一推', c:'沿水平方向推一下 —— 邊的長度<b>完全沒有變</b>，只是角變斜了。', d:3000 },
+    { t:'這就是菱形', c:'四條邊仍然一樣長，兩對對邊仍然平行。<br>所以它就是<b>菱形</b>。', d:2600 },
+    { t:'但角不再是直角', c:'正方形有的「四個直角」，菱形<b class="r">不一定有</b>。', d:2400 },
+    { t:'所以……', c:'<b class="g">所有正方形都是菱形</b>（正方形是菱形的一種）。<br>但<b class="r">不是</b>所有菱形都是正方形。', d:3000 },
+    { t:'用溫氏圖看最清楚', c:'大圈是菱形，小圈是正方形 —— 正方形被包在菱形裡面。', d:2800 }
+  ],
+  mount: function(stage){
+    var wrap = el('div','shapewrap');
+    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 380 300');
+    svg.setAttribute('aria-label','正方形推斜成菱形');
+
+    // 圖形組
+    var gShape = document.createElementNS('http://www.w3.org/2000/svg','g');
+    var poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    poly.setAttribute('points', SQ.join(' '));
+    poly.setAttribute('fill','#fde68a');
+    poly.setAttribute('stroke','#f59e0b');
+    poly.setAttribute('stroke-width','5');
+    poly.setAttribute('stroke-linejoin','round');
+    gShape.appendChild(poly);
+
+    // 四邊記號
+    var ticks = [];
+    for (var k=0;k<4;k++){
+      var t = document.createElementNS('http://www.w3.org/2000/svg','line');
+      t.setAttribute('stroke','#16a34a');
+      t.setAttribute('stroke-width','5');
+      t.setAttribute('stroke-linecap','round');
+      t.setAttribute('opacity','0');
+      gShape.appendChild(t);
+      ticks.push(t);
+    }
+    // 直角記號
+    var right = document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    right.setAttribute('points','60,88 88,88 88,60');
+    right.setAttribute('fill','none');
+    right.setAttribute('stroke','#dc2626');
+    right.setAttribute('stroke-width','4');
+    right.setAttribute('opacity','0');
+    gShape.appendChild(right);
+
+    svg.appendChild(gShape);
+
+    // 溫氏圖
+    var gVenn = document.createElementNS('http://www.w3.org/2000/svg','g');
+    gVenn.setAttribute('opacity','0');
+    var big = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+    big.setAttribute('cx','190'); big.setAttribute('cy','155');
+    big.setAttribute('rx','150'); big.setAttribute('ry','105');
+    big.setAttribute('fill','#fde68a'); big.setAttribute('fill-opacity','.55');
+    big.setAttribute('stroke','#f59e0b'); big.setAttribute('stroke-width','4');
+    gVenn.appendChild(big);
+    var small = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    small.setAttribute('x','150'); small.setAttribute('y','120');
+    small.setAttribute('width','110'); small.setAttribute('height','90');
+    small.setAttribute('rx','8');
+    small.setAttribute('fill','#bbf7d0'); small.setAttribute('stroke','#16a34a');
+    small.setAttribute('stroke-width','4');
+    gVenn.appendChild(small);
+    function txt(x,y,s,size,fill,weight){
+      var t = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('x',x); t.setAttribute('y',y);
+      t.setAttribute('font-size',size); t.setAttribute('fill',fill);
+      t.setAttribute('font-weight',weight||'800');
+      t.setAttribute('text-anchor','middle');
+      t.setAttribute('font-family','inherit');
+      t.textContent = s;
+      return t;
+    }
+    gVenn.appendChild(txt(120,70,'菱形','24','#92600a'));
+    gVenn.appendChild(txt(205,170,'正方形','21','#15803d'));
+    svg.appendChild(gVenn);
+
+    wrap.appendChild(svg);
+    stage.appendChild(wrap);
+    var tag = el('div','tagbox'); stage.appendChild(tag);
+    return { poly:poly, ticks:ticks, right:right, gShape:gShape, gVenn:gVenn, tag:tag, morphDone:false };
+  },
+  render: function(r, i){
+    // 形狀 / 溫氏圖切換
+    var venn = i >= 5;
+    r.gShape.style.opacity = venn ? '0' : '1';
+    r.gVenn.setAttribute('opacity', venn ? '1' : '0');
+
+    if (venn) { contract(r.tag, '正方形 ⊂ 菱形'); return; }
+
+    var target = (i >= 1) ? RH : SQ;
+    r.poly.setAttribute('points', target.join(' '));
+    updateTicks(r.ticks, target);
+    r.ticks.forEach(function(t){ t.setAttribute('opacity', (i===0 || i===2) ? '1' : '0'); });
+    r.right.setAttribute('opacity', i===0 ? '1' : '0');
+    if (i>=1) r.right.setAttribute('opacity','0');
+
+    var txt = '';
+    if (i===0) txt = '四邊相等　＋　四個直角';
+    if (i===1) txt = '推一下：邊長完全沒變';
+    if (i===2) txt = '仍然是四邊相等 → 菱形';
+    if (i===3) txt = '但已經沒有直角了';
+    if (i===4) txt = '所有正方形都是菱形';
+    contract(r.tag, txt);
+  }
+};
+function updateTicks(ticks, pts){
+  // pts: x1,y1 ... 每條邊畫一個短記號在中點，方向沿邊
+  for (var k=0;k<4;k++){
+    var x1 = pts[k*2], y1 = pts[k*2+1];
+    var j = (k+1)%4;
+    var x2 = pts[j*2], y2 = pts[j*2+1];
+    var mx = (x1+x2)/2, my = (y1+y2)/2;
+    var dx = x2-x1, dy = y2-y1;
+    var len = Math.sqrt(dx*dx+dy*dy) || 1;
+    var nx = -dy/len*11, ny = dx/len*11;
+    ticks[k].setAttribute('x1', mx-nx); ticks[k].setAttribute('y1', my-ny);
+    ticks[k].setAttribute('x2', mx+nx); ticks[k].setAttribute('y2', my+ny);
+  }
+}
+
+/* =========================================================
+   場景 6：整除性
+   ========================================================= */
+var SC6 = {
+  id:'divrule', icon:'🎯', color:'#16a34a',
+  title:'整除性：一眼看出可不可以除',
+  desc:'375 —— 用「個位」和「數字和」判斷',
+  steps:[
+    { t:'看這個數：375', c:'要判斷它可不可以被 2、5、10 或 3 整除，<b>不用真的去除</b>。', d:2400 },
+    { t:'規則一：看個位', c:'可以被 <b>5</b> 整除 → 個位是 <b>0</b> 或 <b>5</b>。<br>375 的個位是 <b class="g">5</b> ✓ 可以。<br>（可以被 2 整除要個位 0、2、4、6、8 → 375 不可以）', d:3400 },
+    { t:'規則二：把數字加起來', c:'可以被 <b>3</b> 整除 → 把各位數字相加。<br>把 3、7、5 分開來看。', d:2600 },
+    { t:'3 + 7 + 5 = 15', c:'<b>3 + 7 + 5 = 15</b>。', d:2200 },
+    { t:'15 可以被 3 整除嗎？', c:'<b>15 ÷ 3 = 5</b>，沒有餘數 ✓<br>所以 <b class="g">375 可以被 3 整除</b>。', d:2800 },
+    { t:'一句記住', c:'<b>2 → 看個位是不是雙數</b><br><b>5 → 看個位是不是 0 或 5</b><br><b>10 → 看個位是不是 0</b><br><b>3 → 看各位數字相加</b>', d:3800 }
+  ],
+  mount: function(stage){
+    var wrap = el('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:10px';
+    var num = el('div','bignum');
+    ['3','7','5'].forEach(function(ch){
+      num.appendChild(el('span','dg',ch));
+    });
+    wrap.appendChild(num);
+    var sum = el('div','sumline', '3 + 7 + 5 = <b style="color:#16a34a">15</b>');
+    wrap.appendChild(sum);
+    stage.appendChild(wrap);
+    var tag = el('div','tagbox'); stage.appendChild(tag);
+    return { num:num, ds: Array.prototype.slice.call(num.children), sum:sum, tag:tag };
+  },
+  render: function(r, i){
+    r.ds.forEach(function(d){ d.className = 'dg'; });
+    r.sum.classList.remove('on');
+    if (i===1) { r.ds[2].classList.add('up'); }
+    if (i>=2) { r.ds.forEach(function(d){ d.classList.add('sep'); }); }
+    if (i===2) { r.ds.forEach(function(d){ d.classList.remove('sep'); }); }
+    if (i>=3) { r.sum.classList.add('on'); }
+    var txt = '';
+    if (i===0) txt = '判斷整除性，不用真的除';
+    if (i===1) txt = '個位是 5 → 可以被 5 整除';
+    if (i===2) txt = '把各位數字分開';
+    if (i===3) txt = '3 + 7 + 5 = 15';
+    if (i===4) txt = '15 是 3 的倍數 → 375 可以被 3 整除';
+    if (i===5) txt = '四個規則：2、5、10 看個位；3 看數字和';
+    contract(r.tag, txt);
+  }
+};
+
+/* =========================================================
+   場景 7：方向 —— 左轉右轉
+   ========================================================= */
+var SC7 = {
+  id:'turn', icon:'🧭', color:'#0891b2',
+  title:'右轉到底是轉哪一邊',
+  desc:'跟着指針轉一圈，左轉右轉不再搞錯',
+  steps:[
+    { t:'指南針指向北', c:'紅色指針指向 <b>北</b>。現在我們面向北。', d:2200 },
+    { t:'右轉 1 個直角', c:'<b>右轉 = 順時針</b>，等於轉 <b>90°</b>。<br>面向 <b class="g">東</b>。', d:2800 },
+    { t:'再右轉 1 個直角', c:'再轉 90°，面向 <b class="g">南</b>。', d:2400 },
+    { t:'繼續右轉', c:'再轉 90° → <b class="g">西</b>。', d:2200 },
+    { t:'右轉 4 次', c:'西再右轉就回到 <b>北</b>。<br>轉 <b>4 個直角</b> = 轉一圈 <b>360°</b>，回到原本方向。', d:3000 },
+    { t:'左轉是反方向', c:'<b>左轉 = 逆時針</b>。<br>由北左轉 1 個直角 → <b class="g">西</b>。', d:2800 },
+    { t:'轉 2 個直角 = 反方向', c:'轉 <b>2 個直角</b> 就是轉 <b>180°</b>，剛好面向<b>相反</b>的方向。', d:3000 }
+  ],
+  mount: function(stage){
+    var wrap = el('div','compass');
+    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 200 200');
+    svg.style.width = '100%'; svg.style.height = '100%';
+
+    var circ = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circ.setAttribute('cx','100'); circ.setAttribute('cy','100'); circ.setAttribute('r','88');
+    circ.setAttribute('fill','#fff'); circ.setAttribute('stroke','#c7ccf7'); circ.setAttribute('stroke-width','3');
+    svg.appendChild(circ);
+
+    ['北','東','南','西'].forEach(function(s, k){
+      var ang = k*90 * Math.PI/180;
+      var r = 66;
+      var x = 100 + Math.sin(ang)*r;
+      var y = 100 - Math.cos(ang)*r;
+      var t = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('x',x); t.setAttribute('y',y+7);
+      t.setAttribute('text-anchor','middle'); t.setAttribute('font-size','19');
+      t.setAttribute('font-weight','800');
+      t.setAttribute('fill', k===0 ? '#dc2626' : '#5b6285');
+      t.textContent = s;
+      svg.appendChild(t);
+    });
+
+    // 弧線
+    var arc = document.createElementNS('http://www.w3.org/2000/svg','path');
+    arc.setAttribute('d','M 100 26 A 74 74 0 0 1 174 100');
+    arc.setAttribute('class','arc');
+    svg.appendChild(arc);
+
+    // 指針
+    var g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('class','needle');
+    var nd = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    nd.setAttribute('points','100,26 108,100 100,112 92,100');
+    nd.setAttribute('fill','#dc2626');
+    g.appendChild(nd);
+    var nd2 = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    nd2.setAttribute('points','100,174 108,100 100,88 92,100');
+    nd2.setAttribute('fill','#c7ccf7');
+    g.appendChild(nd2);
+    svg.appendChild(g);
+
+    var hub = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    hub.setAttribute('cx','100'); hub.setAttribute('cy','100'); hub.setAttribute('r','7');
+    hub.setAttribute('fill','#4f46e5');
+    svg.appendChild(hub);
+
+    wrap.appendChild(svg);
+    stage.appendChild(wrap);
+    var tag = el('div','tagbox'); stage.appendChild(tag);
+    return { needle:g, arc:arc, tag:tag };
+  },
+  render: function(r, i){
+    var deg = 0;
+    if (i===1) deg = 90;
+    else if (i===2) deg = 180;
+    else if (i===3 || i===4) deg = 270;
+    else if (i>=5) deg = -90;
+
+    r.needle.style.transform = 'rotate(' + deg + 'deg)';
+    r.arc.classList.toggle('on', i===1 || i===5);
+
+    var txt = '';
+    if (i===0) txt = '面向北';
+    if (i===1) txt = '右轉 90° → 東';
+    if (i===2) txt = '再右轉 → 南';
+    if (i===3) txt = '再右轉 → 西';
+    if (i===4) txt = '4 個直角 = 360° = 回到北';
+    if (i===5) txt = '左轉 90° → 西';
+    if (i===6) txt = '2 個直角 = 180° = 完全相反';
+    contract(r.tag, txt);
+  }
+};
+
+/* =========================================================
+   場景 8：最多 vs 最少
+   ========================================================= */
+var SC8 = {
+  id:'maxmin', icon:'📦', color:'#fb923c',
+  title:'「最多」還是「最少」？',
+  desc:'100 個貨物裝箱 —— 同一個除法，兩個不同答案',
+  steps:[
+    { t:'題目', c:'有 <b>100</b> 件貨物，每個箱最多放 <b>12</b> 件。', d:2000 },
+    { t:'先做除法', c:'<b>100 ÷ 12 = 8 … 4</b><br>裝滿 8 個箱，剩下 4 件。', d:2600 },
+    { t:'問「最多裝滿幾箱」', c:'剩下 4 件<b>不夠裝滿</b>一箱。<br>所以最多裝滿 <b class="g">8</b> 箱 —— 餘數<b>丟掉</b>。', d:3200 },
+    { t:'問「最少要幾個箱」', c:'但剩下那 4 件總要有地方放。<br>所以要<b>多開 1 個箱</b>。', d:3000 },
+    { t:'答案是 9 箱', c:'最少需要 <b class="g">8 + 1 = 9</b> 個箱。', d:2400 },
+    { t:'一句記住', c:'<b>最多</b> → 只要商，餘數不要<br><b>最少</b> → 有餘數就 <b>商 + 1</b><br><br>看到題目先圈起「最多」或「最少」！', d:3600 }
+  ],
+  mount: function(stage){
+    var wrap = el('div','boxes');
+    var boxes = [];
+    for (var k=0;k<9;k++){
+      var b = el('div','box');
+      wrap.appendChild(b); boxes.push(b);
+    }
+    var dotsWrap = el('div','dots');
+    dotsWrap.style.cssText = 'margin-top:18px;width:70%;max-width:360px';
+    var dots = [];
+    for (var j=0;j<12;j++){
+      var d = el('div','dot'); dotsWrap.appendChild(d); dots.push(d);
+    }
+    var col = el('div');
+    col.style.cssText = 'display:flex;flex-direction:column;align-items:center;width:100%';
+    col.appendChild(wrap); col.appendChild(dotsWrap);
+    stage.appendChild(col);
+    var tag = el('div','tagbox'); stage.appendChild(tag);
+    return { boxes: boxes, dots: dots, tag: tag };
+  },
+  render: function(r, i){
+    r.boxes.forEach(function(b, k){
+      b.className = 'box';
+      if (i >= 1 && k < 8) b.classList.add('full');
+      if (i >= 4 && k === 8) b.classList.add('full','new');
+    });
+    r.dots.forEach(function(d, k){ d.className = 'dot'; });
+    // 尾 4 件
+    r.dots.forEach(function(d,k){
+      if (k >= 8) {
+        if (i===2) d.classList.add('left');
+        if (i===3) d.classList.add('extra');
+        if (i>=2) d.classList.add('left');
+      }
+    });
+    if (i>=2) r.dots.forEach(function(d,k){ if(k>=8) d.classList.add('left'); });
+
+    var txt = '';
+    if (i===0) txt = '100 件，每箱 12 件';
+    if (i===1) txt = '100 ÷ 12 = 8 … 4';
+    if (i===2) txt = '「最多」→ 8 箱，餘數丟掉';
+    if (i===3) txt = '「最少」→ 餘下的 4 件要多開一個箱';
+    if (i===4) txt = '「最少」→ 8 + 1 = 9 箱';
+    if (i===5) txt = '最多＝捨去　最少＝進一';
+    contract(r.tag, txt);
+  }
+};
+
+/* =========================================================
+   場景列表
+   ========================================================= */
+var SCENES = [SC1, SC2, SC3, SC4, SC5, SC6, SC7, SC8];
+
+/* =========================================================
+   廣東話旁白（每步一句）
+   用 iOS / iPadOS 內建 zh-HK 語音朗讀，唔需要下載檔案
+   ========================================================= */
+var NARR = {
+  mulcol: [
+    '我哋要計十九乘二十四，先寫成直式。',
+    '二十四嘅個位係四，先用四乘十九，十九乘四等於七十六。',
+    '二十四嘅十位係二，但佢企喺十位，真正嘅值係二十，唔係二。',
+    '所以第二行要計十九乘二十，等於三百八十。留意個零，要寫喺個位。',
+    '兩行加埋，三百八十加七十六，等於四百五十六。所以十九乘二十四等於四百五十六。',
+    '記住：第二行要向左縮一格。唔係死記，係因為佢代表乘幾十，所以最後一定有個零。'
+  ],
+  smartmul: [
+    '二十五乘十七乘四。由左至右咁計，二十五乘十七等於四百二十五，再乘四等於一千七百。好慢。',
+    '但係二十五同四係一對好拍檔，二十五乘四等於一百。',
+    '乘法可以交換次序，我哋將十七同二十五調位，變成十七乘二十五乘四。',
+    '先計二十五乘四，就變成一百。',
+    '十七乘一百等於一千七百。心算三秒，比直式快好多。',
+    '記住呢幾個組合：二十五乘四等於一百，五十乘二等於一百，二十乘五等於一百，一百二十五乘八等於一千。見到就即刻捉住佢哋。'
+  ],
+  trialq: [
+    '要計四百二十七除以七十二。除數係兩位數，先用試商法。',
+    '七十二大約係七十，用七十嚟估商會容易啲。',
+    '七十乘六等於四百二十，好接近四百二十七，所以先試六。',
+    '但係真正要乘嘅係七十二，唔係七十。七十二乘六等於四百三十二，超過四百二十七喇，唔夠減。',
+    '商太大喇，要改用五。呢一步就係試商法嘅關鍵。',
+    '再乘一次，七十二乘五等於三百六十，四百二十七減三百六十等於六十七。',
+    '檢查一下，餘數六十七比除數七十二細，冇問題。所以四百二十七除以七十二等於五，餘六十七。'
+  ],
+  remainder: [
+    '有四十七粒糖，每五粒裝一包。',
+    '將每五粒圈成一組，一直分落去。',
+    '裝滿咗九包，剩低兩粒。所以四十七除以五等於九，餘二。',
+    '如果有一個人寫成餘七呢？假設剩七粒，但每包只要五粒，七粒仲夠再裝一包喎。',
+    '你睇，剩低嘅七粒裡面，五粒又裝成新嘅一包。所以七根本冇可能係餘數。',
+    '結論：餘數一定細過除數。算完除法，第一件事就係檢查，餘數細唔細過除數。'
+  ],
+  rhombus: [
+    '先睇一個正方形，四條邊一樣長，四個角都係直角。',
+    '輕輕推一下，邊嘅長度完全冇變，只係啲角變斜咗。',
+    '呢個就係菱形。四條邊仍然一樣長，兩對對邊仍然平行。',
+    '但係啲角已經唔再係直角。',
+    '所以，所有正方形都係菱形，正方形係菱形嘅一種。但係唔係所有菱形都係正方形。',
+    '用溫氏圖睇最清楚，大圈係菱形，小圈係正方形，正方形被包喺菱形裡面。'
+  ],
+  divrule: [
+    '要判斷三百七十五可唔可以被二、五、十或者三整除，唔需要真係去除。',
+    '可以被五整除，個位要係零或者五。三百七十五嘅個位係五，所以可以。至於二，個位要係零二四六八，三百七十五唔可以。',
+    '可以被三整除，就要將各位數字加埋。先將三、七、五分開嚟睇。',
+    '三加七加五等於十五。',
+    '十五除以三等於五，冇餘數。所以三百七十五可以被三整除。',
+    '一句記住：二就睇個位係唔係雙數，五就睇個位係唔係零或者五，十就睇個位係唔係零，三就將各位數字加埋。'
+  ],
+  turn: [
+    '指南針嘅紅色指針指向北，我哋而家面向北。',
+    '右轉即係順時針，等於轉九十度，面向東。',
+    '再右轉一個直角，面向南。',
+    '再轉九十度，面向西。',
+    '西再右轉就返到北。轉四個直角即係轉一圈三百六十度，會返到原本嘅方向。',
+    '左轉就係逆時針。由北左轉一個直角，會面向西。',
+    '轉兩個直角即係轉一百八十度，剛好面向相反嘅方向。'
+  ],
+  maxmin: [
+    '有一百件貨物，每個箱最多放十二件。',
+    '先做除法，一百除以十二等於八，餘四。即係裝滿八個箱，剩低四件。',
+    '如果問最多裝滿幾多箱，剩低嘅四件唔夠裝滿一箱，所以最多係八箱，餘數丟掉。',
+    '但如果問最少要幾個箱，剩低嗰四件總要有地方放，所以要多開一個箱。',
+    '所以最少需要八加一，等於九個箱。',
+    '一句記住：最多就只要商，餘數唔要；最少就有餘數就商加一。見到題目，先圈起最多或者最少。'
+  ]
+};
+
+/* =========================================================
+   旁白引擎（SpeechSynthesis）
+   ========================================================= */
+var V = {
+  on: true,
+  supported: ('speechSynthesis' in window),
+  voice: null,
+  speaking: false,
+  warned: false,
+  tokens: []       // SpeechSynthesisUtterance 必須保留引用，否則 iOS 會靜靜取消
+};
+
+/* 沒有粵語語音時，禮貌地提示一次 */
+function warnNoVoice(){
+  if (V.warned) return;
+  V.warned = true;
+  toastMsg('未找到廣東話語音　設定 → 輔助使用 → 語音內容 → 加入「粵語（香港）」', 5200);
+}
+
+function pickVoice(){
+  if (!V.supported) return null;
+  var vs = window.speechSynthesis.getVoices() || [];
+  if (!vs.length) return null;
+  function score(v){
+    var lang = (v.lang || '').toLowerCase().replace('_','-');
+    var nm = (v.name || '').toLowerCase();
+    var s = 0;
+    if (lang === 'zh-hk' || lang === 'yue-hk' || lang === 'yue') s += 100;
+    else if (lang === 'zh-yue') s += 95;
+    else if (lang === 'zh-tw' || lang === 'zh-hant-tw') s += 60;
+    else if (lang.indexOf('zh') === 0) s += 40;
+    else return -1;
+    if (/cantonese|粵|粤|hong kong|香港/.test(nm)) s += 30;
+    if (/sin-?ji|婷婷|mei-?jia|美佳|ting-?ting/.test(nm)) s += 4;
+    if (v.localService) s += 5;
+    return s;
+  }
+  var best = null, bestScore = -1;
+  vs.forEach(function(v){
+    var s = score(v);
+    if (s > bestScore) { bestScore = s; best = v; }
+  });
+  return bestScore < 0 ? null : best;
+}
+
+function initVoices(){
+  if (!V.supported) return;
+  V.voice = pickVoice();
+  if (!V.voice) {
+    // getVoices 有時要等一秒先有結果
+    setTimeout(function(){ V.voice = pickVoice(); }, 400);
+    setTimeout(function(){ V.voice = pickVoice(); }, 1400);
+  }
+}
+if (V.supported) {
+  initVoices();
+  if (typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
+    window.speechSynthesis.onvoiceschanged = initVoices;
+  }
+}
+
+function stripTags(s){
+  return String(s).replace(/<br\s*\/?>/gi, '，').replace(/<[^>]+>/g, '');
+}
+
+/* 用廣東話讀一句 */
+function speak(text, opts){
+  if (!V.on || !V.supported || !text) return;
+  opts = opts || {};
+  var syn = window.speechSynthesis;
+  try { syn.cancel(); } catch(e) {}
+
+  var u = new SpeechSynthesisUtterance(text);
+  var v = V.voice || pickVoice();
+  if (v) { u.voice = v; u.lang = v.lang; }
+  else {
+    u.lang = 'zh-HK';
+    var vs = syn.getVoices() || [];
+    if (vs.length && !vs.some(function(x){ return /^zh/i.test(x.lang || ''); })) warnNoVoice();
+  }
+  u.rate = opts.rate || 0.92;
+  u.pitch = 1.02;
+  u.volume = 1;
+
+  u.onstart = function(){
+    V.speaking = true;
+    markNarr(true);
+    if (opts.onstart) opts.onstart();
+  };
+  u.onend = u.onerror = function(){
+    V.speaking = false;
+    markNarr(false);
+    if (opts.onend) opts.onend();
+  };
+
+  V.tokens.push(u);
+  if (V.tokens.length > 12) V.tokens.shift();
+  syn.speak(u);
+}
+
+function stopSpeak(){
+  if (!V.supported) return;
+  try { window.speechSynthesis.cancel(); } catch(e) {}
+  V.speaking = false;
+  markNarr(false);
+}
+
+function markNarr(on){
+  var box = document.getElementById('narrBox');
+  if (box) box.classList.toggle('speaking', !!on);
+  var btn = document.getElementById('voiceBtn');
+  if (btn) btn.classList.toggle('talking', !!on);
+}
+
+/* =========================================================
+   播放器
+   ========================================================= */
+var P = {
+  sc: null, ref: null, i: 0, playing: false, timer: null
+};
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  $('#'+id).classList.add('active');
+  window.scrollTo({ top:0, behavior:'instant' });
+}
+
+function buildHub(){
+  var g = $('#hubGrid');
+  g.innerHTML = '';
+  SCENES.forEach(function(sc){
+    var c = el('div','ccard');
+    c.style.setProperty('--cc', sc.color);
+    c.innerHTML = '<div class="ct"><span class="ci">'+sc.icon+'</span>'+sc.title+'</div>'
+      + '<div class="cd">'+sc.desc+'</div>'
+      + '<div class="cn">'+sc.steps.length+' 步 →</div>';
+    c.addEventListener('click', function(){ openScene(sc); });
+    g.appendChild(c);
+  });
+}
+
+function openScene(sc){
+  P.sc = sc; P.i = 0; P.playing = false;
+  clearTimeout(P.timer);
+  stopSpeak();
+
+  $('#pT').textContent = sc.title;
+  $('#pS').textContent = sc.steps.length + ' 步　·　' + sc.desc;
+
+  var stage = $('#stage');
+  stage.innerHTML = '';
+  stage.className = 'stage' + (sc.id === 'mulcol' ? '' : '');
+  P.ref = sc.mount(stage);
+
+  buildDots();
+  show('scr-play');
+  setStep(0, true);
+  sfx.whoosh();
+  if (V.on) setTimeout(function(){ narrateStep(0); }, 380);
+}
+
+function buildDots(){
+  var d = $('#stepsDots');
+  d.innerHTML = '';
+  P.sc.steps.forEach(function(){ d.appendChild(el('div','pd')); });
+}
+
+function narrLine(i){
+  var arr = NARR[P.sc.id];
+  return arr ? arr[i] : '';
+}
+
+function narrateStep(i){
+  var line = narrLine(i);
+  if (!line || !V.on) return;
+  // 先停音效，避免同旁白打架
+  speak(line, { rate: 0.92 });
+}
+
+function setStep(i, silent){
+  P.i = clamp(i, 0, P.sc.steps.length - 1);
+  var s = P.sc.steps[P.i];
+
+  P.sc.render(P.ref, P.i);
+
+  $('#capN').textContent = P.i + 1;
+  $('#capT').textContent = s.t;
+  $('#capB').innerHTML = s.c;
+
+  // 旁白文字
+  var line = narrLine(P.i);
+  var box = $('#narrBox');
+  var tx = $('#narrTx');
+  if (line && V.supported) {
+    box.classList.remove('hidden');
+    tx.textContent = line;
+  } else {
+    box.classList.add('hidden');
+  }
+
+  var dots = $('#stepsDots').children;
+  for (var k=0;k<dots.length;k++){
+    dots[k].className = 'pd' + (k === P.i ? ' on' : (k < P.i ? ' done' : ''));
+  }
+
+  $('#prevBtn').disabled = P.i === 0;
+  $('#nextBtn').disabled = P.i === P.sc.steps.length - 1;
+
+  if (!silent) {
+    P.sc.sound ? P.sc.sound(P.i) : sfx.pop(P.i);
+    // 自動播放時由 tick() 負責朗讀（佢要等 onend 才跳步），
+    // 呢度只負責手動點擊時的旁白，否則會重複讀兩次
+    if (!P.playing) narrateStep(P.i);
+  }
+}
+
+/* 用真正的「朗讀完畢」事件推進，不再靠估算時間
+   每個 speakThen 有自己嘅計時器，唔會同外面嘅 P.timer 打架 */
+function speakThen(text, done, fallbackMs){
+  var finished = false;
+  var guardId = null;
+  var tailId = null;
+  var started = false;
+
+  function finish(){
+    if (finished) return;
+    finished = true;
+    if (guardId) { clearInterval(guardId); guardId = null; }
+    if (tailId) { clearTimeout(tailId); tailId = null; }
+    if (done) done();
+  }
+
+  // 沒有旁白 / 不支援 / 關掉了 → 用步驟本身的停頓時間
+  if (!V.on || !V.supported || !text) {
+    tailId = setTimeout(finish, fallbackMs || 2200);
+    return;
+  }
+
+  var syn = window.speechSynthesis;
+  try { syn.cancel(); } catch(e) {}
+
+  var u = new SpeechSynthesisUtterance(text);
+  var v = V.voice || pickVoice();
+  if (v) { u.voice = v; u.lang = v.lang; } else { u.lang = 'zh-HK'; }
+  u.rate = 0.92; u.pitch = 1.02; u.volume = 1;
+
+  u.onstart = function(){
+    started = true;
+    V.speaking = true;
+    markNarr(true);
+  };
+  u.onend = function(){
+    V.speaking = false;
+    markNarr(false);
+    if (finished) return;
+    // 講完之後留一點呼吸位，讓小朋友消化
+    tailId = setTimeout(finish, 420);
+  };
+  u.onerror = function(){
+    V.speaking = false;
+    markNarr(false);
+    if (finished) return;
+    tailId = setTimeout(finish, 420);
+  };
+
+  V.tokens.push(u);
+  if (V.tokens.length > 12) V.tokens.shift();
+  syn.speak(u);
+
+  // 保險：極少數瀏覽器唔會觸發 onend。
+  // 只喺「已經開始讀，但引擎明顯已經唔再忙，而且等咗一段合理時間」才接手，
+  // 避免將本來正在讀的一句當成完成。
+  var startedAt = 0;
+  guardId = setInterval(function(){
+    if (finished) { clearInterval(guardId); guardId = null; return; }
+    if (!started) return;
+    var busy = true;
+    try { busy = !!(syn.speaking || syn.pending); } catch(e) { busy = false; }
+
+    if (busy) { startedAt = 0; return; }
+    if (!startedAt) { startedAt = Date.now(); return; }
+
+    // 引擎靜咗超過 1.5 秒都冇 onend → 真係卡住，接手
+    if (Date.now() - startedAt > 1500) {
+      clearInterval(guardId); guardId = null;
+      V.speaking = false;
+      markNarr(false);
+      finish();
+    }
+  }, 250);
+}
+
+function playFrom(i){
+  P.playing = true;
+  $('#playBtn').textContent = '⏸ 暫停';
+  // setStep(i, true) = 唔發音效、唔朗讀，跟住由 tick() 負責朗讀
+  if (i !== undefined) setStep(i, true);
+  tick();
+}
+
+function tick(){
+  if (!P.playing) return;
+
+  // 讀完「目前這一步」才跳下一步
+  var stepDelay = (P.sc.steps[P.i].d || 2200);
+
+  speakThen(narrLine(P.i), function(){
+    if (!P.playing) return;
+
+    if (P.i >= P.sc.steps.length - 1) {
+      P.playing = false;
+      $('#playBtn').textContent = '▶ 播放';
+      if (!muted) sfx.chime();
+      return;
+    }
+
+    setStep(P.i + 1);
+    tick();
+  }, stepDelay);
+}
+
+function stopPlay(){
+  P.playing = false;
+  clearTimeout(P.timer);
+  stopSpeak();
+  $('#playBtn').textContent = '▶ 播放';
+}
+
+/* ---------- 事件 ---------- */
+$('#playBtn').addEventListener('click', function(){
+  ac();
+  if (P.playing) { stopPlay(); return; }
+  var from = (P.i >= P.sc.steps.length - 1) ? 0 : P.i;
+  if (from === 0 && P.i === P.sc.steps.length - 1) setStep(0, true);
+  playFrom(from);
+});
+$('#nextBtn').addEventListener('click', function(){ stopPlay(); setStep(P.i + 1); });
+$('#prevBtn').addEventListener('click', function(){ stopPlay(); setStep(P.i - 1); });
+$('#resetBtn').addEventListener('click', function(){ stopPlay(); setStep(0); sfx.whoosh(); });
+$('#backBtn').addEventListener('click', function(){ stopPlay(); stopSpeak(); show('scr-hub'); });
+$('#homeBtn').addEventListener('click', function(){ stopPlay(); stopSpeak(); show('scr-hub'); });
+window.addEventListener('pagehide', stopSpeak);
+window.addEventListener('beforeunload', stopSpeak);
+document.addEventListener('visibilitychange', function(){
+  if (document.hidden) stopSpeak();
+});
+
+$('#soundBtn').addEventListener('click', function(e){
+  muted = !muted;
+  e.currentTarget.textContent = muted ? '🔈' : '🔊';
+  e.currentTarget.classList.toggle('off', muted);
+  if (!muted) { ac(); sfx.pop(0); }
+});
+
+/* 旁白開關 */
+$('#voiceBtn').addEventListener('click', function(e){
+  V.on = !V.on;
+  e.currentTarget.textContent = V.on ? '🗣️' : '🚫';
+  e.currentTarget.classList.toggle('off', !V.on);
+  var box = document.getElementById('narrBox');
+  if (!V.on) {
+    stopSpeak();
+    if (box) box.classList.add('hidden');
+    toastMsg('旁白已關閉');
+  } else {
+    initVoices();
+    if (box && narrLine(P.i)) box.classList.remove('hidden');
+    toastMsg('旁白已開啟');
+    setTimeout(function(){ narrateStep(P.i); }, 160);
+  }
+});
+
+/* 輕按旁白文字 → 再讀一次 */
+var nb = document.getElementById('narrBox');
+if (nb) {
+  nb.style.cursor = 'pointer';
+  nb.addEventListener('click', function(){
+    if (!V.on) { V.on = true; var vb = document.getElementById('voiceBtn'); vb.textContent='🗣️'; vb.classList.remove('off'); }
+    narrateStep(P.i);
+  });
+}
+
+/* 簡單提示 */
+function toastMsg(msg, dur){
+  var t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;left:50%;bottom:calc(120px + env(safe-area-inset-bottom));'
+    + 'transform:translate(-50%,14px);background:#1b2140;color:#fff;padding:13px 22px;'
+    + 'border-radius:22px;font-size:15px;font-weight:700;z-index:99;opacity:0;'
+    + 'transition:.28s;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.22);'
+    + 'max-width:min(86vw,460px);white-space:normal;text-align:center;line-height:1.65';
+  document.body.appendChild(t);
+  requestAnimationFrame(function(){ t.style.opacity = '1'; t.style.transform = 'translate(-50%,0)'; });
+  setTimeout(function(){
+    t.style.opacity = '0';
+    t.style.transform = 'translate(-50%,14px)';
+    setTimeout(function(){ t.remove(); }, 320);
+  }, dur || 1700);
+}
+
+document.addEventListener('keydown', function(e){
+  if (!$('#scr-play').classList.contains('active')) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); stopPlay(); setStep(P.i+1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); stopPlay(); setStep(P.i-1); }
+  else if (e.key === 'r' || e.key === 'R') { e.preventDefault(); narrateStep(P.i); }
+  else if (e.key === 'Escape') { stopPlay(); stopSpeak(); show('scr-hub'); }
+});
+
+/* ---------- 錯題 badge ---------- */
+try {
+  var raw = localStorage.getItem('p4p_mistakes');
+  var ms = raw ? JSON.parse(raw) : [];
+  var b = document.getElementById('tabBadge');
+  if (b && ms && ms.length) { b.textContent = ms.length > 99 ? '99+' : ms.length; b.hidden = false; }
+} catch(e) {}
+
+buildHub();
+})();
+</script>
+</body>
+</html>

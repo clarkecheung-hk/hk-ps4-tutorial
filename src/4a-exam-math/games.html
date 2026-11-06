@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="數學遊戲">
+<meta name="theme-color" content="#0f1226">
+<meta name="format-detection" content="telephone=no">
+<title>P4 數學遊戲挑戰 ｜ 考試特訓</title>
+<style>
+  :root{
+    --bg:#0f1226;
+    --card:#1e2342;
+    --card-hi:#262c52;
+    --line:#333a63;
+    --ink:#eef1ff;
+    --ink-soft:#a3aad2;
+    --indigo:#6366f1;
+    --indigo-hi:#818cf8;
+    --green:#22c55e;
+    --red:#ef4444;
+    --amber:#fbbf24;
+    --sky:#38bdf8;
+    --pink:#f472b6;
+    --purple:#a78bfa;
+    --teal:#2dd4bf;
+    --orange:#fb923c;
+    --r:20px;
+    --shadow:0 10px 34px rgba(0,0,0,.35);
+    --safe-t:env(safe-area-inset-top,0px);
+    --safe-b:env(safe-area-inset-bottom,0px);
+    --safe-l:env(safe-area-inset-left,0px);
+    --safe-r:env(safe-area-inset-right,0px);
+    --pad:clamp(16px,3vw,26px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:"PingFang HK","PingFang TC","Microsoft JhengHei","Noto Sans TC",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    background:
+      radial-gradient(1000px 600px at 15% -10%, #2a2060 0%, transparent 55%),
+      radial-gradient(900px 600px at 90% 0%, #10344d 0%, transparent 50%),
+      radial-gradient(700px 700px at 50% 120%, #3a1450 0%, transparent 55%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-size:17px;
+    line-height:1.65;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    overscroll-behavior:none;
+    touch-action:manipulation;
+  }
+  button{font-family:inherit;touch-action:manipulation}
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:40;
+    background:rgba(15,18,38,.86);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
+    padding-top:var(--safe-t);
+  }
+  .topbar-in{
+    max-width:1000px;margin:0 auto;
+    padding:8px max(var(--pad),var(--safe-r)) 8px max(var(--pad),var(--safe-l));
+    display:flex;align-items:center;gap:10px;min-height:56px;
+  }
+  .brand{font-weight:800;font-size:19px;letter-spacing:.4px;display:flex;align-items:center;gap:9px;white-space:nowrap}
+  .brand .logo{
+    width:36px;height:36px;border-radius:11px;
+    background:linear-gradient(135deg,var(--indigo),var(--pink));
+    display:grid;place-items:center;font-size:18px;flex:0 0 auto;
+  }
+  .topbar .spacer{flex:1}
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 16px;border-radius:999px;font-size:16px;font-weight:700;
+    background:rgba(255,255,255,.07);border:1px solid var(--line);
+    white-space:nowrap;
+  }
+  .pill .n{color:var(--amber);font-variant-numeric:tabular-nums}
+  .iconbtn{
+    width:50px;height:50px;border-radius:14px;border:1px solid var(--line);
+    background:rgba(255,255,255,.05);color:var(--ink);font-size:21px;
+    cursor:pointer;display:grid;place-items:center;transition:background .15s,transform .1s;
+    flex:0 0 auto;
+  }
+  .iconbtn:active{transform:scale(.92);background:rgba(255,255,255,.14)}
+  .iconbtn.off{opacity:.45}
+
+  /* ---------- screens ---------- */
+  .screen{
+    max-width:1000px;margin:0 auto;
+    padding:20px max(var(--pad),var(--safe-r)) calc(104px + var(--safe-b)) max(var(--pad),var(--safe-l));
+    display:none;
+  }
+  .screen.active{display:block;animation:fade .26s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ---------- hub ---------- */
+  .hero{text-align:center;padding:10px 0 18px}
+  .hero h1{
+    margin:0 0 10px;font-size:clamp(30px,5.2vw,46px);line-height:1.25;
+    background:linear-gradient(100deg,#a5b4fc,#f0abfc 45%,#fbbf24);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    font-weight:900;letter-spacing:.5px;
+  }
+  .hero p{margin:0;color:var(--ink-soft);font-size:17px}
+
+  .xpwrap{
+    max-width:600px;margin:20px auto 4px;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:16px;padding:16px 22px;box-shadow:var(--shadow);
+  }
+  .xprow{display:flex;justify-content:space-between;font-size:15.5px;color:var(--ink-soft);margin-bottom:10px;gap:10px}
+  .xprow b{color:var(--ink);font-size:17px}
+  .xpbar{height:14px;border-radius:99px;background:#0d1029;overflow:hidden;border:1px solid var(--line)}
+  .xpfill{
+    height:100%;width:0%;border-radius:99px;
+    background:linear-gradient(90deg,var(--indigo),var(--purple),var(--pink));
+    transition:width .5s cubic-bezier(.4,1.4,.5,1);
+  }
+
+  .grid{display:grid;grid-template-columns:1fr;gap:13px;margin-top:20px}
+  @media(min-width:620px){.grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+  .gamecard{
+    position:relative;overflow:hidden;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:var(--r);padding:18px 18px 16px;
+    transition:transform .16s,box-shadow .16s,border-color .16s;
+    text-align:left;min-height:132px;
+    display:flex;flex-direction:column;
+  }
+  .gamecard::before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:var(--gc,var(--indigo))}
+  .gamecard::after{
+    content:"";position:absolute;right:-40px;top:-40px;width:130px;height:130px;border-radius:50%;
+    background:var(--gc,var(--indigo));opacity:.10;pointer-events:none;
+  }
+  .gamecard:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--gc)}
+  .gamecard:active{transform:scale(.985)}
+  .gc-head{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+  .gc-ico{
+    width:50px;height:50px;border-radius:14px;display:grid;place-items:center;
+    font-size:25px;background:rgba(255,255,255,.07);border:1px solid var(--line);flex:0 0 auto;
+  }
+  .gc-title{font-size:19px;font-weight:800;line-height:1.35}
+  .gc-desc{font-size:15.5px;color:var(--ink-soft);margin:0 0 12px;flex:1;line-height:1.6}
+  .gc-foot{display:flex;align-items:center;gap:8px;font-size:14.5px;color:var(--ink-soft)}
+  .gc-best{margin-left:auto;color:var(--amber);font-weight:700}
+
+  /* ---------- game screen ---------- */
+  .gamehead{display:flex;align-items:center;gap:13px;margin-bottom:16px}
+  .gamehead h2{margin:0;font-size:23px;font-weight:800;line-height:1.3}
+  .gamehead .sub{font-size:15px;color:var(--ink-soft);font-weight:400}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px 10px;text-align:center}
+  .stat .k{font-size:14px;color:var(--ink-soft);letter-spacing:.5px}
+  .stat .v{font-size:27px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.25}
+  .stat .v.amber{color:var(--amber)}
+  .stat .v.green{color:var(--green)}
+  .stat .v.sky{color:var(--sky)}
+
+  .timerbar{height:7px;border-radius:99px;background:#0d1029;overflow:hidden;margin-bottom:16px;border:1px solid var(--line)}
+  .timerfill{height:100%;width:100%;background:linear-gradient(90deg,var(--green),var(--amber),var(--red));transition:width .28s linear}
+  .timerfill.low{animation:pulse .7s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+  .qcard{
+    background:linear-gradient(160deg,var(--card-hi),var(--card));
+    border:1px solid var(--line);border-radius:var(--r);
+    padding:clamp(20px,3.4vw,30px) 22px;box-shadow:var(--shadow);margin-bottom:14px;
+    text-align:center;min-height:clamp(150px,22vh,210px);
+    display:flex;flex-direction:column;justify-content:center;gap:10px;
+  }
+  .qtag{font-size:14px;font-weight:800;letter-spacing:1.2px;color:var(--ink-soft)}
+  .qtext{font-size:clamp(23px,3.9vw,33px);font-weight:900;line-height:1.55;letter-spacing:.4px}
+  .qtext small{font-size:.58em;font-weight:700;color:var(--ink-soft);display:block;margin-top:10px;letter-spacing:0;line-height:1.7}
+  .qmono{font-family:"SF Mono",ui-monospace,"Cascadia Mono","Consolas",monospace;font-size:clamp(28px,5vw,42px);letter-spacing:2px}
+
+  .choices{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  @media(max-width:520px){.choices{grid-template-columns:1fr}}
+  .choice{
+    padding:0 16px;min-height:74px;border-radius:16px;cursor:pointer;
+    background:var(--card);border:2px solid var(--line);
+    color:var(--ink);font-size:clamp(21px,3vw,25px);font-weight:800;
+    transition:border-color .14s,background .14s,transform .1s;
+    position:relative;font-variant-numeric:tabular-nums;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+  }
+  .choice:hover:not(:disabled){border-color:var(--indigo-hi);background:var(--card-hi)}
+  .choice:active:not(:disabled){transform:scale(.97)}
+  .choice:disabled{cursor:default}
+  .choice.right{border-color:var(--green);background:rgba(34,197,94,.16);color:#86efac;animation:pop .3s}
+  .choice.wrong{border-color:var(--red);background:rgba(239,68,68,.16);color:#fca5a5;animation:shake .32s}
+  .choice.dim{opacity:.32}
+  @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.04)}100%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+  .choices.tf .choice{min-height:88px;font-size:27px}
+
+  .fb{
+    margin-top:14px;border-radius:15px;padding:16px 19px;font-size:17px;
+    border:1px solid var(--line);background:var(--card);animation:fade .2s ease;
+  }
+  .fb.ok{border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.10)}
+  .fb.no{border-color:rgba(239,68,68,.5);background:rgba(239,68,68,.10)}
+  .fb .h{font-weight:800;margin-bottom:5px;display:block;font-size:18px}
+  .fb.ok .h{color:#4ade80}
+  .fb.no .h{color:#f87171}
+  .fb .why{color:var(--ink-soft);line-height:1.8}
+
+  .nextbtn{
+    width:100%;margin-top:13px;min-height:66px;border-radius:16px;border:none;
+    background:linear-gradient(135deg,var(--indigo),var(--purple));
+    color:#fff;font-size:20px;font-weight:800;cursor:pointer;
+    box-shadow:0 8px 22px rgba(99,102,241,.35);transition:filter .15s,transform .1s;
+  }
+  .nextbtn:hover{filter:brightness(1.1)}
+  .nextbtn:active{transform:scale(.98)}
+
+  /* ---------- results ---------- */
+  .result{text-align:center;padding:8px 0 10px}
+  .result .emoji{font-size:clamp(56px,9vw,76px);line-height:1;margin-bottom:8px;display:block}
+  .result h2{margin:0 0 8px;font-size:clamp(26px,3.8vw,32px)}
+  .result .msg{color:var(--ink-soft);margin:0 0 18px;font-size:17.5px}
+  .bigscore{
+    font-size:clamp(54px,8.6vw,76px);font-weight:900;line-height:1;
+    background:linear-gradient(100deg,var(--amber),var(--pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .bigscore small{font-size:24px;color:var(--ink-soft);-webkit-text-fill-color:var(--ink-soft)}
+  .resrow{display:flex;justify-content:center;gap:clamp(16px,4vw,34px);margin:18px 0 22px;flex-wrap:wrap}
+  .resrow .item{font-size:15px;color:var(--ink-soft)}
+  .resrow .item b{display:block;font-size:26px;color:var(--ink);font-weight:900}
+
+  .btnrow{display:flex;gap:11px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    padding:0 28px;min-height:62px;border-radius:15px;font-size:18px;font-weight:800;
+    cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);
+    transition:background .15s,transform .1s;display:inline-flex;align-items:center;justify-content:center;
+  }
+  .btn:hover{background:var(--card-hi)}
+  .btn:active{transform:scale(.97)}
+  .btn.primary{
+    background:linear-gradient(135deg,var(--indigo),var(--purple));border:none;color:#fff;
+    box-shadow:0 8px 22px rgba(99,102,241,.32);
+  }
+  .btn.primary:hover{filter:brightness(1.1)}
+
+  .starline{font-size:clamp(24px,4vw,30px);letter-spacing:6px;margin:6px 0 12px;color:var(--amber)}
+
+  /* ---------- review list ---------- */
+  .review{margin-top:24px;text-align:left}
+  .review h3{font-size:19px;margin:0 0 12px;display:flex;align-items:center;gap:9px}
+  .review h3 .cnt{
+    font-size:14px;font-weight:800;padding:3px 11px;border-radius:999px;
+    background:rgba(239,68,68,.18);color:#fca5a5;
+  }
+  .revitem{
+    background:var(--card);border:1px solid var(--line);border-left:5px solid var(--red);
+    border-radius:13px;padding:15px 18px;margin-bottom:10px;font-size:16.5px;
+  }
+  .revitem .rq{font-weight:700;margin-bottom:7px;line-height:1.65}
+  .revitem .ra{color:var(--ink-soft);font-size:16px;line-height:1.8}
+  .revitem .ra b{color:#86efac}
+  .revitem .ra .bad{color:#fca5a5;text-decoration:line-through}
+
+  /* toast */
+  .toast{
+    position:fixed;left:50%;bottom:calc(96px + var(--safe-b));transform:translate(-50%,20px);
+    background:var(--card-hi);border:1px solid var(--line);color:var(--ink);
+    padding:15px 26px;border-radius:999px;font-size:16.5px;font-weight:700;
+    box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.3s;z-index:80;
+    white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  .float{
+    position:fixed;pointer-events:none;font-weight:900;font-size:32px;
+    color:var(--green);z-index:90;animation:floatup .9s ease-out forwards;
+  }
+  @keyframes floatup{
+    0%{opacity:1;transform:translateY(0) scale(.8)}
+    100%{opacity:0;transform:translateY(-80px) scale(1.4)}
+  }
+
+  /* iPad 橫向：題目與選項並排，不用捲動 */
+  @media (min-width:820px) and (min-height:600px){
+    .playgrid{display:grid;grid-template-columns:1.05fr 1fr;gap:18px;align-items:start}
+    .playgrid .qcard{margin-bottom:0;min-height:clamp(220px,36vh,320px)}
+    .playgrid .choices{grid-template-columns:1fr}
+    .playgrid .choices.tf{grid-template-columns:1fr 1fr}
+    .playgrid .choice{min-height:80px}
+  }
+
+  /* ---------- concept promo banner ---------- */
+  .conceptbanner{
+    display:flex;align-items:center;gap:15px;margin-top:20px;
+    padding:16px 20px;border-radius:18px;text-decoration:none;
+    background:linear-gradient(120deg,rgba(124,58,237,.30),rgba(219,39,119,.26));
+    border:1px solid rgba(167,139,250,.42);
+    transition:transform .16s,border-color .16s,background .16s;
+  }
+  .conceptbanner:hover{transform:translateY(-2px);border-color:rgba(196,181,253,.75)}
+  .conceptbanner:active{transform:scale(.988)}
+  .cb-ico{
+    flex:0 0 auto;width:48px;height:48px;border-radius:50%;
+    background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.42);
+    display:grid;place-items:center;font-size:18px;color:#fff;
+    animation:cbpulse 2.4s ease-in-out infinite;
+  }
+  @keyframes cbpulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(167,139,250,.5)}
+    55%{box-shadow:0 0 0 12px rgba(167,139,250,0)}
+  }
+  .cb-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+  .cb-k{font-size:12.5px;letter-spacing:1.2px;font-weight:800;color:#c4b5fd}
+  .cb-m{font-size:16.5px;font-weight:800;color:#fff;line-height:1.45}
+  .cb-a{font-size:26px;color:#c4b5fd;flex:0 0 auto}
+
+  /* ---------- bottom app tab bar ---------- */
+  .tabbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:70;
+    padding:7px max(14px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));
+    background:rgba(23,27,54,.88);
+    -webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);
+    border-top:1px solid rgba(255,255,255,.10);
+    box-shadow:0 -6px 26px rgba(0,0,0,.42);
+  }
+  .tabbar-in{
+    max-width:600px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(5,1fr);gap:3px;
+  }
+  .tabitem{
+    position:relative;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    min-height:54px;border-radius:15px;text-decoration:none;
+    color:#7d84ad;font-size:11.5px;font-weight:800;letter-spacing:.1px;
+    transition:color .16s,background .16s,transform .1s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .tabitem .ti{font-size:21px;line-height:1;transition:transform .22s cubic-bezier(.4,1.5,.5,1);filter:grayscale(.6);opacity:.8}
+  .tabitem:active{transform:scale(.95);background:rgba(255,255,255,.07)}
+  .tabitem.on{color:#fff;background:linear-gradient(180deg,rgba(129,140,248,.22),rgba(129,140,248,.06))}
+  .tabitem.on .ti{filter:none;opacity:1;transform:translateY(-1px) scale(1.1)}
+  .tabitem.on::after{
+    content:"";position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+    width:22px;height:3px;border-radius:99px;
+    background:linear-gradient(90deg,var(--indigo-hi),var(--pink));
+  }
+  .tabitem:not(.on):hover{color:#c7cdf5;background:rgba(255,255,255,.05)}
+  .tabitem:not(.on):hover .ti{filter:grayscale(0);opacity:1}
+  .tabbadge{
+    position:absolute;top:3px;left:calc(50% + 8px);
+    min-width:20px;height:20px;padding:0 6px;border-radius:99px;
+    background:linear-gradient(135deg,#ef4444,#db2777);color:#fff;
+    font-size:11.5px;font-weight:800;line-height:20px;
+    box-shadow:0 2px 8px rgba(220,38,38,.5);
+    display:grid;place-items:center;
+  }
+  .tabbadge[hidden]{display:none}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><span class="logo">🎮</span><span>數學遊戲</span></div>
+    <div class="spacer"></div>
+    <span class="pill">⭐ <span class="n" id="hudXp">0</span></span>
+    <span class="pill" id="hudStreakPill" style="display:none">🔥 <span class="n" id="hudStreak">0</span></span>
+    <button class="iconbtn" id="soundBtn" title="音效開關" aria-label="音效開關">🔊</button>
+  </div>
+</div>
+
+<!-- ================= HUB ================= -->
+<div class="screen active" id="scr-hub">
+  <div class="hero">
+    <h1>考試特訓基地</h1>
+    <p>選一個遊戲開始。答對得分，連勝有加乘 🔥</p>
+  </div>
+
+  <div class="xpwrap">
+    <div class="xprow"><span>等級 <b id="lvName">初心者</b></span><span><b id="lvXp">0</b> / <span id="lvNext">150</span> XP</span></div>
+    <div class="xpbar"><div class="xpfill" id="xpFill"></div></div>
+  </div>
+
+  <div class="grid" id="hubGrid"></div>
+
+  <a href="concepts.html" class="conceptbanner">
+    <span class="cb-ico" aria-hidden="true">▶</span>
+    <span class="cb-tx">
+      <span class="cb-k">🎬 卡住了？</span>
+      <span class="cb-m">看動畫圖解，一步步搞懂 8 個難概念</span>
+    </span>
+    <span class="cb-a" aria-hidden="true">›</span>
+  </a>
+</div>
+<!-- ================= GAME ================= -->
+<div class="screen" id="scr-game">
+  <div class="gamehead">
+    <button class="iconbtn" id="backBtn" aria-label="返回">←</button>
+    <div>
+      <h2 id="gTitle">遊戲</h2>
+      <div class="sub" id="gSub"></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="k">得分</div><div class="v amber" id="sScore">0</div></div>
+    <div class="stat"><div class="k">連勝</div><div class="v green" id="sStreak">0</div></div>
+    <div class="stat"><div class="k" id="sThirdK">剩餘</div><div class="v sky" id="sThird">60</div></div>
+  </div>
+
+  <div class="timerbar"><div class="timerfill" id="timerFill"></div></div>
+
+  <div class="playgrid">
+    <div class="qcard">
+      <div class="qtag" id="qTag">題目</div>
+      <div class="qtext" id="qText">準備中…</div>
+    </div>
+    <div>
+      <div class="choices" id="choices"></div>
+      <div id="fbWrap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= RESULT ================= -->
+<div class="screen" id="scr-result">
+  <div class="result">
+    <span class="emoji" id="rEmoji">🎉</span>
+    <h2 id="rTitle">完成！</h2>
+    <p class="msg" id="rMsg"></p>
+    <div class="bigscore"><span id="rScore">0</span><small> 分</small></div>
+    <div class="starline" id="rStars"></div>
+    <div class="resrow">
+      <div class="item">答對 <b id="rRight">0</b></div>
+      <div class="item">答錯 <b id="rWrong">0</b></div>
+      <div class="item">最高連勝 <b id="rBestStreak">0</b></div>
+      <div class="item">最佳紀錄 <b id="rBest">0</b></div>
+    </div>
+    <div class="btnrow">
+      <button class="btn primary" id="againBtn">再玩一次</button>
+      <button class="btn" id="homeBtn">返回選單</button>
+    </div>
+  </div>
+  <div class="review" id="reviewWrap" style="display:none">
+    <h3>📌 答錯的題目 <span class="cnt" id="revCount">0</span></h3>
+    <div id="reviewList"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<nav class="tabbar" aria-label="頁面切換">
+  <div class="tabbar-in">
+    <a class="tabitem" href="revision.html">
+      <span class="ti" aria-hidden="true">📖</span><span>溫習</span>
+    </a>
+    <a class="tabitem" href="concepts.html">
+      <span class="ti" aria-hidden="true">🎬</span><span>動畫</span>
+    </a>
+    <a class="tabitem" href="practice.html">
+      <span class="ti" aria-hidden="true">✏️</span><span>練習</span>
+      <span class="tabbadge" id="tabBadge" hidden>0</span>
+    </a>
+    <a class="tabitem" href="diagnose.html"><span class="ti" aria-hidden="true">🔬</span><span>診斷</span></a>
+    <a class="tabitem on" href="games.html" aria-current="page">
+      <span class="ti" aria-hidden="true">🎮</span><span>遊戲</span>
+    </a>
+  </div>
+</nav>
+
+<script src="./assets/wb.js"></script>
+<script>
+/* =========================================================
+   基礎工具
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const rnd = n => Math.floor(Math.random() * n);
+const pick = a => a[rnd(a.length)];
+const shuffle = a => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = rnd(i + 1); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+const uniq = a => [...new Set(a)];
+
+const DIRS = ['北', '東北', '東', '東南', '南', '西南', '西', '西北'];
+
+/* ---------- 音效 ---------- */
+let audioCtx = null, soundOn = true;
+function beep(freq, dur, type, vol) {
+  if (!soundOn) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = type || 'sine';
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(vol || .06, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001, audioCtx.currentTime + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); o.stop(audioCtx.currentTime + dur);
+  } catch (e) {}
+}
+const sndOk = () => { beep(880, .1, 'sine', .05); setTimeout(() => beep(1320, .12, 'sine', .045), 70); };
+const sndNo = () => beep(180, .22, 'sawtooth', .05);
+const sndEnd = () => { [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => beep(f, .18, 'sine', .05), i * 110)); };
+
+/* ---------- 儲存 ---------- */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('p4_' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('p4_' + k, JSON.stringify(v)); } catch (e) {} }
+};
+
+/* ---------- XP / 等級 ---------- */
+const LEVELS = [
+  { at: 0,    name: '初心者' },
+  { at: 150,  name: '小新手' },
+  { at: 400,  name: '計算學徒' },
+  { at: 800,  name: '數字忍者' },
+  { at: 1400, name: '數學高手' },
+  { at: 2200, name: '試卷獵人' },
+  { at: 3200, name: '班級第一' },
+  { at: 5000, name: '數學大師' }
+];
+function getXp() { return store.get('xp', 0); }
+function levelIndex(xp) {
+  let idx = 0;
+  for (let i = LEVELS.length - 1; i >= 0; i--) if (xp >= LEVELS[i].at) { idx = i; break; }
+  return idx;
+}
+function refreshXp() {
+  const xp = getXp();
+  const idx = levelIndex(xp);
+  const cur = LEVELS[idx], next = LEVELS[idx + 1];
+  const base = cur.at, target = next ? next.at : cur.at;
+  const pct = next ? Math.min(100, ((xp - base) / (target - base)) * 100) : 100;
+  $('#lvName').textContent = cur.name;
+  $('#lvXp').textContent = xp;
+  $('#lvNext').textContent = next ? target : 'MAX';
+  $('#xpFill').style.width = pct + '%';
+  $('#hudXp').textContent = xp;
+}
+function addXp(n) {
+  const before = getXp();
+  store.set('xp', before + n);
+  refreshXp();
+  const oldIdx = levelIndex(before), newIdx = levelIndex(before + n);
+  if (newIdx > oldIdx) toast('🎉 升級！你現在是「' + LEVELS[newIdx].name + '」');
+}
+
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* =========================================================
+   題目產生器
+   ========================================================= */
+
+/* --- 乘法 --- */
+function qMultiply() {
+  const kinds = [
+    () => { const a = 12 + rnd(88), b = 2 + rnd(8); return { a, b, tag: '兩位數 × 一位數' }; },
+    () => { const a = 12 + rnd(88), b = (2 + rnd(8)) * 10; return { a, b, tag: '兩位數 × 整十數' }; },
+    () => { const a = 105 + rnd(880), b = 2 + rnd(8); return { a, b, tag: '三位數 × 一位數' }; },
+    () => { const a = 12 + rnd(88), b = 12 + rnd(88); return { a, b, tag: '兩位數 × 兩位數' }; }
+  ];
+  const w = [2, 3, 2, 3];
+  let r = rnd(10), acc = 0, k = 0;
+  for (let i = 0; i < w.length; i++) { acc += w[i]; if (r < acc) { k = i; break; } }
+  const { a, b, tag } = kinds[k]();
+  const ans = a * b;
+
+  const cands = uniq([
+    ans,
+    ans * 10,
+    ans + (b >= 10 ? a * (b % 10) : a),
+    Math.round(ans / 10) * 10 + 10,
+    ans - a,
+    ans + a,
+    ans - 10,
+    ans + 10
+  ]).filter(v => v > 0 && v !== ans);
+
+  const wrongs = shuffle(cands).slice(0, 3);
+  const choices = shuffle([ans, ...wrongs]);
+  return {
+    tag: '乘法　' + tag,
+    text: `${a} × ${b} = ?`,
+    mono: true,
+    choices: choices.map(String),
+    answer: String(ans),
+    explain: `${a} × ${b} = ${ans}`
+  };
+}
+
+/* --- 乘法巧算 --- */
+function qSmartMul() {
+  const a = pick([25, 50, 20, 125]);
+  const partner = a === 25 ? 4 : a === 50 ? 2 : a === 20 ? 5 : 8;
+  const nice = a * partner;
+  const k = 2 + rnd(38);
+  const ans = k * nice;
+  const pool = uniq([
+    ans,
+    a * k * partner + nice,
+    k * a * (partner - 1),
+    ans * 10,
+    ans / 10,
+    ans + a,
+    a + k + partner
+  ]).filter(v => Number.isInteger(v) && v > 0 && v !== ans);
+  const choices = shuffle([ans, ...shuffle(pool).slice(0, 3)]);
+  return {
+    tag: '乘法巧算',
+    text: `${a} × ${k} × ${partner} = ?<small>提示：${a} × ${partner} = ${nice}</small>`,
+    choices: choices.map(String),
+    answer: String(ans),
+    explain: `${a} × ${k} × ${partner}\n= ${k} × (${a} × ${partner})\n= ${k} × ${nice}\n= ${ans}`
+  };
+}
+
+/* --- 除法 --- */
+function qDivide() {
+  const divisor = 11 + rnd(88);
+  const q = 3 + rnd(28);
+  const r = rnd(divisor);
+  const dividend = divisor * q + r;
+  const ansStr = r === 0 ? `${q}` : `${q} … ${r}`;
+  const opts = uniq([
+    ansStr,
+    r === 0 ? `${q} … 1` : `${q} … ${r + 1}`,
+    `${q + 1}${r === 0 ? '' : ' … ' + r}`,
+    `${q} … ${divisor}`,
+    `${q - 1}${r === 0 ? '' : ' … ' + r}`
+  ]).filter(v => v !== ansStr).slice(0, 3);
+  const choices = shuffle([ansStr, ...opts]);
+  return {
+    tag: '除法（兩位數除數）',
+    text: `${dividend} ÷ ${divisor} = ?`,
+    mono: true,
+    choices,
+    answer: ansStr,
+    explain: `${divisor} × ${q} = ${divisor * q}，${dividend} − ${divisor * q} = ${r}\n所以 ${dividend} ÷ ${divisor} = ${q}${r === 0 ? '（沒有餘數）' : ' … ' + r}`
+  };
+}
+
+/* --- 整除性 --- */
+function qDivisibility() {
+  const rule = pick([2, 5, 10, 3]);
+  const n = 40 + rnd(960);
+  const test = {
+    2: n % 2 === 0,
+    5: n % 5 === 0,
+    10: n % 10 === 0,
+    3: String(n).split('').reduce((s, c) => s + (+c), 0) % 3 === 0
+  }[rule];
+  let why;
+  if (rule === 2) why = `個位數字是 ${n % 10}，${test ? '是 0、2、4、6、8 → 可以被 2 整除' : '不是 0、2、4、6、8 → 不可以被 2 整除'}`;
+  else if (rule === 5) why = `個位數字是 ${n % 10}，${test ? '是 0 或 5 → 可以被 5 整除' : '不是 0 或 5 → 不可以被 5 整除'}`;
+  else if (rule === 10) why = `個位數字是 ${n % 10}，${test ? '是 0 → 可以被 10 整除' : '不是 0 → 不可以被 10 整除'}`;
+  else {
+    const s = String(n).split('').join(' + ') + ' = ' + String(n).split('').reduce((a, c) => a + (+c), 0);
+    why = `各位數字相加：${s}，${test ? '可以被 3 整除 → 原數也可以' : '不可以被 3 整除 → 原數也不可以'}`;
+  }
+  return {
+    tag: '整除性',
+    text: `${n} 可以被 ${rule} 整除嗎？`,
+    mono: true,
+    opts: ['可以', '不可以'],
+    answer: test ? '可以' : '不可以',
+    explain: why
+  };
+}
+
+/* --- 四邊形 --- */
+const SHAPE_STATEMENTS = [
+  { s: '所有正方形都是長方形。', a: true,  w: '正方形有 4 個直角、對邊相等，符合長方形的所有性質。' },
+  { s: '所有正方形都是菱形。', a: true,  w: '正方形四邊長度相等、對邊平行，符合菱形的所有性質。' },
+  { s: '所有菱形都是正方形。', a: false, w: '菱形不一定有直角。把正方形推斜就不是正方形了。' },
+  { s: '所有長方形都是正方形。', a: false, w: '長方形不一定四邊相等。' },
+  { s: '所有正方形都是平行四邊形。', a: true,  w: '正方形對邊平行，所以是平行四邊形的一種。' },
+  { s: '所有平行四邊形都是正方形。', a: false, w: '平行四邊形不一定四邊相等，也不一定有直角。' },
+  { s: '所有長方形都是平行四邊形。', a: true,  w: '長方形對邊平行，所以是平行四邊形的一種。' },
+  { s: '所有菱形都是平行四邊形。', a: true,  w: '菱形對邊平行，所以是平行四邊形的一種。' },
+  { s: '平行四邊形既是長方形，又是菱形。', a: false, w: '方向反了。是長方形、菱形屬於平行四邊形。' },
+  { s: '菱形有四條邊長度相等。', a: true,  w: '這是菱形最基本的定義。' },
+  { s: '菱形只有一對對邊平行。', a: false, w: '菱形有兩對對邊平行（它就是平行四邊形）。' },
+  { s: '長方形的對邊長度相等。', a: true,  w: '長方形的上下兩邊相等，左右兩邊相等。' },
+  { s: '正方形和長方形都有四個直角。', a: true,  w: '這是它們共同的性質。' },
+  { s: '正方形的對角線把它分成兩個相同的三角形。', a: true, w: '正方形對稱，沿對角線剪開得到兩個全等三角形。' },
+  { s: '菱形的四個角都是直角。', a: false, w: '只有正方形的四個角是直角；其他菱形不是。' },
+  { s: '正方形、長方形和菱形都是平行四邊形。', a: true, w: '三者的對邊都平行。' },
+  { s: '梯形是平行四邊形的一種。', a: false, w: '梯形只有一對對邊平行，不是平行四邊形。' },
+  { s: '正方形是特別的菱形，也是特別的長方形。', a: true, w: '正方形同時滿足菱形和長方形的所有條件。' }
+];
+function qShape() {
+  const st = pick(SHAPE_STATEMENTS);
+  return {
+    tag: '四邊形判斷',
+    text: st.s,
+    tf: true,
+    answer: st.a ? '對' : '錯',
+    explain: st.w
+  };
+}
+
+/* --- 方向 --- */
+function qDirection() {
+  const mode = rnd(3);
+  if (mode === 0) {
+    const i = rnd(8), n = 1 + rnd(3), right = Math.random() < .5;
+    const fromName = DIRS[i];
+    const to = right ? DIRS[(i + n) % 8] : DIRS[(i - n + 8) % 8];
+    const opts = shuffle(uniq([
+      to,
+      DIRS[(i + n + 1) % 8],
+      DIRS[(i - n + 8) % 8],
+      DIRS[(i + n + 7) % 8],
+      DIRS[(i + 4) % 8]
+    ])).slice(0, 4);
+    if (opts.indexOf(to) === -1) opts[3] = to;
+    return {
+      tag: '方向　轉向',
+      text: `面向${fromName}方，向${right ? '右' : '左'}轉 ${n} 個直角後，會面向哪一方？<small>${right ? '右轉＝順時針' : '左轉＝逆時針'}；1 個直角＝90°</small>`,
+      choices: shuffle(opts),
+      answer: to,
+      explain: `${right ? '順時針（右轉）' : '逆時針（左轉）'}轉 ${n} 次：${fromName} → ${to}`
+    };
+  }
+  if (mode === 1) {
+    const i = rnd(8), fromName = DIRS[i];
+    const opp = DIRS[(i + 4) % 8];
+    const opts = shuffle(uniq([opp, DIRS[(i + 1) % 8], DIRS[(i + 2) % 8], DIRS[(i + 6) % 8], DIRS[(i + 3) % 8]])).slice(0, 4);
+    if (opts.indexOf(opp) === -1) opts[3] = opp;
+    return {
+      tag: '方向　相反方向',
+      text: `${fromName}方的相反方向是甚麼？`,
+      choices: shuffle(opts),
+      answer: opp,
+      explain: `${fromName} 的相反方向是 ${opp}（隔着 4 格）`
+    };
+  }
+  const places = ['學校', '公園', '圖書館', '商場', '車站', '球場', '醫院', '泳池'];
+  const [p1, p2] = shuffle(places).slice(0, 2);
+  const i = rnd(8), d = DIRS[i];
+  const opp = DIRS[(i + 4) % 8];
+  const opts = shuffle(uniq([opp, DIRS[(i + 1) % 8], DIRS[(i + 2) % 8], DIRS[(i + 6) % 8], DIRS[(i + 3) % 8]])).slice(0, 4);
+  if (opts.indexOf(opp) === -1) opts[3] = opp;
+  return {
+    tag: '方向　相對位置',
+    text: `${p1}在${p2}的${d}方，那麼${p2}在${p1}的哪一方？`,
+    choices: shuffle(opts),
+    answer: opp,
+    explain: `A 在 B 的${d}方 → B 就在 A 的相反方向，即 ${opp}`
+  };
+}
+
+/* --- 倍數與因數 --- */
+function factorsOf(n) {
+  const out = [];
+  for (let i = 1; i * i <= n; i++) {
+    if (n % i === 0) { out.push(i); if (i !== n / i) out.push(n / i); }
+  }
+  return out.sort((a, b) => a - b);
+}
+function qMultipleFactor() {
+  const mode = rnd(3);
+  if (mode === 0) {
+    const n = pick([12, 16, 18, 20, 24, 28, 30, 36, 40, 42, 45, 48, 54, 60, 72]);
+    const fs = factorsOf(n);
+    const good = pick(fs);
+    const bad = [];
+    let guard = 0;
+    while (bad.length < 3 && guard++ < 200) {
+      const c = 2 + rnd(30);
+      if (n % c !== 0 && bad.indexOf(c) === -1) bad.push(c);
+    }
+    return {
+      tag: '倍數和因數　找因數',
+      text: `以下哪一個是 ${n} 的因數？`,
+      choices: shuffle([String(good), ...bad.map(String)]),
+      answer: String(good),
+      explain: `${n} ÷ ${good} = ${n / good}，沒有餘數，所以 ${good} 是因數。\n${n} 的所有因數：${fs.join('、')}`
+    };
+  }
+  if (mode === 1) {
+    const n = 3 + rnd(11);
+    const k = 2 + rnd(11);
+    const good = n * k;
+    const opts = [good];
+    let guard = 0;
+    while (opts.length < 4 && guard++ < 200) {
+      const c = good + (rnd(2) ? 1 : -1) * (1 + rnd(20));
+      if (c > 0 && c % n !== 0 && opts.indexOf(c) === -1) opts.push(c);
+    }
+    return {
+      tag: '倍數和因數　找倍數',
+      text: `以下哪一個是 ${n} 的倍數？`,
+      choices: shuffle(opts.map(String)),
+      answer: String(good),
+      explain: `${n} × ${k} = ${good}，所以 ${good} 是 ${n} 的倍數。`
+    };
+  }
+  const n = pick([12, 16, 18, 20, 24, 28, 30, 36, 40, 42, 45, 48, 54, 60, 72, 84, 96]);
+  const fs = factorsOf(n);
+  const ans = fs.length;
+  const opts = uniq([ans, ans + 1, ans - 1, ans + 2, ans + 3]).filter(v => v > 0).slice(0, 4);
+  if (opts.indexOf(ans) === -1) opts[3] = ans;
+  return {
+    tag: '倍數和因數　因數個數',
+    text: `${n} 一共有多少個因數？`,
+    choices: shuffle(opts.map(String)),
+    answer: String(ans),
+    explain: `${n} 的因數：${fs.join('、')}\n共 ${ans} 個。`
+  };
+}
+
+/* --- 應用題 --- */
+function qWordProblem() {
+  const mode = rnd(4);
+  if (mode === 0) {
+    const price = 15 + rnd(285), qty = 3 + rnd(28);
+    const ans = price * qty;
+    const opts = uniq([ans, ans + price, ans - price, price + qty, Math.round(ans / 10) * 10]).filter(v => v > 0).slice(0, 4);
+    if (opts.indexOf(ans) === -1) opts[3] = ans;
+    return {
+      tag: '應用題　求總數',
+      text: `每個${pick(['書包', '水樽', '燈籠', '月餅', '玩具'])}售 ${price} 元。買 ${qty} 個共需付多少元？<small>用乘法</small>`,
+      choices: shuffle(opts.map(String)),
+      answer: String(ans),
+      explain: `${price} × ${qty} = ${ans}（元）`
+    };
+  }
+  if (mode === 1) {
+    const per = 6 + rnd(20), boxes = 4 + rnd(40), extra = 1 + rnd(per - 1);
+    const total = per * boxes + extra;
+    const ans = boxes;
+    const opts = uniq([ans, ans + 1, ans - 1, boxes + 2, total]).filter(v => v > 0).slice(0, 4);
+    if (opts.indexOf(ans) === -1) opts[3] = ans;
+    return {
+      tag: '應用題　最多（捨去餘數）',
+      text: `共有 ${total} 個雞蛋，每盒最多裝 ${per} 個。最多可裝滿多少盒？<small>「最多」→ 答商，餘數不要</small>`,
+      choices: shuffle(opts.map(String)),
+      answer: String(ans),
+      explain: `${total} ÷ ${per} = ${boxes} … ${extra}\n餘下的 ${extra} 個不夠一盒 → 最多 ${boxes} 盒`
+    };
+  }
+  if (mode === 2) {
+    const per = 8 + rnd(30), boxes = 3 + rnd(30), extra = 1 + rnd(per - 1);
+    const total = per * boxes + extra;
+    const ans = boxes + 1;
+    const opts = uniq([ans, ans - 1, ans + 1, boxes, ans + 2]).filter(v => v > 0).slice(0, 4);
+    if (opts.indexOf(ans) === -1) opts[3] = ans;
+    return {
+      tag: '應用題　最少（進一）',
+      text: `${total} 件貨物，每個箱最多放 ${per} 件。最少需要多少個箱？<small>「最少」→ 有餘數要 商 + 1</small>`,
+      choices: shuffle(opts.map(String)),
+      answer: String(ans),
+      explain: `${total} ÷ ${per} = ${boxes} … ${extra}\n餘下的 ${extra} 件也要用一個箱 → 最少 ${boxes} + 1 = ${ans} 個`
+    };
+  }
+  const money = 20 + rnd(80), target = money * (3 + rnd(10)) + (1 + rnd(money - 1));
+  const days = Math.ceil(target / money);
+  const opts = uniq([days, days - 1, days + 1, days + 2, Math.floor(target / money)]).filter(v => v > 0).slice(0, 4);
+  if (opts.indexOf(days) === -1) opts[3] = days;
+  return {
+    tag: '應用題　最少要幾次',
+    text: `每天儲 ${money} 元，想買一件 ${target} 元的禮物。最少要儲多少天？<small>「最少」→ 有餘數要 商 + 1</small>`,
+    choices: shuffle(opts.map(String)),
+    answer: String(days),
+    explain: `${target} ÷ ${money} = ${Math.floor(target / money)} … ${target % money}\n儲完那一天不夠，要再儲一天 → 最少 ${days} 天`
+  };
+}
+
+/* --- 混合 --- */
+function qMixed() {
+  const gens = [qMultiply, qDivide, qWordProblem, qDivisibility, qDirection, qMultipleFactor, qShape, qSmartMul];
+  return pick(gens)();
+}
+
+/* =========================================================
+   遊戲定義
+   ========================================================= */
+const GAMES = [
+  { id: 'mul',   icon: '✖️', color: '#6366f1', title: '乘法快閃',     desc: '兩種位數的直式練習，60 秒內答得越多越好', mode: 'timed', seconds: 60, gen: qMultiply,       sub: '60 秒　·　兩位數／三位數乘法' },
+  { id: 'smart', icon: '⚡', color: '#fbbf24', title: '巧算閃電',     desc: '湊成 100 或 1000，用最短的路算出答案',   mode: 'timed', seconds: 60, gen: qSmartMul,       sub: '60 秒　·　乘法巧算' },
+  { id: 'div',   icon: '➗', color: '#38bdf8', title: '除法試商王',   desc: '兩位數除數，考你商和餘數對不對',         mode: 'timed', seconds: 75, gen: qDivide,         sub: '75 秒　·　除法與餘數' },
+  { id: 'rule',  icon: '🎯', color: '#22c55e', title: '整除性判斷',   desc: '看個位、看數字和，一眼就知道可不可以整除', mode: 'timed', seconds: 60, gen: qDivisibility,   sub: '60 秒　·　2、3、5、10 的整除性' },
+  { id: 'shape', icon: '🔷', color: '#a78bfa', title: '四邊形偵探',   desc: '判斷句子對錯，捉出「反過來就錯」的陷阱',   mode: 'count', total: 12,   gen: qShape,          sub: '12 題　·　四邊形關係' },
+  { id: 'dir',   icon: '🧭', color: '#2dd4bf', title: '方向達人',     desc: '左轉右轉、相反方向、相對位置',           mode: 'timed', seconds: 60, gen: qDirection,      sub: '60 秒　·　八個方向' },
+  { id: 'num',   icon: '🔢', color: '#f472b6', title: '倍數因數王',   desc: '找出因數、認出倍數，搞清楚兩者的分別',     mode: 'timed', seconds: 75, gen: qMultipleFactor, sub: '75 秒　·　倍數與因數' },
+  { id: 'word',  icon: '📝', color: '#fb923c', title: '應用題闖關',   desc: '「最多」還是「最少」？這是失分重災區',     mode: 'count', total: 10,   gen: qWordProblem,    sub: '10 題　·　乘除應用題' },
+  { id: 'mixed', icon: '👑', color: '#ef4444', title: '終極混合挑戰', desc: '所有題型隨機出現，考驗真正實力',         mode: 'count', total: 15,   gen: qMixed,          sub: '15 題　·　全部課題' }
+];
+
+/* =========================================================
+   遊戲引擎
+   ========================================================= */
+const S = {
+  game: null, q: null,
+  score: 0, streak: 0, bestStreak: 0,
+  right: 0, wrong: 0,
+  qNo: 0, totalQ: 0,
+  left: 0, timerId: null, locked: false,
+  mistakes: [], lastText: ''
+};
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $('#' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function renderHub() {
+  const grid = $('#hubGrid');
+  grid.innerHTML = '';
+  GAMES.forEach(g => {
+    const best = store.get('best_' + g.id, 0);
+    const el = document.createElement('div');
+    el.className = 'gamecard';
+    el.style.setProperty('--gc', g.color);
+    el.innerHTML = `
+      <div class="gc-head">
+        <div class="gc-ico" style="color:${g.color}">${g.icon}</div>
+        <div class="gc-title">${g.title}</div>
+      </div>
+      <p class="gc-desc">${g.desc}</p>
+      <div class="gc-foot">
+        <span>${g.mode === 'timed' ? '⏱ ' + g.seconds + ' 秒' : '📋 ' + g.total + ' 題'}</span>
+        ${best ? '<span class="gc-best">🏆 ' + best + '</span>' : ''}
+      </div>`;
+    el.addEventListener('click', () => startGame(g));
+    grid.appendChild(el);
+  });
+  refreshXp();
+}
+
+function startGame(g) {
+  S.game = g;
+  S.score = 0; S.streak = 0; S.bestStreak = 0;
+  S.right = 0; S.wrong = 0; S.qNo = 0;
+  S.mistakes = []; S.lastText = '';
+  S.totalQ = g.mode === 'count' ? g.total : 0;
+  S.left = g.mode === 'timed' ? g.seconds : 0;
+  S.locked = false;
+
+  $('#gTitle').textContent = g.title;
+  $('#gSub').textContent = g.sub;
+  $('#sScore').textContent = '0';
+  $('#sStreak').textContent = '0';
+  if (g.mode === 'timed') {
+    $('#sThirdK').textContent = '剩餘';
+    $('#sThird').textContent = g.seconds;
+  } else {
+    $('#sThirdK').textContent = '進度';
+    $('#sThird').textContent = '1 / ' + g.total;
+  }
+  $('#sThird').className = 'v sky';
+
+  show('scr-game');
+  renderHubStreak(false);
+  updateTimerBar(1);
+
+  clearInterval(S.timerId);
+  if (g.mode === 'timed') {
+    const start = Date.now();
+    S.timerId = setInterval(() => {
+      const passed = (Date.now() - start) / 1000;
+      const remain = Math.max(0, g.seconds - passed);
+      S.left = remain;
+      $('#sThird').textContent = Math.ceil(remain);
+      updateTimerBar(remain / g.seconds);
+      if (remain <= 0) { clearInterval(S.timerId); endGame(); }
+    }, 120);
+  }
+
+  nextQuestion();
+}
+
+function renderHubStreak(on) {
+  $('#hudStreakPill').style.display = on ? 'inline-flex' : 'none';
+  $('#hudStreak').textContent = S.streak;
+}
+
+function updateTimerBar(pct) {
+  const p = Math.max(0, Math.min(1, pct));
+  const fill = $('#timerFill');
+  fill.style.width = p * 100 + '%';
+  fill.classList.toggle('low', p < .25);
+}
+
+function nextQuestion() {
+  if (!$('#scr-game').classList.contains('active')) return;
+  if (S.game.mode === 'count' && S.qNo >= S.game.total) { endGame(); return; }
+  S.locked = false;
+  $('#fbWrap').innerHTML = '';
+
+  const g = S.game;
+  let q, guard = 0;
+  do { q = g.gen(); guard++; } while (q && S.lastText && q.text === S.lastText && guard < 8);
+  S.lastText = q.text;
+  S.q = q;
+  S.qNo++;
+
+  if (g.mode === 'count') {
+    $('#sThird').textContent = Math.min(S.qNo, g.total) + ' / ' + g.total;
+  }
+
+  $('#qTag').textContent = q.tag;
+  $('#qText').innerHTML = q.mono ? `<span class="qmono">${q.text}</span>` : q.text;
+
+  const wrap = $('#choices');
+  wrap.innerHTML = '';
+  wrap.className = 'choices' + (q.tf ? ' tf' : '');
+
+  const opts = q.opts || (q.tf ? ['對', '錯'] : q.choices);
+  opts.forEach(o => {
+    const b = document.createElement('button');
+    b.className = 'choice';
+    b.textContent = o;
+    b.addEventListener('click', e => answer(o, b, e));
+    wrap.appendChild(b);
+  });
+}
+
+function answer(choice, btn, evt) {
+  if (S.locked) return;
+  S.locked = true;
+
+  const q = S.q;
+  const ok = String(choice) === String(q.answer);
+
+  document.querySelectorAll('#choices .choice').forEach(b => {
+    b.disabled = true;
+    if (String(b.textContent) === String(q.answer)) b.classList.add('right');
+    else if (b !== btn) b.classList.add('dim');
+  });
+  if (!ok) btn.classList.add('wrong');
+
+  if (ok) {
+    S.right++;
+    S.streak++;
+    if (S.streak > S.bestStreak) S.bestStreak = S.streak;
+    const bonus = Math.min(5, Math.floor(S.streak / 3));
+    const gain = 1 + bonus;
+    S.score += gain;
+    sndOk();
+    floatText('+' + gain, evt);
+    renderHubStreak(S.streak >= 3);
+  } else {
+    S.wrong++;
+    S.streak = 0;
+    sndNo();
+    renderHubStreak(false);
+    S.mistakes.push({ q: q.text, answer: q.answer, chosen: String(choice), explain: q.explain || '' });
+  }
+
+  $('#sScore').textContent = S.score;
+  $('#sStreak').textContent = S.streak;
+  $('#hudStreak').textContent = S.streak;
+
+  const fb = document.createElement('div');
+  fb.className = 'fb ' + (ok ? 'ok' : 'no');
+  fb.innerHTML = `<span class="h">${ok ? '✅ 答對了！' : '❌ 答案是 ' + q.answer}</span><div class="why">${(q.explain || '').replace(/\n/g, '<br>')}</div>`;
+  $('#fbWrap').innerHTML = '';
+  $('#fbWrap').appendChild(fb);
+
+  const nb = document.createElement('button');
+  nb.className = 'nextbtn';
+  nb.textContent = (S.game.mode === 'count' && S.qNo >= S.game.total) ? '看結果 →' : '下一題 →';
+  nb.addEventListener('click', nextQuestion);
+  $('#fbWrap').appendChild(nb);
+
+  if (S.game.mode === 'timed') {
+    let cancelled = false;
+    const t = setTimeout(() => { if (!cancelled) nextQuestion(); }, ok ? 750 : 1700);
+    nb.addEventListener('click', () => { cancelled = true; clearTimeout(t); });
+  }
+}
+
+function floatText(txt, evt) {
+  const el = document.createElement('div');
+  el.className = 'float';
+  el.textContent = txt;
+  const x = evt ? evt.clientX : window.innerWidth / 2;
+  const y = evt ? evt.clientY : 200;
+  el.style.left = (x - 15) + 'px';
+  el.style.top = (y - 30) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 900);
+}
+
+function endGame() {
+  clearInterval(S.timerId);
+  renderHubStreak(false);
+  sndEnd();
+
+  const g = S.game;
+  const prevBest = store.get('best_' + g.id, 0);
+  const isNew = S.score > prevBest;
+  if (isNew) store.set('best_' + g.id, S.score);
+
+  addXp(S.score);
+
+  let pct;
+  if (g.mode === 'timed') {
+    pct = S.score >= 22 ? 1 : S.score >= 15 ? .85 : S.score >= 9 ? .6 : .3;
+  } else {
+    pct = S.right / Math.max(1, S.right + S.wrong);
+  }
+
+  let emoji = '🌱', title = '繼續努力！', msg = '慢慢來，先求正確，再求速度。';
+  if (pct >= .95) { emoji = '👑'; title = '完美！'; msg = '這就是全班第一的水準。'; }
+  else if (pct >= .8) { emoji = '🏆'; title = '太厲害了！'; msg = '你已經很穩了，再練速度就無敵。'; }
+  else if (pct >= .6) { emoji = '🎉'; title = '做得不錯！'; msg = '再答錯的地方重看一次，就會更強。'; }
+  else if (pct >= .4) { emoji = '💪'; title = '有進步空間！'; msg = '去 revision.html 重看那一節，再回來挑戰。'; }
+
+  const stars = pct >= .95 ? '★★★' : pct >= .8 ? '★★☆' : pct >= .6 ? '★☆☆' : '☆☆☆';
+
+  $('#rEmoji').textContent = emoji;
+  $('#rTitle').textContent = title;
+  $('#rMsg').textContent = msg;
+  $('#rScore').textContent = S.score;
+  $('#rStars').textContent = stars;
+  $('#rRight').textContent = S.right;
+  $('#rWrong').textContent = S.wrong;
+  $('#rBestStreak').textContent = S.bestStreak;
+  $('#rBest').textContent = store.get('best_' + g.id, 0);
+
+  // 答錯回顧
+  const wrap = $('#reviewWrap'), list = $('#reviewList');
+  list.innerHTML = '';
+  if (S.mistakes.length) {
+    wrap.style.display = 'block';
+    $('#revCount').textContent = S.mistakes.length;
+    S.mistakes.forEach(m => {
+      const d = document.createElement('div');
+      d.className = 'revitem';
+      const qText = m.q.replace(/<small>[\s\S]*?<\/small>/g, '').replace(/<[^>]+>/g, '');
+      d.innerHTML = `<div class="rq">${qText}</div>
+        <div class="ra">你答：<span class="bad">${m.chosen}</span>　正確：<b>${m.answer}</b><br>${m.explain.replace(/\n/g, '<br>')}</div>`;
+      list.appendChild(d);
+    });
+  } else {
+    wrap.style.display = 'none';
+  }
+
+  show('scr-result');
+  if (isNew && S.score > 0) toast('🎉 新紀錄！' + S.score + ' 分');
+}
+
+/* =========================================================
+   事件綁定
+   ========================================================= */
+$('#backBtn').addEventListener('click', () => { clearInterval(S.timerId); renderHub(); show('scr-hub'); });
+$('#homeBtn').addEventListener('click', () => { renderHub(); show('scr-hub'); });
+$('#againBtn').addEventListener('click', () => { if (S.game) startGame(S.game); });
+
+$('#soundBtn').addEventListener('click', e => {
+  soundOn = !soundOn;
+  e.currentTarget.textContent = soundOn ? '🔊' : '🔈';
+  e.currentTarget.classList.toggle('off', !soundOn);
+  if (soundOn) beep(880, .08, 'sine', .04);
+});
+
+document.addEventListener('keydown', e => {
+  if (!$('#scr-game').classList.contains('active')) return;
+  const k = e.key;
+  if (k === 'Escape') { clearInterval(S.timerId); renderHub(); show('scr-hub'); return; }
+  if (S.locked) {
+    if (k === ' ' || k === 'Enter') {
+      e.preventDefault();
+      const nb = document.querySelector('.nextbtn');
+      if (nb) nb.click();
+    }
+    return;
+  }
+  const idx = { '1': 0, '2': 1, '3': 2, '4': 3 }[k];
+  if (idx !== undefined) {
+    const btns = document.querySelectorAll('#choices .choice');
+    if (btns[idx]) btns[idx].click();
+  }
+});
+
+/* 初始化 */
+renderHub();
+refreshXp();
+
+/* 錯題數量顯示在分頁標籤上 */
+try {
+  var rawMs = localStorage.getItem('p4p_mistakes');
+  var msArr = rawMs ? JSON.parse(rawMs) : [];
+  var tb = document.getElementById('tabBadge');
+  if (tb && msArr && msArr.length) {
+    tb.textContent = msArr.length > 99 ? '99+' : msArr.length;
+    tb.hidden = false;
+  }
+} catch (e) {}
+</script>
+</body>
+</html>
